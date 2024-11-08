@@ -13,7 +13,7 @@ modif_Pspline <- function(x, K, order = 2, sparse_sol = T) {
     stop(paste0("`x` must be a numeric vector."))
   }
 
-  if (any(x < 0) | any(x > 1)| any(is.na(x))) {
+  if (any(x < 0) | any(x > 1) | any(is.na(x))) {
     stop(paste0("The vector `x` must be normalized to lie between 0 and 1 and not contain NA values."))
   }
 

@@ -1,7 +1,7 @@
 modif_Pspline2D <- function(x_matrix, K1, K2, sparse_sol = T) {
   # Error messages on the arguments
 
-  if (!is.numeric(K1)|!is.numeric(K2)) {
+  if (!is.numeric(K1) | !is.numeric(K2)) {
     stop(paste0("`K1` and `K2` must be numeric."))
   }
 
@@ -13,11 +13,11 @@ modif_Pspline2D <- function(x_matrix, K1, K2, sparse_sol = T) {
     stop(paste0("`x` must be a matrix."))
   }
 
-  if (ncol(x)!=2 |nrow(x)==0) {
-    stop(paste0("`x` must have 2 columns and a positive number of rows. Instead, it has dimension ",nrow(x),"x",ncol(x),"."))
+  if (ncol(x) != 2 | nrow(x) == 0) {
+    stop(paste0("`x` must have 2 columns and a positive number of rows. Instead, it has dimension ", nrow(x), "x", ncol(x), "."))
   }
 
-  if (any(x < 0) | any(x> 1) | any(is.NA(x))) {
+  if (any(x < 0) | any(x > 1) | any(is.NA(x))) {
     stop(paste0("The entries of `x` must be normalized to lie between 0 and 1 and must not contain NA values."))
   }
 
@@ -90,7 +90,8 @@ modif_Pspline2D <- function(x_matrix, K1, K2, sparse_sol = T) {
   # Basis matrix evaluated at x
   B_unif <- bspline_2D(expand.grid(
     seq(0, 1, length.out = 200),
-    seq(0, 1, length.out = 200)),K1, K2)
+    seq(0, 1, length.out = 200)
+  ), K1, K2)
   C <- ex_scale(R_tilde, B_unif %*% Lambda, rank_def = 1)
   B <- bspline_2D(x[, 1], x[, 2], K1, K2)
 

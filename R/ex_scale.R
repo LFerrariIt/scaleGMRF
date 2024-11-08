@@ -1,12 +1,11 @@
-ex_scale <- function(Q,D=NULL, rank_def = NULL) {
-
+ex_scale <- function(Q, D = NULL, rank_def = NULL) {
   isSPSP(Q)
 
   if (is.null(D)) {
     D <- diag(nrow(Q))
   }
 
-  isValidBasis(D,Q)
+  isValidBasis(D, Q)
 
   Sigma <- gen_inv(Q, rank_def = rank_def)
 

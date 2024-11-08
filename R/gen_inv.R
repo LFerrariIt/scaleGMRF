@@ -1,4 +1,4 @@
-gen_inverse_func <- function(M, rank_def = 1) {
+gen_inv <- function(M, rank_def = 1) {
 
   isSPSP(M)
 
