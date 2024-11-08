@@ -6,13 +6,9 @@ ex_scale <- function(Q,D=NULL, rank_def = NULL) {
     D <- diag(nrow(Q))
   }
 
-  isValidBasis(D)
+  isValidBasis(D,Q)
 
-  if (!ncol(D) == ncol(Q)) {
-    stop(paste0("The number of columns of `Q` and `D` must be equal. Instead,", ncol(Q), "!=", ncol(D), "."))
-  }
-
-  Sigma <- gen_inverse_func(Q, rank_def = rank_def)
+  Sigma <- gen_inv(Q, rank_def = rank_def)
 
   var_diag <- rowSums(D * (D %*% Sigma))
 
