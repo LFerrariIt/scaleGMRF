@@ -1,0 +1,14 @@
+Package: scaleGMRF
+Type: Package
+Title: Standardization procedure for Gaussian Markov Random Fields
+Version: 0.1.0
+Author: Luisa Ferrari
+Maintainer: Luisa Ferrari <luisa.ferrari5@unibo.it>
+Description: ???
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+Imports: 
+    Matrix,
+    spam,
+    splines
