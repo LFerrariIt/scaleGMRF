@@ -1,5 +1,5 @@
 
-bspline_2D <- function(x1, x2, N_basis1, N_basis2) {
+bspline2D <- function(x1, x2, N_basis1, N_basis2) {
 
   if (length(x1)!=length(x2)) {
     stop(paste0("The vectors `x1` and `x2` must have the same length. Instead,",length(x1),"!=",length(x2),"."))

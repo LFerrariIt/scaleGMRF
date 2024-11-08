@@ -11,4 +11,5 @@ LazyData: true
 Imports: 
     Matrix,
     spam,
-    splines
+    splines,
+    stats

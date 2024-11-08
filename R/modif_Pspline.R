@@ -57,7 +57,7 @@ modif_Pspline <- function(x, K, order = 2, sparse_sol = T) {
       return(kld)
     }
     # Optimization of the KLD function with symmetric entries for lambda
-    results <- nlm(optim_function, rep(1, ceiling(K / 2)), print.level = 2)
+    results <- stats::nlm(optim_function, rep(1, ceiling(K / 2)), print.level = 2)
     # Save the lambda values that minimize the KLD
     lambdas <- abs(results$estimate)
     # Lambda matrix
@@ -171,7 +171,7 @@ modif_Pspline <- function(x, K, order = 2, sparse_sol = T) {
       return(kld)
     }
     # Optimization of the KLD function with symmetric entries for lambda
-    results <- nlm(optim_function, rep(1, ceiling(K / 2)), print.level = 2)
+    results <- stats::nlm(optim_function, rep(1, ceiling(K / 2)), print.level = 2)
     # Save the lambda values that minimize the KLD
     lambdas <- abs(results$estimate)
     # Lambda matrix
