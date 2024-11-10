@@ -30,6 +30,9 @@ A list of 4 elements, containing:
 \examples{
 x <- seq(0, 1, length.out = 100)
 
+modif_Pspline(x, K = 10,order = 1)
+modif_Pspline(x, K = 10,order = 2)
+modif_Pspline(x, K = 20,order = 1)
 modif_Pspline(x, K = 20,order = 2)
 
 }

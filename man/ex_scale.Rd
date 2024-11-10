@@ -20,6 +20,7 @@ A positive number to be used for scaling.
 `ex_scale()` returns the appropriate scaling constant for a given effect of an LGM model, defined through a basis matrix and a precision matrix.
 }
 \examples{
+ex_scale(Q = diag(10))
 prec <- as.matrix(spam::precmat.RW1(10))
-ex_scale(Q = prec, D = NULL, rank_def = 1)
+ex_scale(Q = prec,rank_def = 1)
 }

@@ -18,6 +18,9 @@
 #' @examples
 #' x <- seq(0, 1, length.out = 100)
 #'
+#' modif_Pspline(x, K = 10,order = 1)
+#' modif_Pspline(x, K = 10,order = 2)
+#' modif_Pspline(x, K = 20,order = 1)
 #' modif_Pspline(x, K = 20,order = 2)
 #'
 
@@ -29,7 +32,7 @@ modif_Pspline <- function(x, K, order = 2, sparse_sol = T) {
   }
 
   if (K < 4) {
-    stop(paste0("`K` must be at least than 4, instead K=", K, "."))
+    stop(paste0("`K` must be larger than 4, instead K=", K, "."))
   }
 
   if (!is.numeric(x)) {
@@ -97,25 +100,25 @@ modif_Pspline <- function(x, K, order = 2, sparse_sol = T) {
     R_tilde <- G_tilde - W_tilde
 
     # Basis matrix evaluated at x
-    B_unif <- bspline(seq(0, 1, length.out = 1000), N_basis = K)
+    B_unif <- bspline(seq(0, 1, length.out = 1000), K = K)
     C <- ex_scale(R_tilde, B_unif %*% Lambda, rank_def = order)
-    B <- bspline(x, N_basis = K)
+    B <- bspline(x, K = K)
 
     if (sparse_sol) {
       return(list(
-        "basis matrix" = B %*% Lambda,
-        "precision matrix" = R_tilde,
-        "constraint matrix" = new_S,
-        "scaling constant" = C
+        "basis" = B %*% Lambda,
+        "prec" = R_tilde,
+        "null_space" = new_S,
+        "scaling_constant" = C
       ))
     } else {
       Q_tilde <- gen_inv(Lambda %*% gen_inv(R_tilde, rank_def = 1) %*% Lambda, rank_def = 1)
 
       return(list(
-        "basis matrix" = B,
-        "precision matrix" = Q_tilde,
-        "constraint matrix" = S_tilde,
-        "scaling constant" = C
+        "basis" = B,
+        "prec" = Q_tilde,
+        "null_space" = S_tilde,
+        "scaling_constant" = C
       ))
     }
   }
@@ -218,25 +221,25 @@ modif_Pspline <- function(x, K, order = 2, sparse_sol = T) {
     R_tilde <- G_tilde - W_tilde
 
     # Basis matrix evaluated at x
-    B_unif <- bspline(seq(0, 1, length.out = 1000), N_basis = K)
+    B_unif <- bspline(seq(0, 1, length.out = 1000), K = K)
     C <- ex_scale(R_tilde, B_unif %*% Lambda, rank_def = order)
-    B <- bspline(x, N_basis = K)
+    B <- bspline(x, K = K)
 
     if (sparse_sol) {
       return(list(
-        "basis matrix" = B %*% Lambda,
-        "precision matrix" = R_tilde,
-        "constraint matrix" = new_S,
-        "scaling constant" = C
+        "basis" = B %*% Lambda,
+        "prec" = R_tilde,
+        "null_space" = new_S,
+        "scaling_constant" = C
       ))
     } else {
       Q_tilde <- gen_inv(Lambda %*% gen_inv(R_tilde, rank_def = order) %*% Lambda, rank_def = order)
 
       return(list(
-        "basis matrix" = B,
-        "precision matrix" = Q_tilde,
-        "constraint matrix" = S_tilde,
-        "scaling constant" = C
+        "basis" = B,
+        "prec" = Q_tilde,
+        "null_space" = S_tilde,
+        "scaling_constant" = C
       ))
     }
   }

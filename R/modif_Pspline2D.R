@@ -71,11 +71,11 @@ modif_Pspline2D <- function(x, K1, K2, sparse_sol = T) {
   optim_function <- function(lambdas) {
     lambdas <- abs(lambdas)
     # Creation of the diagonal matrix Lambda
-    lambdas1 <- lambdas[1:ceiling(K2 / 2)]
-    lambdas2 <- lambdas[(ceiling(K2 / 2) + 1):(ceiling(K2 / 2) + ceiling(K1 / 2))]
+    lambdas1 <- lambdas[1:K1]
+    lambdas2 <- lambdas[(K1+1):(K1+K2)]
     Lambda <- diag(kronecker(
-      c(lambdas2, rev(lambdas2)),
-      c(lambdas1, rev(lambdas1))
+      c(lambdas2),
+      c(lambdas1)
     ))
     # Null space for the R matrix
     new_S <- Lambda %*% S_tilde
@@ -91,17 +91,17 @@ modif_Pspline2D <- function(x, K1, K2, sparse_sol = T) {
   }
   # Optimization of the KLD function with symmetric entries for lambda
   results <- stats::nlm(optim_function,
-    c(rep(1, ceiling(K2 / 2)), rep(1, ceiling(K1 / 2))),
+    c(rep(1, K1), rep(1,K2)),
     print.level = 2
   )
   # Save the lambda values that minimize the KLD
   lambdas <- abs(results$estimate)
   # Lambda matrix
-  lambdas1 <- lambdas[1:ceiling(K2 / 2)]
-  lambdas2 <- lambdas[(ceiling(K2 / 2) + 1):(ceiling(K2 / 2) + ceiling(K1 / 2))]
+  lambdas1 <- lambdas[1:K1]
+  lambdas2 <- lambdas[(K1+1):(K1+K2)]
   Lambda <- diag(kronecker(
-    c(lambdas2, rev(lambdas2)),
-    c(lambdas1, rev(lambdas1))
+    c(lambdas2),
+    c(lambdas1)
   ))
   # Null space for the R matrix
   new_S <- Lambda %*% S_tilde
@@ -111,12 +111,13 @@ modif_Pspline2D <- function(x, K1, K2, sparse_sol = T) {
   R_tilde <- G_tilde - W_tilde
 
   # Basis matrix evaluated at x
-  B_unif <- bspline2D(expand.grid(
+  B_unif <- bspline2D(as.matrix(
+    expand.grid(
     seq(0, 1, length.out = 200),
-    seq(0, 1, length.out = 200)
-  ), K1, K2)
+    seq(0, 1, length.out = 200))
+  ), K1 = K1, K2 = K2)
   C <- ex_scale(R_tilde, B_unif %*% Lambda, rank_def = 1)
-  B <- bspline2D(x[, 1], x[, 2], K1, K2)
+  B <- bspline2D(x, K1, K2)
 
   if (sparse_sol) {
     return(list(

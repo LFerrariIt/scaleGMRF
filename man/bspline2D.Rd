@@ -4,12 +4,10 @@
 \alias{bspline2D}
 \title{Create a basis of cubic uniform 2D B-Spline functions}
 \usage{
-bspline2D(x1, x2, K1, K2)
+bspline2D(x, K1, K2)
 }
 \arguments{
-\item{x1}{A numeric vector, with values contained between 0 and 1.}
-
-\item{x2}{A numeric vector, with values contained between 0 and 1, of the same length of `x1`.}
+\item{x}{A matrix of 2 columns, containing values between 0 and 1.}
 
 \item{K1}{A positive integer larger than 3, specifying the number of basis functions on the first dimension.}
 
@@ -27,6 +25,6 @@ x_grid <- expand.grid(
   seq(0, 1, length.out = 100)
 )
 
-bspline2D(x_grid[, 1], x_grid[, 2], K1 = 5, K2 = 5)
+bspline2D(x_grid, K1 = 5, K2 = 5)
 
 }

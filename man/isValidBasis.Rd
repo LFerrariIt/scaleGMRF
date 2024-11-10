@@ -16,7 +16,7 @@ isValidBasis(D, Q)
 }
 \examples{
 x <- seq(0, 1, length.out = 100)
-isValidBasis(D = bspline(x, N_basis = 10), Q = diag(10)) # NULL
+isValidBasis(D = bspline(x, K = 10), Q = diag(10)) # NULL
 
-try(isValidBasis(D = bspline(x, N_basis = 20), Q = diag(10))) # error
+try(isValidBasis(D = bspline(x, K = 20), Q = diag(10))) # error
 }

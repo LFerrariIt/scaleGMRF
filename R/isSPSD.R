@@ -13,31 +13,30 @@
 #' try(isSPSD(diag(NA, ncol = 3, nrow = 3))) # error
 #' try(isSPSD(matrix(1, ncol = 3, nrow = 2))) # error
 isSPSD <- function(M) {
-  M_name <- deparse(substitute(M))
 
   if (!is.matrix(M)) {
-    stop(paste0("`", M_name, "` must be a matrix, not a ", class(M), "."))
+    stop(paste0("The argument `M` must be a matrix, not a ", class(M), "."))
   }
 
   if (!ncol(M) == nrow(M)) {
-    stop(paste0("`", M_name, "` must be a square matrix, not a matrix of dimension ", nrow(M), "x", ncol(M), "."))
+    stop(paste0("The argument `M` must be a square matrix, not a matrix of dimension ", nrow(M), "x", ncol(M), "."))
   }
 
   if (ncol(M) == 0) {
-    stop(paste("`", M_name, "` must be a non-empty matrix."))
+    stop(paste("The argument `M` must be a non-empty matrix."))
   }
 
   if (anyNA(M)) {
-    stop(paste("`", M_name, "` must not contain NA values."))
+    stop(paste("The argument `M` must not contain NA values."))
   }
 
   if (!isSymmetric(M)) {
-    stop(paste0("`", M_name, "` must be symmetric."))
+    stop(paste0("The argument `M` must be symmetric."))
   }
 
-  V <- round(eigen(M, symmetric = T, only.values = T)$values, 10)
+  V <- eigen(M, symmetric = T, only.values = T)$values
 
-  if (any(V < 0) | all(V == 0)) {
+  if (any(V < -0.001) | all(V == 0)) {
     stop(paste("`M` must be a positive definite or semi-definite matrix, not nipotent."))
   }
 

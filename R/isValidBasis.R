@@ -10,9 +10,9 @@
 #'
 #' @examples
 #' x <- seq(0, 1, length.out = 100)
-#' isValidBasis(D = bspline(x, N_basis = 10), Q = diag(10)) # NULL
+#' isValidBasis(D = bspline(x, K = 10), Q = diag(10)) # NULL
 #'
-#' try(isValidBasis(D = bspline(x, N_basis = 20), Q = diag(10))) # error
+#' try(isValidBasis(D = bspline(x, K = 20), Q = diag(10))) # error
 isValidBasis <- function(D, Q) {
   tryCatch(
     {
@@ -24,22 +24,19 @@ isValidBasis <- function(D, Q) {
     }
   )
 
-  D_name <- deparse(substitute(D))
-  Q_name <- deparse(substitute(Q))
-
   if (!is.matrix(D)) {
-    stop(paste("`", D_name, "` must be a matrix, not a", class(D), "."))
+    stop(paste("The argument `D` must be a matrix, not a", class(D), "."))
   }
 
   if (nrow(D) == 0 | ncol(D) == 0) {
-    stop(paste("`", D_name, "` must be a non-empty matrix."))
+    stop(paste("The argument `D` must be a non-empty matrix."))
   }
 
   if (anyNA(D)) {
-    stop(paste("`", D_name, "` must not contain NA values."))
+    stop(paste("The argument `D` must not contain NA values."))
   }
 
   if (!ncol(D) == ncol(Q)) {
-    stop(paste0("The number of columns of `", Q_name, "` and `", D_name, "` must be equal. Instead,", ncol(Q), "!=", ncol(D), "."))
+    stop(paste0("The number of columns of The argument `Q` and The argument `D` must be equal. Instead,", ncol(Q), "!=", ncol(D), "."))
   }
 }
