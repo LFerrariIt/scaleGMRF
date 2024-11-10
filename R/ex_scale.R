@@ -1,5 +1,19 @@
+#' Expectation-based scaling for an LGM effect
+#'
+#' `ex_scale()` returns the appropriate scaling constant for a given effect of an LGM model, defined through a basis matrix and a precision matrix.
+#'
+#' @param Q A square matrix, representing the precision matrix on the coefficients.
+#' @param D A matrix, representing the basis matrix of the effect. If not provided, it is set to an identity matrix of dimension equal to `Q`.
+#' @param rank_def The rank deficiency of the matrix `Q`. If not provided, it is estimated.
+#'
+#' @return A positive number to be used for scaling.
+#'
+#' @examples
+#' prec <- as.matrix(spam::precmat.RW1(10))
+#' ex_scale(Q = prec, D = NULL, rank_def = 1)
+
 ex_scale <- function(Q, D = NULL, rank_def = NULL) {
-  isSPSP(Q)
+  isSPSD(Q)
 
   if (is.null(D)) {
     D <- diag(nrow(Q))
@@ -20,8 +34,6 @@ ex_scale <- function(Q, D = NULL, rank_def = NULL) {
   }
 
   C <- mean(var_diag)
-
-  names(C) <- "scaling constant"
 
   return(C)
 }

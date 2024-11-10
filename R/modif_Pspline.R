@@ -1,3 +1,26 @@
+#' Provide a modified version of the precision matrix for P-Spline effects
+#'
+#' `modif_Pspline()` provides a list of elements to build the modified version of a P-Spline effect, either of order 1 or 2. Specifically, the appropriate basis matrix, precision matrix, null space, and scaling constant are provided.
+#'
+#' @param x A numeric vector, containing values between 0 and 1.
+#' @param K A positive integer larger than 3, specifying the number of basis functions on the first dimension.
+#' @param order Either 1 or 2, specifying the order of the random walk process on the coefficients.
+#' @param sparse_sol logical indicating whether the solution is to be provided in the sparse version. Otherwise, the solution is provided in a non-sparse format. By default, TRUE.
+#'
+#' @return A list of 4 elements, containing:
+#' \itemize{
+#' \item{`basis`: a matrix, representing the basis matrix.}
+#' \item{`prec`: a matrix, representing the precision matrix.}
+#' \item{`null_space`: a matrix, representing the null space of the precision matrix.}
+#' \item{`scaling_constant`: a positive number, representing the appropriate scaling constant.}
+#'}
+#'
+#' @examples
+#' x <- seq(0, 1, length.out = 100)
+#'
+#' modif_Pspline(x, K = 20,order = 2)
+#'
+
 modif_Pspline <- function(x, K, order = 2, sparse_sol = T) {
   # Error messages on the arguments
 

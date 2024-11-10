@@ -1,3 +1,26 @@
+#' Provide a modified version of the precision matrix for P-Spline effects
+#'
+#' `modif_Pspline2D()` provides a list of elements to build the modified version of a 2-dimensional P-Spline effect. Specifically, the appropriate basis matrix, precision matrix, null space, and scaling constant are provided.
+#'
+#' @param x A matrix of 2 columns, containing values between 0 and 1.
+#' @param K1 A positive integer larger than 3, specifying the number of basis functions on the first dimension.
+#' @param K2 A positive integer larger than 3, specifying the number of basis functions on the second dimension.
+#' @param sparse_sol logical indicating whether the solution is to be provided in the sparse version. Otherwise, the solution is provided in a non-sparse format. By default, TRUE.
+#'
+#' @return A list of 4 elements, containing:
+#' \itemize{
+#' \item{`basis`: a matrix, representing the basis matrix.}
+#' \item{`prec`: a matrix, representing the precision matrix.}
+#' \item{`null_space`: a matrix, representing the null space of the precision matrix.}
+#' \item{`scaling_constant`: a positive number, representing the appropriate scaling constant.}
+#' }
+#'
+#' @examples
+#' x_grid <- as.matrix(expand.grid(
+#'   seq(0, 1, length.out = 100),
+#'   seq(0, 1, length.out = 100)
+#' ))
+#' modif_Pspline2D(x_grid, K1 = 5, K2 = 5)
 modif_Pspline2D <- function(x, K1, K2, sparse_sol = T) {
   # Error messages on the arguments
 
@@ -97,19 +120,19 @@ modif_Pspline2D <- function(x, K1, K2, sparse_sol = T) {
 
   if (sparse_sol) {
     return(list(
-      "basis matrix" = B %*% Lambda,
-      "precision matrix" = R_tilde,
-      "constraint matrix" = new_S,
-      "scaling constant" = C
+      "basis" = B %*% Lambda,
+      "prec" = R_tilde,
+      "null_space" = new_S,
+      "scaling_constant" = C
     ))
   } else {
     Q_tilde <- gen_inv(Lambda %*% gen_inv(R_tilde, rank_def = 1) %*% Lambda, rank_def = 1)
 
     return(list(
-      "basis matrix" = B,
-      "precision matrix" = Q_tilde,
-      "constraint matrix" = S_tilde,
-      "scaling constant" = C
+      "basis" = B,
+      "prec" = Q_tilde,
+      "null_space" = S_tilde,
+      "scaling_constant" = C
     ))
   }
 }

@@ -1,4 +1,29 @@
+#' Test if a matrix is an appropriate basis
+#'
+#' `isValidBasis()` throws an error message if the first argument is not a non-empty matrix of the correct dimension. The error message explains which property is not respected.
+#'
+#' @param D a matrix.
+#' @param Q a square matrix.
+#'
+#' @return NULL
+#' @export
+#'
+#' @examples
+#' x <- seq(0, 1, length.out = 100)
+#' isValidBasis(D = bspline(x, N_basis = 10), Q = diag(10)) # NULL
+#'
+#' try(isValidBasis(D = bspline(x, N_basis = 20), Q = diag(10))) # error
 isValidBasis <- function(D, Q) {
+  tryCatch(
+    {
+      isSPSD(Q)
+    },
+    error = function(e) {
+      print("`Q` must be a valid precision matrix:")
+      print(e)
+    }
+  )
+
   D_name <- deparse(substitute(D))
   Q_name <- deparse(substitute(Q))
 

@@ -1,4 +1,18 @@
-isSPSP <- function(M) {
+#' Test if a Matrix is Symmetric Positive (Semi-)Definite
+#'
+#' `isSPSD()` throws an error message if the argument is not a non-empty symmetric positive (semi-)definite matrix without NA entries and not nilpotent. The error message explains which property is not respected.
+#'
+#' @param M A matrix object.
+#'
+#' @return NULL
+#'
+#'
+#' @examples
+#' isSPSD(diag(10)) # NULL
+#' try(isSPSD(diag(0))) # error
+#' try(isSPSD(diag(NA, ncol = 3, nrow = 3))) # error
+#' try(isSPSD(matrix(1, ncol = 3, nrow = 2))) # error
+isSPSD <- function(M) {
   M_name <- deparse(substitute(M))
 
   if (!is.matrix(M)) {
@@ -21,30 +35,11 @@ isSPSP <- function(M) {
     stop(paste0("`", M_name, "` must be symmetric."))
   }
 
-  V <- eigen(M, symmetric = T, only.values = T)$values
+  V <- round(eigen(M, symmetric = T, only.values = T)$values, 10)
 
   if (any(V < 0) | all(V == 0)) {
-    stop(paste("`M` must be a positive semi-definite matrix."))
-  }
-}
-
-isValidBasis <- function(D, Q) {
-  D_name <- deparse(substitute(D))
-  Q_name <- deparse(substitute(Q))
-
-  if (!is.matrix(D)) {
-    stop(paste("`", D_name, "` must be a matrix, not a", class(D), "."))
+    stop(paste("`M` must be a positive definite or semi-definite matrix, not nipotent."))
   }
 
-  if (nrow(D) == 0 | ncol(D) == 0) {
-    stop(paste("`", D_name, "` must be a non-empty matrix."))
-  }
-
-  if (anyNA(D)) {
-    stop(paste("`", D_name, "` must not contain NA values."))
-  }
-
-  if (!ncol(D) == ncol(Q)) {
-    stop(paste0("The number of columns of `", Q_name, "` and `", D_name, "` must be equal. Instead,", ncol(Q), "!=", ncol(D), "."))
-  }
+  return(NULL)
 }

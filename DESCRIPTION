@@ -13,3 +13,4 @@ Imports:
     spam,
     splines,
     stats
+RoxygenNote: 7.2.1
