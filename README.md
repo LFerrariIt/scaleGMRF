@@ -6,7 +6,7 @@
 <!-- badges: start -->
 <!-- badges: end -->
 
-scaleGMRF is a package that provides useful function to standardize
+scaleGMRF is a package that provides useful functions to standardize
 Gaussian Markov Random Fields effects used in Latent Gaussian models.
 The standardization guarantees that the corresponding scale parameters
 of the effects match their intuitive interpretation defined as the
@@ -26,6 +26,23 @@ You can install the development version of scaleGMRF from
 devtools::install_github("LFerrariIt/scaleGMRF")
 ```
 
-## Main function: standardize_GMRF()
+\##How to write README
 
-???
+The goal of the README is to answer the following questions about your
+package:
+
+Why should I use it? How do I use it? How do I get it?
+
+When you write your README, try to put yourself in the shoes of someone
+who’s come across your package and is trying to figure out if it solves
+a problem they have. If they decide that your package looks promising,
+the README should also show them how to install it and how to do one or
+two basic tasks.
+
+A paragraph that describes the high-level purpose of the package.
+
+An example that shows how to use the package to solve a simple problem.
+
+An overview that describes the main components of the package. Point to
+vignettes for more details. This is also a good place to describe how
+your package fits into the ecosystem of its target domain.
