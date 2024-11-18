@@ -15,7 +15,7 @@ gen_inv(M, rank_def = NULL)
 `gen_inv()` calculates the Moore-Penrose generalized inverse of a symmetric positive (semi-)definite matrix, with the possibility of explicitly state its rank-deficiency when the matrix is positive semi-definite.
 }
 \examples{
-gen_inv(diag(10),rank_def=0)
+gen_inv(diag(10), rank_def = 0)
 gen_inv(as.matrix(spam::precmat.RW1(10)), rank_def = 1)
 gen_inv(as.matrix(spam::precmat.RW2(10)), rank_def = 2)
 

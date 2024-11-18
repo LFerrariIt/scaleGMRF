@@ -11,8 +11,13 @@ License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Imports: 
+    fastDummies,
+    ggplot2,
+    ggpubr,
     Matrix,
+    mvtnorm,
     spam,
     splines,
-    stats
+    stats,
+    tidyr
 RoxygenNote: 7.2.1

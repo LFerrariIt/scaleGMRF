@@ -25,18 +25,18 @@ isValidBasis <- function(D, Q) {
   )
 
   if (!is.matrix(D)) {
-    stop(paste("The argument `D` must be a matrix, not a", class(D), "."))
+    stop("`D` must be a matrix. Instead it is a", class(D), ".")
   }
 
   if (nrow(D) == 0 | ncol(D) == 0) {
-    stop(paste("The argument `D` must be a non-empty matrix."))
+    stop("`D` must be a non-empty matrix.")
   }
 
   if (anyNA(D)) {
-    stop(paste("The argument `D` must not contain NA values."))
+    stop("`D` must not contain NA values.")
   }
 
   if (!ncol(D) == ncol(Q)) {
-    stop(paste0("The number of columns of The argument `Q` and The argument `D` must be equal. Instead,", ncol(Q), "!=", ncol(D), "."))
+    stop("The number of columns of `Q` and of `D` must be equal. Instead ncol(Q)=,", ncol(Q), "!=ncol(D)=", ncol(D), ".")
   }
 }

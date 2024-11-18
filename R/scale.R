@@ -1,6 +1,6 @@
 #' Expectation-based scaling for an LGM effect
 #'
-#' `ex_scale()` returns the appropriate scaling constant for a given effect of an LGM model, defined through a basis matrix and a precision matrix.
+#' `scale_GMRF()` returns the appropriate scaling constant for a given effect of an LGM model, defined through a basis matrix and a precision matrix.
 #'
 #' @param Q A square matrix, representing the precision matrix on the coefficients.
 #' @param D A matrix, representing the basis matrix of the effect. If not provided, it is set to an identity matrix of dimension equal to `Q`.
@@ -9,11 +9,10 @@
 #' @return A positive number to be used for scaling.
 #'
 #' @examples
-#' ex_scale(Q = diag(10))
+#' scale_GMRF(Q = diag(10))
 #' prec <- as.matrix(spam::precmat.RW1(10))
-#' ex_scale(Q = prec,rank_def = 1)
-
-ex_scale <- function(Q, D = NULL, rank_def = NULL) {
+#' scale_GMRF(Q = prec, rank_def = 1)
+scale_GMRF <- function(Q, D = NULL, rank_def = NULL) {
   isSPSD(Q)
 
   if (is.null(D)) {
@@ -27,11 +26,11 @@ ex_scale <- function(Q, D = NULL, rank_def = NULL) {
   var_diag <- rowSums(D * (D %*% Sigma))
 
   if (any(var_diag < 0)) {
-    stop(paste0("Invalid case: the conditional variance entries cannot be negative."))
+    stop("Invalid case: the conditional variance entries cannot be negative.")
   }
 
   if (all(var_diag == 0)) {
-    stop(paste0("Invalid case: the conditional variance entries cannot be all null."))
+    stop("Invalid case: the conditional variance entries cannot be all null.")
   }
 
   C <- mean(var_diag)

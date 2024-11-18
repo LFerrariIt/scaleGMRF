@@ -10,37 +10,36 @@
 #' @return A matrix with `K1`x`K2` columns and a number of rows equal to the length of `x1` and `x2`.
 #'
 #' @examples
-#' x_grid <- expand.grid(
+#' x_grid <- as.matrix(expand.grid(
 #'   seq(0, 1, length.out = 100),
 #'   seq(0, 1, length.out = 100)
-#' )
+#' ))
 #'
 #' bspline2D(x_grid, K1 = 5, K2 = 5)
 #'
 bspline2D <- function(x, K1, K2) {
-
   if (K1 < 4) {
-    stop(paste0("`K1` must be larger than 3."))
+    stop("`K1` must be larger than 3.")
   }
 
   if (K2 < 4) {
-    stop(paste0("`K2` must be larger than 3."))
+    stop("`K2` must be larger than 3.")
   }
 
   if (!is.matrix(x)) {
-    stop(paste0("`x` must be a matrix."))
+    stop("`x` must be a matrix.")
   }
 
   if (ncol(x) != 2 | nrow(x) == 0) {
-    stop(paste0("`x` must have 2 columns and a positive number of rows. Instead, it has dimension ", nrow(x), "x", ncol(x), "."))
+    stop("`x` must have 2 columns and a positive number of rows. Instead, it has dimension ", nrow(x), "x", ncol(x), ".")
   }
 
   if (any(x < 0) | any(x > 1) | any(is.na(x))) {
-    stop(paste0("The entries of `x` must be normalized to lie between 0 and 1 and must not contain NA values."))
+    stop("The entries of `x` must be normalized to lie between 0 and 1 and must not contain NA values.")
   }
 
-  x1 <- x[,1]
-  x2 <- x[,2]
+  x1 <- x[, 1]
+  x2 <- x[, 2]
 
   B_1 <- bspline(x1, K1)
   B_2 <- bspline(x2, K2)

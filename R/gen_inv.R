@@ -7,7 +7,7 @@
 #'
 #'
 #' @examples
-#' gen_inv(diag(10),rank_def=0)
+#' gen_inv(diag(10), rank_def = 0)
 #' gen_inv(as.matrix(spam::precmat.RW1(10)), rank_def = 1)
 #' gen_inv(as.matrix(spam::precmat.RW2(10)), rank_def = 2)
 #'
@@ -20,6 +20,14 @@ gen_inv <- function(M, rank_def = NULL) {
 
   if (is.null(rank_def)) {
     rank_def <- nrow(M) - Matrix::rankMatrix(M)
+  }
+
+  if (!is.numeric(rank_def)) {
+    stop("rank_def must be a non-negative integer.")
+  }
+
+  if (rank_def %% 1 != 0 | rank_def < 0) {
+    stop("rank_def must be a non-negative integer.")
   }
 
   gen_inverse <- U %*% diag(c(1 / (V[1:(nrow(M) - rank_def)]), rep(0, rank_def))) %*% t(U)

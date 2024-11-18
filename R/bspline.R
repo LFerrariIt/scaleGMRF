@@ -10,18 +10,17 @@
 #' @examples
 #' x <- seq(0, 1, length.out = 100)
 #' bspline(x, K = 10)
-
 bspline <- function(x, K) {
   if (K < 4) {
-    stop(paste0("`K` must be larger than 3."))
+    stop("`K` must be larger than 3.")
   }
 
   if (!is.numeric(x)) {
-    stop(paste0("`x` must be a numeric vector."))
+    stop("`x` must be a numeric vector.")
   }
 
   if (any(x < 0) | any(x > 1) | any(is.na(x))) {
-    stop(paste0("The vector `x` must be normalized to lie between 0 and 1 and not contain NA values."))
+    stop("The vector `x` must be normalized to lie between 0 and 1 and not contain NA values.")
   }
 
   dx <- 1 / (K - 3)
