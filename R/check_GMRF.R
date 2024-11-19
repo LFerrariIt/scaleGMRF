@@ -15,7 +15,7 @@ check_GMRF <- function(result) {
 
   mean_sample <- colMeans(f_sample)
 
-  var_sample <- apply(f_sample, 2, var)
+  var_sample <- apply(f_sample, 2, function(x) var(x)*(length(x)-1)/length(x))
 
   return(
     ggpubr::ggarrange(
@@ -35,13 +35,13 @@ check_GMRF <- function(result) {
           ggplot2::geom_vline(xintercept = 0) +
           ggplot2::geom_vline(xintercept = mean(mean_sample), col = 2) +
           ggplot2::theme_light() +
-          ggplot2::labs(x = "Mean", title = round(mean(mean_sample), 2)),
+          ggplot2::labs(title = "Mean", x = paste("Mean:",round(mean(mean_sample), 2))),
         ggplot2::ggplot() +
           ggplot2::geom_histogram(ggplot2::aes(var_sample), fill = "grey") +
           ggplot2::geom_vline(xintercept = 1) +
           ggplot2::geom_vline(xintercept = mean(var_sample), col = 2) +
           ggplot2::theme_light() +
-          ggplot2::labs(x = "Variance", title = round(mean(var_sample), 2))
+          ggplot2::labs(title = "Variance", x = paste("Mean:",round(mean(var_sample), 2)))
       ),
       ncol = 1
     )

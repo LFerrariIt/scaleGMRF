@@ -32,7 +32,7 @@ linear_standard <- function(x, m = NULL, M = NULL) {
   M <- m_M[2]
 
   x_mean <- (m + M) / 2
-  x_var <- (M - m) / 12
+  x_var <- (M - m)^2 / 12
 
   Q <- diag(1)
   D <- matrix((x - x_mean) / sqrt(x_var), ncol = 1, nrow = length(x))

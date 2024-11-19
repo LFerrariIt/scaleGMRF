@@ -15,6 +15,7 @@
 #' # Example 1
 #' K <- 20
 #' x <- factor(sample(1:K, 100, replace = TRUE), ordered = TRUE, levels = c(1:K))
+#' f_Xunif(x, model = "iid", plot_check = TRUE)
 #' f_Xunif(x, model = "iid", fixed = FALSE, plot_check = TRUE)
 #' f_Xunif(x, model = "rw1", plot_check = TRUE)
 #' f_Xunif(x, model = "rw2", plot_check = TRUE)
@@ -58,7 +59,11 @@ f_Xunif <- function(
   }
 
   if (plot_check) {
-    print(check_GMRF(result))
+
+    return(
+      ggpubr::annotate_figure(
+        check_GMRF(result),top=paste("Model:",model)))
+
   }
 
   return(result)

@@ -16,7 +16,7 @@ isOrderedFactor(x)
 K <- 20
 x <- factor(1:K, ordered = TRUE, levels = c(1:K))
 isOrderedFactor(x) # NULL
-try(isOrderedFactor(c(x,NA))) # error
+try(isOrderedFactor(c(x, NA))) # error
 try(isOrderedFactor(factor(1:K, levels = c(1:K)))) # error
-try(isOrderedFactor(factor(rep(1,K), levels = 1))) # error
+try(isOrderedFactor(factor(rep(1, K), levels = 1))) # error
 }

@@ -27,17 +27,18 @@ f_Xunif(x, model, K, adj_mat, m = NULL, M = NULL, fixed = TRUE, plot_check = F)
 `f_Xunif()` returns a list to build various standardized effects (specified through the `model` argument) under the assumption that the corresponding covaiate follows a Uniform distribution (either, discrete or continuous). The first three elements of the list are designed to be used in INLA to specify an effect in its standardized version through the model `generic0`. The list also reports the scaling constant, a sample from the Uniform distribution on the covariate, and  the basis matrix evaluated at this sample: these elements can be useful for the user. The argument `plot_check=TRUE` returns a plot showing realizations of the standardized effect along with the histograms of the mean and variance of each realization.
 }
 \examples{
-#Example 1
+# Example 1
 K <- 20
 x <- factor(sample(1:K, 100, replace = TRUE), ordered = TRUE, levels = c(1:K))
-f_Xunif(x, model = "iid", fixed = FALSE, plot_check=TRUE)
-f_Xunif(x, model = "rw1", plot_check=TRUE)
-f_Xunif(x, model = "rw2", plot_check=TRUE)
+f_Xunif(x, model = "iid", plot_check = TRUE)
+f_Xunif(x, model = "iid", fixed = FALSE, plot_check = TRUE)
+f_Xunif(x, model = "rw1", plot_check = TRUE)
+f_Xunif(x, model = "rw2", plot_check = TRUE)
 
-#Example 2
+# Example 2
 K <- 20
-x<- runif(1000,min=2,max=5)
-f_Xunif(x, model = "linear", plot_check=TRUE)
-f_Xunif(x, model = "pspline1",   K = K, plot_check=TRUE)
-f_Xunif(x, model = "pspline2",   K = K, plot_check=TRUE)
+x <- runif(1000, min = 2, max = 5)
+f_Xunif(x, model = "linear", plot_check = TRUE)
+f_Xunif(x, model = "pspline1", K = K, plot_check = TRUE)
+f_Xunif(x, model = "pspline2", K = K, plot_check = TRUE)
 }

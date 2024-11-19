@@ -22,6 +22,6 @@ A vector of 2 numeric entries, with the first being smaller than the second.
 \examples{
 x <- runif(100)
 checkBoundaries(x)
-try(checkBoundaries(x, m=2,M=3))
-try(checkBoundaries(x, m=1,M=0))
+try(checkBoundaries(x, m = 2, M = 3))
+try(checkBoundaries(x, m = 1, M = 0))
 }
