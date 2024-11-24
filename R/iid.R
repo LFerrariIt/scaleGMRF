@@ -41,7 +41,7 @@ iid_standard <- function(x, fixed = TRUE) {
   C <- stand_iid$scaling_constant
 
   return(list(
-    "precision" = Q * C,
+    "precision" = Q,
     "basis" = D,
     "scaling_constant" = C,
     "null_space" = S,

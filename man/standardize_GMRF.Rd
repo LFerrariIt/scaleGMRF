@@ -4,7 +4,14 @@
 \alias{standardize_GMRF}
 \title{Standardize a GMRF}
 \usage{
-standardize_GMRF(Q, D = NULL, rank_def = NULL, fixed = TRUE, scale_Q = TRUE)
+standardize_GMRF(
+  Q,
+  D = NULL,
+  rank_def = NULL,
+  fixed = TRUE,
+  plot_check = FALSE,
+  n_sim = 1000
+)
 }
 \arguments{
 \item{Q}{A square matrix, representing the precision matrix on the coefficients.}
@@ -15,7 +22,9 @@ standardize_GMRF(Q, D = NULL, rank_def = NULL, fixed = TRUE, scale_Q = TRUE)
 
 \item{fixed}{logical indicating whether the effect is to be considered fixed.}
 
-\item{scale_Q}{logical indicating whether the precision matrix is to be returned scaled or not.}
+\item{plot_check}{Logical, indicating whether a plot to check the standardization must be printed (TRUE) or not (FALSE). By default, FALSE.}
+
+\item{n_sim}{Positive integer, indicating the number of realizations to generate for the check plot.}
 }
 \value{
 A list of 3 or 4 elements containing:
@@ -23,7 +32,7 @@ A list of 3 or 4 elements containing:
 \item{`Q`: a matrix, representing the precision matrix under the 0-mean constraint.}
 \item{`D`: a matrix, representing the basis under the 0-mean constraint.}
 \item{`C`: a number, representing the scaling constant.}
-\item{`A`: a matrix, representing the 0-mean constraint asthe coefficients of a linear combination.}
+\item{`A`: a matrix, representing the 0-mean constraint as the coefficients of a linear combination.}
 }
 }
 \description{

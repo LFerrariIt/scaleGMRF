@@ -10,9 +10,9 @@
 #' @param M A number indicating the upper boundary of the support of X. If not provided, it is set to the maximum value from `x`.  Needed for `model="linear","pspline1","pspline2","pspline_2D"`.
 #' @param fixed Logical, indicating whether the effect must be treated as fixed (TRUE) or random (FALSE). If it is treated as fixed, a 0 mean constraint is imposed By default, TRUE. The only model affected is `model="iid"`.
 #' @param plot_check Logical, indicating whether a plot to check the standardization must be printed (TRUE) or not (FALSE). By default, FALSE.
+#' @param n_sim Positive integer, indicating the number of realizations to generate for the check plot.
 #'
 #' @examples
-#' # Example 1
 #' K <- 20
 #' x <- factor(sample(1:K, 100, replace = TRUE), ordered = TRUE, levels = c(1:K))
 #' f_Xunif(x, model = "iid", plot_check = TRUE)
@@ -20,7 +20,6 @@
 #' f_Xunif(x, model = "rw1", plot_check = TRUE)
 #' f_Xunif(x, model = "rw2", plot_check = TRUE)
 #'
-#' # Example 2
 #' K <- 20
 #' x <- runif(1000, min = 2, max = 5)
 #' f_Xunif(x, model = "linear", plot_check = TRUE)
@@ -30,16 +29,16 @@ f_Xunif <- function(
     x, model, K,
     adj_mat,
     m = NULL, M = NULL,
-    fixed = TRUE, plot_check = F) {
+    fixed = TRUE, plot_check = F, n_sim = 1000) {
   # Discrete ------
   if (model == "iid") {
     result <- iid_standard(x = x, fixed = fixed)
   }
   if (model == "rw1") {
-    result <- rw1_standard(x = x)
+    result <- rw_standard(x = x, order = 1)
   }
   if (model == "rw2") {
-    result <- rw2_standard(x = x)
+    result <- rw_standard(x = x, order = 2)
   }
   if (model == "besag") {
     result <- besag_standard(x = x, adj_mat = adj_mat)
@@ -49,21 +48,38 @@ f_Xunif <- function(
     result <- linear_standard(x = x, m = m, M = M)
   }
   if (model == "pspline1") {
-    result <- Pspline1_standard(x = x, K = K, m = m, M = M)
+    result <- pspline_standard(x = x, K = K, order = 1, m = m, M = M)
   }
   if (model == "pspline2") {
-    result <- Pspline2_standard(x = x, K = K, m = m, M = M)
+    result <- pspline_standard(x = x, K = K, order = 2, m = m, M = M)
   }
   if (model == "pspline_2D") {
     result <- Pspline_2D_standard(x = x, K = K, m = m, M = M)
   }
 
   if (plot_check) {
+    realizations <- result$basis_distribution %*%
+      t(mvtnorm::rmvnorm(n_sim, sigma = gen_inv(result$precision)))
 
     return(
       ggpubr::annotate_figure(
-        check_GMRF(result),top=paste("Model:",model)))
-
+        ggpubr::ggarrange(
+          ggplot2::ggplot(
+            data =
+              tidyr::gather(as.data.frame(realizations))
+          ) +
+            ggplot2::geom_line(alpha = 0.1, ggplot2::aes(
+              x = rep(as.matrix(result$X_distribution)[, 1], n_sim),
+              y = value, group = key
+            )) +
+            ggplot2::theme_light() +
+            ggplot2::labs(y = "f(x)", x = "x"),
+          check_GMRF(realizations, fixed = fixed),
+          ncol = 1
+        ),
+        top = paste("Model:", model)
+      )
+    )
   }
 
   return(result)

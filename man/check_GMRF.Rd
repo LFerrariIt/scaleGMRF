@@ -4,14 +4,14 @@
 \alias{check_GMRF}
 \title{Checks if the effect has been properly standardized.}
 \usage{
-check_GMRF(result)
+check_GMRF(realizations, fixed = T)
 }
 \arguments{
-\item{result}{A list returned from the `f_Xunif()` function.}
+\item{realizations}{A numeric matrix, containing a realization of the process in each column.}
 }
 \value{
 Plot.
 }
 \description{
-`check_GMRF()` returns a plot with three panels. Realizations of the effect from the argument are generated and displayed in the first panel. The expected value and variances of the realizations with respect to the Uniform distribution of the covariate are computed and plotted via histograms. The means of both statistics are also reported, which should be equal respectively to 0 (only if `fixed=TRUE`) and 1.
+`check_GMRF()` returns a plot with 2 panels: the means and variances of the realizations are plotted via histograms. The means of both statistics are also reported, which should be equal respectively to 0 (only if `fixed=TRUE`) and 1.
 }

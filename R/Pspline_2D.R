@@ -1,6 +1,6 @@
 #' Standardized 2D P-Spline effect
 #'
-#' `Pspline_2D_standard()` provides a list of elements to build a standardized 2-dimensional P-Spline effect. Specifically, the scaled precision matrix, the basis matrix, the null space, and the scaling constant are provided.
+#' `pspline_2D_standard()` provides a list of elements to build a standardized 2-dimensional P-Spline effect. Specifically, the scaled precision matrix, the basis matrix, the null space, and the scaling constant are provided.
 #'
 #' @param x A matrix of 2 columns of numeric entries.
 #' @param K A vector containing 2 positive integers larger than 3, specifying the number of basis functions respectively for the first and second dimensions.
@@ -23,8 +23,8 @@
 #'   seq(0, 1, length.out = 100),
 #'   seq(0, 1, length.out = 100)
 #' ))
-#' Pspline_2D_standard(x_grid, K = c(5, 5))
-Pspline_2D_standard <- function(x, K, m = NULL, M = NULL, sparse_sol = T) {
+#' pspline_2D_standard(x_grid, K = c(5, 5))
+pspline_2D_standard <- function(x, K, m = NULL, M = NULL, sparse_sol = T) {
   # Error messages on the arguments
 
   if (!is.numeric(K) | !is.vector(K) | length(K) != 2) {
