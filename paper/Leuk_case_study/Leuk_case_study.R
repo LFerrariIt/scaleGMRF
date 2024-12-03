@@ -1,5 +1,10 @@
 #                   SURVIVAL ANALYSIS CASE STUDY
 
+# Install the package scaleGMRF
+rm(list=ls())
+library(devtools)
+install_github("LFerrariIt/scaleGMRF")
+
 # Library loading -------------------------------------------
 library(R2BayesX)
 library(fastDummies)
@@ -7,12 +12,13 @@ library(spam)
 library(ggpubr)
 library(scaleGMRF)
 library(INLA)
+
 # This option is necessary for the use of inla.jp.define()
 inla.setOption(num.threads = "1")
 
 # Step 1: creation of the transformed dataset---------------
-
 #The dataset is available in INLA as Leuk
+data(Leuk)
 
 K_T <- 27 # number of intervals for time (about half a year)
 
@@ -121,7 +127,7 @@ data_stack <- inla.stack(
 
 # Step 4: design of the VP prior ----------------------
 
-VP_log_joint_prior <- function(theta) {
+VP_log_joint_prior <- function(theta, theta.desc = NULL) {
 
   # Hyperparameter of the symmetric Dirichlet
   alpha_omega <- 1
