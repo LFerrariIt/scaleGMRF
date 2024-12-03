@@ -2,8 +2,10 @@
 
 # Install the package scaleGMRF
 rm(list=ls())
-library(devtools)
-install_github("LFerrariIt/scaleGMRF")
+if(!require("scaleGMRF")) {
+  library(devtools)
+  install_github("LFerrariIt/scaleGMRF")
+}
 
 # Library loading -------------------------------------------
 library(R2BayesX)
@@ -81,7 +83,7 @@ D_SEX <- as.matrix(
   dummy_cols(transf_data$sex,remove_selected_columns = T))
 
 # Precision matrices
-
+#map of the districts in North East England
 nwengland <- read.bnd(system.file("otherdata/nwengland.bnd",
                                  package = "spBayesSurv"))
 Q_S <- bnd2gra(nwengland)[(1:24),(1:24)]
