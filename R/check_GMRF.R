@@ -6,7 +6,7 @@
 #'
 #' @return Plot.
 #'
-check_GMRF <- function(realizations, fixed = T) {
+check_GMRF <- function(realizations, fixed = T,X_distribution=NULL) {
   if (!is.matrix(realizations)) {
     stop("`realizations` must be a matrix.")
   }
@@ -34,27 +34,36 @@ check_GMRF <- function(realizations, fixed = T) {
             ggplot2::aes(col = "Mean")
           ) +
           ggplot2::theme_light() +
-          ggplot2::labs(title = "Mean", x = paste("Mean:", round(mean(mean_sample), 2))),
+          ggplot2::labs(title = base::expression(E[X]~"["~f(X)~"]"), x = paste("Mean:", round(mean(mean_sample), 2))),
         ggplot2::ggplot() +
           ggplot2::geom_histogram(ggplot2::aes(var_sample), fill = "grey") +
-          ggplot2::geom_vline(xintercept = 1, ggplot2::aes(col = "1")) +
           ggplot2::geom_vline(
-            xintercept = mean(var_sample), lty = "dashed",
-            ggplot2::aes(col = "Mean")
-          ) +
+            xintercept = mean(var_sample), lty = "dashed") +
           ggplot2::theme_light() +
-          ggplot2::labs(title = "Variance", x = paste("Mean:", round(mean(var_sample), 2)))
+          ggplot2::labs(title = base::expression(Var[X]~"["~f(X)~"]"), x = paste("Mean:", round(mean(var_sample), 2)))
       )
     )
   } else {
-    var_sample <- apply(realizations, 1, var)
+    if (is.null(X_distribution)) {
+      var_sample <- apply(realizations, 1, var)
 
-    return(
-      ggplot2::ggplot() +
-        ggplot2::geom_line(ggplot2::aes(x = 1:length(var_sample), y = var_sample)) +
-        ggplot2::geom_hline(yintercept = mean(var_sample), lty = "dashed") +
-        ggplot2::theme_light() +
-        ggplot2::labs(title = "Variance", x = "x")
-    )
+      return(
+        ggplot2::ggplot() +
+          ggplot2::geom_line(ggplot2::aes(x = 1:length(var_sample), y = var_sample)) +
+          ggplot2::geom_hline(yintercept = mean(var_sample), lty = "dashed") +
+          ggplot2::theme_light() +
+          ggplot2::labs(title="Variance",y=base::expression(Var["i=1"]^n~"["~f[i](x)~"]"), x = "x")
+      )
+    } else {
+      var_sample <- apply(realizations, 1, var)
+
+      return(
+        ggplot2::ggplot() +
+          ggplot2::geom_line(ggplot2::aes(x = as.matrix(X_distribution)[,1], y = var_sample)) +
+          ggplot2::geom_hline(yintercept = mean(var_sample), lty = "dashed") +
+          ggplot2::theme_light() +
+          ggplot2::labs(title="Variance",y=base::expression(Var["i=1"]^n~"["~f[i](x)~"]"), x = "x")
+      )
+    }
   }
 }

@@ -28,7 +28,7 @@
 f_Xunif <- function(
     x, model, K,
     adj_mat,
-    m = NULL, M = NULL,
+    m = NULL, M = NULL, scale_Q=T,
     fixed = TRUE, plot_check = F, n_sim = 1000) {
   # Discrete ------
   if (model == "iid") {
@@ -57,9 +57,18 @@ f_Xunif <- function(
     result <- Pspline_2D_standard(x = x, K = K, m = m, M = M)
   }
 
+  # Precision matrox unscaled -----
+  if (!scale_Q) {
+    result$precision <- result$precision/result$scaling_constant
+  }
+
+  # Check results through simulation-----
+
   if (plot_check) {
-    realizations <- result$basis_distribution %*%
-      t(mvtnorm::rmvnorm(n_sim, sigma = gen_inv(result$precision)))
+
+    if (model!="pspline_2D" & model !="besag") {
+      realizations <- result$basis_distribution %*%
+        t(mvtnorm::rmvnorm(n_sim, sigma = gen_inv(result$precision)))
 
     return(
       ggpubr::annotate_figure(
@@ -69,18 +78,27 @@ f_Xunif <- function(
               tidyr::gather(as.data.frame(realizations))
           ) +
             ggplot2::geom_line(alpha = 0.1, ggplot2::aes(
-              x = rep(as.matrix(result$X_distribution)[, 1], n_sim),
+              x = rep(result$X_distribution, n_sim),
               y = value, group = key
             )) +
             ggplot2::theme_light() +
             ggplot2::labs(y = "f(x)", x = "x"),
-          check_GMRF(realizations, fixed = fixed),
+          check_GMRF(realizations, fixed = fixed,X_distribution = result$X_distribution),
           ncol = 1
         ),
         top = paste("Model:", model)
       )
     )
+    } else {
+      return(
+        ggpubr::annotate_figure(
+          check_GMRF(realizations, fixed = fixed,X_distribution = result$X_distribution),
+          top = paste("Model:", model)
+        )
+      )
+    }
   }
 
   return(result)
+
 }

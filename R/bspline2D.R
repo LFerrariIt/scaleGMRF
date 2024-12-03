@@ -2,10 +2,12 @@
 #'
 #' `bspline2D()` creates a basis matrix with `K1`x`K2` columns, each of them evaluating the numeric vector `x` at a 2-dimensional cubic B-Spline function, defined through the Kronecker product of 2 unidimensional B-Spline functions.
 #'
-#' @param x A matrix of 2 columns, containing values between 0 and 1.
-#' @param K1 A positive integer larger than 3, specifying the number of basis functions on the first dimension.
+#' @param x A matrix of 2 columns. The first column must contain values between `m[1]` and `M[1]`. The second column must contain values between `m[2]` and `M[2]`.
+#' @param K Two positive integers larger than 3, specifying the number of basis functions on each dimension.
+
+#' @param m Lower bounds of the rectangular support on which to define the basis functions. By default, c(0,0).
 #'
-#' @param K2 A positive integer larger than 3, specifying the number of basis functions on the second dimension.
+#' @param M Upper bounds of the rectangular support on which to define the basis functions. By default, c(1,1).
 #'
 #' @return A matrix with `K1`x`K2` columns and a number of rows equal to the length of `x1` and `x2`.
 #'
@@ -17,13 +19,17 @@
 #'
 #' bspline2D(x_grid, K1 = 5, K2 = 5)
 #'
-bspline2D <- function(x, K1, K2) {
-  if (K1 < 4) {
-    stop("`K1` must be larger than 3.")
+bspline2D <- function(x, K1, K2,m=c(0,0),M=c(1,1)) {
+
+  K1 <- K[1]
+  K2 <- K[2]
+
+  if (K[1] < 4) {
+    stop("`K[1]` must be larger than 3.")
   }
 
-  if (K2 < 4) {
-    stop("`K2` must be larger than 3.")
+  if (K[2] < 4) {
+    stop("`K[2]` must be larger than 3.")
   }
 
   if (!is.matrix(x)) {
@@ -34,17 +40,13 @@ bspline2D <- function(x, K1, K2) {
     stop("`x` must have 2 columns and a positive number of rows. Instead, it has dimension ", nrow(x), "x", ncol(x), ".")
   }
 
-  if (any(x < 0) | any(x > 1) | any(is.na(x))) {
-    stop("The entries of `x` must be normalized to lie between 0 and 1 and must not contain NA values.")
-  }
-
   x1 <- x[, 1]
   x2 <- x[, 2]
 
-  B_1 <- bspline(x1, K1)
-  B_2 <- bspline(x2, K2)
+  B_1 <- bspline(x1, K[1],m=m[1],M=M[1])
+  B_2 <- bspline(x2, K[2],m=m[2],M=M[2])
 
-  B <- matrix(NA, nrow = length(x1), ncol = K1 * K2)
+  B <- matrix(NA, nrow = length(x1), ncol = K[1] * K[1])
 
   for (i in 1:length(x1)) {
     B[i, ] <- kronecker(B_2[i, ], B_1[i, ])

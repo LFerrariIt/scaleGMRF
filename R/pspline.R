@@ -43,9 +43,9 @@ pspline_standard <- function(x, K, order, m = NULL, M = NULL, sparse_sol = T) {
   m <- m_M[1]
   M <- m_M[2]
 
-  B <- bspline((x - m) / (M - m), K = K)
+  B <- bspline(x, K = K,m=m,M=M)
   x_unif <- seq(m, M, length.out = 1000)
-  B_unif <- bspline((x_unif - m) / (M - m), K = K)
+  B_unif <- bspline(x_unif, K = K,m=m,M=M)
 
   # P-Spline with Random Walk of order 1 on the coefficients
 

@@ -35,11 +35,11 @@ linear_standard <- function(x, m = NULL, M = NULL) {
   x_var <- (M - m)^2 / 12
 
   Q <- diag(1)
-  D <- matrix((x - x_mean) / sqrt(x_var), ncol = 1, nrow = length(x))
-  C <- 1
+  D <- matrix((x - x_mean), ncol = 1, nrow = length(x))
+  C <- x_var
 
   X_dist <- seq(m, M, length.out = 1000)
-  D_dist <- matrix((X_dist - x_mean) / sqrt(x_var), ncol = 1, nrow = length(X_dist))
+  D_dist <- matrix((X_dist - x_mean), ncol = 1, nrow = length(X_dist))
 
   return(list(
     "precision" = Q * C,

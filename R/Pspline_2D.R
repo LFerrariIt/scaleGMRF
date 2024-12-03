@@ -90,7 +90,7 @@ pspline_2D_standard <- function(x, K, m = NULL, M = NULL, sparse_sol = T) {
     stop("The entries of `x` must lie between the given boundaries and must not contain NA values.")
   }
 
-  B <- bspline2D(x_norm, K[1], K[2])
+  B <- bspline2D(x, K[1], K[2],m=m,M=M)
 
 
   # Original Q, G, W matrices and generalized inverse of Q
