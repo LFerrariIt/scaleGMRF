@@ -2,17 +2,17 @@
 #'
 #' `isValidBasis()` throws an error message if the first argument is not a non-empty matrix of the correct dimension. The error message explains which property is not respected.
 #'
-#' @param D a matrix.
-#' @param Q a square matrix.
+#' @param D A matrix.
+#' @param Q A square matrix.
 #'
 #' @return NULL
-#' @export
 #'
 #' @examples
 #' x <- seq(0, 1, length.out = 100)
 #' isValidBasis(D = bspline(x, K = 10), Q = diag(10)) # NULL
 #'
 #' try(isValidBasis(D = bspline(x, K = 20), Q = diag(10))) # error
+
 isValidBasis <- function(D, Q) {
   tryCatch(
     {
@@ -25,11 +25,11 @@ isValidBasis <- function(D, Q) {
   )
 
   if (!is.matrix(D)) {
-    stop("`D` must be a matrix. Instead it is a", class(D), ".")
+    stop("`D` must be a matrix object. Instead it is a", class(D), ".")
   }
 
   if (nrow(D) == 0 | ncol(D) == 0) {
-    stop("`D` must be a non-empty matrix.")
+    stop("`D` must be a non-empty matrix.  Instead, it has dimension ", nrow(D), "x", ncol(D), ".")
   }
 
   if (anyNA(D)) {

@@ -4,13 +4,13 @@
 \alias{isSPSD}
 \title{Test if a Matrix is Symmetric Positive (Semi-)Definite}
 \usage{
-isSPSD(M)
+isSPSD(Q)
 }
 \arguments{
-\item{M}{A matrix object.}
+\item{Q}{A matrix object.}
 }
 \description{
-`isSPSD()` throws an error message if the argument is not a non-empty symmetric positive (semi-)definite matrix without NA entries and not nilpotent. The error message explains which property is not respected.
+\code{isSPSD()} throws an error message if the argument is not a non-empty symmetric positive (semi-)definite matrix without NA entries and not nilpotent. The error message explains which property is not respected.
 }
 \examples{
 isSPSD(diag(10)) # NULL

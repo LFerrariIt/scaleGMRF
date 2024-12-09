@@ -10,7 +10,7 @@ isOrderedFactor(x)
 \item{x}{An ordered factor, with more than 1 level.}
 }
 \description{
-`isOrderedFactor()` throws an error message if the argument is not an ordered factor with more than 2 levels or contains NA values.
+\code{isOrderedFactor()} throws an error message if the argument is not an ordered factor with more than 2 levels or contains NA values.
 }
 \examples{
 K <- 20

@@ -7,22 +7,22 @@
 mean0_GMRF(Q, D = NULL, rank_def = NULL)
 }
 \arguments{
-\item{Q}{A square matrix, representing the precision matrix on the coefficients.}
+\item{Q}{A square matrix, representing the precision matrix on the coefficients of the Gaussian effect.}
 
-\item{D}{A matrix, representing the basis matrix of the effect. If not provided, it is set to an identity matrix of dimension equal to `Q`.}
+\item{D}{A matrix, representing the basis matrix of the effect. If not provided, it is set to an identity matrix of dimension equal to \code{Q}.}
 
-\item{rank_def}{The rank deficiency of the matrix `Q`. If not provided, it is estimated.}
+\item{rank_def}{The rank deficiency of the matrix \code{Q}. If not provided, it is estimated.}
 }
 \value{
 A list of 3 elements containing:
 \itemize{
-\item{`Q`: a matrix, representing the precision matrix under the 0-mean constraint.}
-\item{`D`: a matrix, representing the basis under the 0-mean constraint.}
-#' \item{`A`: a matrix, representing the 0-mean constraint as the coefficients of a linear combination.}
+\item \code{Q}: a matrix, representing the precision matrix subject to the 0-mean constraint.
+\item \code{D}: a matrix, representing the basis subject to the 0-mean
+\item \code{A}: a matrix with 1 column, representing the 0-mean constraint as the coefficients of a linear combination.
 }
 }
 \description{
-`mean0_GMRF` returns the precision matrix subject to a 0-mean constraint, based on the provided precision and basis matrices.
+\code{mean0_GMRF} returns the precision matrix subject to a 0-mean constraint of a Gaussian effect, defined through a basis matrix and a set of Normally distributed coefficients with null mean and given precision matrix.
 }
 \examples{
 mean0_GMRF(diag(10))

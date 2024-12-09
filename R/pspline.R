@@ -3,22 +3,12 @@
 #' @description
 #' `pspline_standard()` provides a list of elements to build a standardized P-Spline effect with a random walk process of order 1 or 2 on the coefficients. Note that the modified version is used, as detailed in ???.
 #'
-#' @param x A numeric vector.
-#'  @param K A positive integer larger than 3, specifying the number of basis functions.
-#'  @param order Either 1 or 2, representing the order of the random walk.
-#' @param m A number indicating the lower boundary of the support of X. If not provided, it is set to the minimum value from `x`.
-#' @param M A number indicating the upper boundary of the support of X. If not provided, it is set to the maximum value from `x`.
+#' @inherit linear_standard params
+#' @param K A positive integer larger than 3, specifying the number of basis functions.
+#' @param order Either 1 or 2, representing the order of the random walk.
 #' @param sparse_sol Logical, indicating whether the solution is to be provided in the sparse version. Otherwise, the solution is provided in a non-sparse format. By default, TRUE.
 #'
-#' @return A list of 6 elements, containing:
-#' \itemize{
-#' \item{`precision`: precision matrix.}
-#' \item{`basis`:  basis matrix evaluated at `x`}
-#' \item{`scaling_constant`: a positive number, representing the appropriate scaling constant.}
-#'  \item{`null_space`: a matrix, representing the null space of the precision matrix.}
-#'  \item{`X_distribution`: a numeric vector sampled from the Uniform distribution on X.}
-#'  \item{`basis_distribution`: basis matrix evaluated at `X_distribution`.}
-#' }
+#' @inherit iid_standard return
 #'
 #' @examples
 #' x <- seq(0, 1, length.out = 100)
@@ -43,9 +33,9 @@ pspline_standard <- function(x, K, order, m = NULL, M = NULL, sparse_sol = T) {
   m <- m_M[1]
   M <- m_M[2]
 
-  B <- bspline(x, K = K,m=m,M=M)
+  B <- bspline(x, K = K, m = m, M = M)
   x_unif <- seq(m, M, length.out = 1000)
-  B_unif <- bspline(x_unif, K = K,m=m,M=M)
+  B_unif <- bspline(x_unif, K = K, m = m, M = M)
 
   # P-Spline with Random Walk of order 1 on the coefficients
 

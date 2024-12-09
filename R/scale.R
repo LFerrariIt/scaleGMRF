@@ -1,10 +1,8 @@
 #' Expectation-based scaling for an LGM effect
 #'
-#' `scale_GMRF()` returns the appropriate scaling constant for a given effect of an LGM model, defined through a basis matrix and a precision matrix.
+#' `scale_GMRF()` returns the appropriate scaling constant for a Gaussian effect, defined through a basis matrix and a set of Normally distributed coefficients with null mean and given precision matrix.
 #'
-#' @param Q A square matrix, representing the precision matrix on the coefficients.
-#' @param D A matrix, representing the basis matrix of the effect. If not provided, it is set to an identity matrix of dimension equal to `Q`.
-#' @param rank_def The rank deficiency of the matrix `Q`. If not provided, it is estimated.
+#' @inheritParams mean0_GMRF
 #'
 #' @return A positive number to be used for scaling.
 #'
@@ -12,6 +10,7 @@
 #' scale_GMRF(Q = diag(10))
 #' prec <- as.matrix(spam::precmat.RW1(10))
 #' scale_GMRF(Q = prec, rank_def = 1)
+
 scale_GMRF <- function(Q, D = NULL, rank_def = NULL) {
   isSPSD(Q)
 

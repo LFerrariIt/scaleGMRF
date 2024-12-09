@@ -4,15 +4,15 @@
 \alias{gen_inv}
 \title{Generalized Inverse of a Matrix}
 \usage{
-gen_inv(M, rank_def = NULL)
+gen_inv(Q, rank_def = NULL)
 }
 \arguments{
-\item{M}{A matrix, which must be symmetric positive (semi-)definite.}
+\item{Q}{A matrix, which must be symmetric positive (semi-)definite.}
 
-\item{rank_def}{A non-negative integer, indicating the rank deficiency of the matrix. If NULL, the rank deficiency is set to `nrow(M)-Matrix::rankMatrix(M)`.}
+\item{rank_def}{A non-negative integer, indicating the rank deficiency of the matrix. If \code{NULL}, the rank deficiency is estimated.}
 }
 \description{
-`gen_inv()` calculates the Moore-Penrose generalized inverse of a symmetric positive (semi-)definite matrix, with the possibility of explicitly state its rank-deficiency when the matrix is positive semi-definite.
+\code{gen_inv()} calculates the Moore-Penrose generalized inverse of a symmetric positive (semi-)definite matrix, with the possibility of explicitly stating the rank-deficiency when the matrix is positive semi-definite.
 }
 \examples{
 gen_inv(diag(10), rank_def = 0)
@@ -21,5 +21,5 @@ gen_inv(as.matrix(spam::precmat.RW2(10)), rank_def = 2)
 
 }
 \seealso{
-[solve()],[MASS::ginv()]
+\code{\link[=solve]{solve()}},\code{\link[MASS:ginv]{MASS::ginv()}}
 }

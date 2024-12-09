@@ -9,6 +9,7 @@ standardize_GMRF(
   D = NULL,
   rank_def = NULL,
   fixed = TRUE,
+  scale_Q = TRUE,
   plot_check = FALSE,
   n_sim = 1000
 )
@@ -16,32 +17,37 @@ standardize_GMRF(
 \arguments{
 \item{Q}{A square matrix, representing the precision matrix on the coefficients.}
 
-\item{D}{A matrix, representing the basis matrix of the effect. If not provided, it is set to an identity matrix of dimension equal to `Q`.}
+\item{D}{A matrix, representing the basis matrix of the effect. If not provided, it is set to an identity matrix of dimension equal to \code{Q}.}
 
-\item{rank_def}{The rank deficiency of the matrix `Q`. If not provided, it is estimated.}
+\item{rank_def}{The rank deficiency of the matrix \code{Q}. If not provided, it is estimated.}
 
-\item{fixed}{logical indicating whether the effect is to be considered fixed.}
+\item{fixed}{Logical, indicating whether the effect must be treated as fixed or random. By default, \code{TRUE}.}
 
-\item{plot_check}{Logical, indicating whether a plot to check the standardization must be printed (TRUE) or not (FALSE). By default, FALSE.}
+\item{scale_Q}{Logical, indicating whether the precision matrix to be returned must already be scaled or not. By default, \code{TRUE}.}
 
-\item{n_sim}{Positive integer, indicating the number of realizations to generate for the check plot.}
+\item{plot_check}{Logical, indicating whether a plot to check the standardization must be printed or not. By default, \code{FALSE}.}
+
+\item{n_sim}{Positive integer, indicating the number of realizations to generate for the check plot. By default, \code{n_sim=1000}.}
 }
 \value{
-A list of 3 or 4 elements containing:
+A list of 4 elements containing:
 \itemize{
-\item{`Q`: a matrix, representing the precision matrix under the 0-mean constraint.}
-\item{`D`: a matrix, representing the basis under the 0-mean constraint.}
-\item{`C`: a number, representing the scaling constant.}
-\item{`A`: a matrix, representing the 0-mean constraint as the coefficients of a linear combination.}
+\item \code{Q}: a matrix, representing the precision subject to the 0-mean constraint.
+\item \code{D}: a matrix, representing the basis subject to the 0-mean constraint.
+\item \code{C}: a positive number, representing the scaling constant.
+\item \code{A}: a matrix with 1 column, representing the 0-mean constraint as the coefficients of a linear combination. \code{NULL} for random effects for which the 0-mean constraint is not required, i.e. \code{fixed=FALSE}.
 }
 }
 \description{
-`scale_GMRF()` returns the appropriate scaling constant for a given effect of an LGM model, defined through a basis matrix and a precision matrix.
+\code{scale_GMRF()} returns the appropriate scaling constant for a given Gaussian effect, defined through a basis matrix and a set of Normally distributed coefficients with null mean and given precision matrix.
 }
 \examples{
+# Random walk example --------------------------------------
 prec <- as.matrix(spam::precmat.RW1(10))
-standardize_GMRF(prec, rank_def = 1)
-standardize_GMRF(prec, rank_def = 1, fixed = FALSE)
-standardize_GMRF(diag(10))
-standardize_GMRF(diag(10), fixed = FALSE)
+standardize_GMRF(prec, rank_def = 1) # fixed effect
+standardize_GMRF(prec, rank_def = 1, fixed = FALSE) # random effect
+
+# Cluster effect example -----------------------------------
+standardize_GMRF(diag(10)) # fixed effect
+standardize_GMRF(diag(10), fixed = FALSE) # random effect
 }

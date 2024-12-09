@@ -9,15 +9,15 @@ checkBoundaries(x, m = NULL, M = NULL)
 \arguments{
 \item{x}{A numeric vector.}
 
-\item{m}{A number indicating the lower boundary of the support of X. If not provided, it is set to the minimum value from `x`.}
+\item{m}{A number indicating the lower boundary of the support of X. If not provided, it is set to the minimum value from \code{x}.}
 
-\item{M}{A number indicating the upper boundary of the support of X. If not provided, it is set to the maximum value from `x`.}
+\item{M}{A number indicating the upper boundary of the support of X. If not provided, it is set to the maximum value from \code{x}.}
 }
 \value{
 A vector of 2 numeric entries, with the first being smaller than the second.
 }
 \description{
-`checkBoundaries()` tests if `x` is a numeric vector with no missing values, throwing an error if it is not, and returns the boundaries of the interval if all entries of `x` lie within this interval.
+\code{checkBoundaries()} tests if \code{x} is a numeric vector with no missing values, throwing an error if it is not, and returns the boundaries of the interval if all entries of \code{x} lie within this interval.
 }
 \examples{
 x <- runif(100)

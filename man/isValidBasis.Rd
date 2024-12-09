@@ -7,12 +7,12 @@
 isValidBasis(D, Q)
 }
 \arguments{
-\item{D}{a matrix.}
+\item{D}{A matrix.}
 
-\item{Q}{a square matrix.}
+\item{Q}{A square matrix.}
 }
 \description{
-`isValidBasis()` throws an error message if the first argument is not a non-empty matrix of the correct dimension. The error message explains which property is not respected.
+\code{isValidBasis()} throws an error message if the first argument is not a non-empty matrix of the correct dimension. The error message explains which property is not respected.
 }
 \examples{
 x <- seq(0, 1, length.out = 100)

@@ -4,18 +4,9 @@
 #' `linear_standard()` provides a list of elements to build a standardized linear effect.
 #'
 #' @param x A numeric vector.
-#' @param m A number indicating the lower boundary of the support of X. If not provided, it is set to the minimum value from `x`.
-#' @param M A number indicating the upper boundary of the support of X. If not provided, it is set to the maximum value from `x`.
+#' @param m,M A pair of numbers indicating respectively the lower and upper boundaries of the support of X. If not provided, it is set to the extreme values of `x`.
 #'
-#' @return A list of 6 elements, containing:
-#' \itemize{
-#' \item{`precision`: precision matrix.}
-#' \item{`basis`:  basis matrix evaluated at `x`}
-#' \item{`scaling_constant`: a positive number, representing the appropriate scaling constant.}
-#'  \item{`null_space`: a matrix, representing the null space of the precision matrix.}
-#'  \item{`X_distribution`: a numeric vector sampled from the Uniform distribution on X.}
-#'  \item{`basis_distribution`: basis matrix evaluated at `X_distribution`.}
-#' }
+#' @inherit iid_standard return
 #'
 #' @examples
 #' x <- seq(0, 1, length.out = 100)

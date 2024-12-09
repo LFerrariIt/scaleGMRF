@@ -9,23 +9,21 @@ linear_standard(x, m = NULL, M = NULL)
 \arguments{
 \item{x}{A numeric vector.}
 
-\item{m}{A number indicating the lower boundary of the support of X. If not provided, it is set to the minimum value from `x`.}
-
-\item{M}{A number indicating the upper boundary of the support of X. If not provided, it is set to the maximum value from `x`.}
+\item{m, M}{A pair of numbers indicating respectively the lower and upper boundaries of the support of X. If not provided, it is set to the extreme values of \code{x}.}
 }
 \value{
 A list of 6 elements, containing:
 \itemize{
-\item{`precision`: precision matrix.}
-\item{`basis`:  basis matrix evaluated at `x`}
-\item{`scaling_constant`: a positive number, representing the appropriate scaling constant.}
- \item{`null_space`: a matrix, representing the null space of the precision matrix.}
- \item{`X_distribution`: a numeric vector sampled from the Uniform distribution on X.}
- \item{`basis_distribution`: basis matrix evaluated at `X_distribution`.}
+\item \code{precision}: precision matrix
+\item \code{basis}:  basis matrix evaluated at \code{x}
+\item \code{scaling_constant}: a positive number, representing the appropriate scaling constant
+\item \code{null_space}: a matrix, representing the null space of the precision matrix
+\item \code{X_distribution}: a numeric vector of values sampled from the Uniform distribution of X
+\item \code{basis_distribution}: basis matrix evaluated at \code{X_distribution}
 }
 }
 \description{
-`linear_standard()` provides a list of elements to build a standardized linear effect.
+\code{linear_standard()} provides a list of elements to build a standardized linear effect.
 }
 \examples{
 x <- seq(0, 1, length.out = 100)

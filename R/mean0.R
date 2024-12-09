@@ -1,17 +1,16 @@
 #' Precision matrix of a GMRF subject to 0-mean constraint.
 #'
-#' `mean0_GMRF` returns the precision matrix subject to a 0-mean constraint, based on the provided precision and basis matrices.
+#' `mean0_GMRF` returns the precision matrix subject to a 0-mean constraint of a Gaussian effect, defined through a basis matrix and a set of Normally distributed coefficients with null mean and given precision matrix.
 #'
-#' @param Q A square matrix, representing the precision matrix on the coefficients.
+#' @param Q A square matrix, representing the precision matrix on the coefficients of the Gaussian effect.
 #' @param D A matrix, representing the basis matrix of the effect. If not provided, it is set to an identity matrix of dimension equal to `Q`.
 #' @param rank_def The rank deficiency of the matrix `Q`. If not provided, it is estimated.
 #'
 #' @return A list of 3 elements containing:
-#' \itemize{
-#' \item{`Q`: a matrix, representing the precision matrix under the 0-mean constraint.}
-#' \item{`D`: a matrix, representing the basis under the 0-mean constraint.}
-#' #' \item{`A`: a matrix, representing the 0-mean constraint as the coefficients of a linear combination.}
-#' }
+#' * `Q`: a matrix, representing the precision matrix subject to the 0-mean constraint.
+#' * `D`: a matrix, representing the basis subject to the 0-mean
+#' * `A`: a matrix with 1 column, representing the 0-mean constraint as the coefficients of a linear combination.
+#'
 #' @examples
 #' mean0_GMRF(diag(10))
 #' mean0_GMRF(as.matrix(spam::precmat.RW1(10)), rank_def = 1)

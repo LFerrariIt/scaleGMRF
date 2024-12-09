@@ -4,14 +4,12 @@
 #' @param fixed Logical, indicating whether the effect must be treated as fixed (TRUE) or random (FALSE). If it is treated as fixed, a 0 mean constraint is imposed By default, TRUE.
 #'
 #' @return A list of 6 elements, containing:
-#' \itemize{
-#' \item{`precision`: precision matrix.}
-#' \item{`basis`:  basis matrix evaluated at `x`}
-#' \item{`scaling_constant`: a positive number, representing the appropriate scaling constant.}
-#'  \item{`null_space`: a matrix, representing the null space of the precision matrix.}
-#'  \item{`X_distribution`: a numeric vector sampled from the Uniform distribution on X.}
-#'  \item{`basis_distribution`: basis matrix evaluated at `X_distribution`.}
-#' }
+#' * `precision`: precision matrix
+#' * `basis`:  basis matrix evaluated at `x`
+#' * `scaling_constant`: a positive number, representing the appropriate scaling constant
+#'  * `null_space`: a matrix, representing the null space of the precision matrix
+#'  * `X_distribution`: a numeric vector of values sampled from the Uniform distribution of X
+#'  * `basis_distribution`: basis matrix evaluated at `X_distribution`
 #'
 #'
 #' @examples

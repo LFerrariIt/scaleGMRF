@@ -14,12 +14,12 @@ iid_standard(x, fixed = TRUE)
 \value{
 A list of 6 elements, containing:
 \itemize{
-\item{`precision`: precision matrix.}
-\item{`basis`:  basis matrix evaluated at `x`}
-\item{`scaling_constant`: a positive number, representing the appropriate scaling constant.}
- \item{`null_space`: a matrix, representing the null space of the precision matrix.}
- \item{`X_distribution`: a numeric vector sampled from the Uniform distribution on X.}
- \item{`basis_distribution`: basis matrix evaluated at `X_distribution`.}
+\item \code{precision}: precision matrix
+\item \code{basis}:  basis matrix evaluated at \code{x}
+\item \code{scaling_constant}: a positive number, representing the appropriate scaling constant
+\item \code{null_space}: a matrix, representing the null space of the precision matrix
+\item \code{X_distribution}: a numeric vector of values sampled from the Uniform distribution of X
+\item \code{basis_distribution}: basis matrix evaluated at \code{X_distribution}
 }
 }
 \description{

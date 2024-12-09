@@ -6,15 +6,7 @@
 #' @param x An ordered factor, with more than 1 level.
 #' @param order Either 1 or 2, representing the order of the random walk.
 #'
-#' @return A list of 6 elements, containing:
-#' \itemize{
-#' \item{`precision`: precision matrix.}
-#' \item{`basis`:  basis matrix evaluated at `x`}
-#' \item{`scaling_constant`: a positive number, representing the appropriate scaling constant.}
-#'  \item{`null_space`: a matrix, representing the null space of the precision matrix.}
-#'  \item{`X_distribution`: a numeric vector sampled from the Uniform distribution on X.}
-#'  \item{`basis_distribution`: basis matrix evaluated at `X_distribution`.}
-#' }
+#' @inherit iid_standard return
 #'
 #' @examples
 #' K <- 20

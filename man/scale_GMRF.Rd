@@ -7,17 +7,17 @@
 scale_GMRF(Q, D = NULL, rank_def = NULL)
 }
 \arguments{
-\item{Q}{A square matrix, representing the precision matrix on the coefficients.}
+\item{Q}{A square matrix, representing the precision matrix on the coefficients of the Gaussian effect.}
 
-\item{D}{A matrix, representing the basis matrix of the effect. If not provided, it is set to an identity matrix of dimension equal to `Q`.}
+\item{D}{A matrix, representing the basis matrix of the effect. If not provided, it is set to an identity matrix of dimension equal to \code{Q}.}
 
-\item{rank_def}{The rank deficiency of the matrix `Q`. If not provided, it is estimated.}
+\item{rank_def}{The rank deficiency of the matrix \code{Q}. If not provided, it is estimated.}
 }
 \value{
 A positive number to be used for scaling.
 }
 \description{
-`scale_GMRF()` returns the appropriate scaling constant for a given effect of an LGM model, defined through a basis matrix and a precision matrix.
+\code{scale_GMRF()} returns the appropriate scaling constant for a Gaussian effect, defined through a basis matrix and a set of Normally distributed coefficients with null mean and given precision matrix.
 }
 \examples{
 scale_GMRF(Q = diag(10))
