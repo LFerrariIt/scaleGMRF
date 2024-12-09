@@ -6,7 +6,7 @@ Authors@R:
     person("Luisa", "Ferrari", , "luisa.ferrari5@unibo.it", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-7922-6795"))
 Maintainer: Luisa Ferrari <luisa.ferrari5@unibo.it>
-Description: scaleGMRF is a package that provides useful functions to standardize Gaussian Markov Random Fields effects used in Latent Gaussian models. The standardization guarantees that the corresponding scale parameters of the effects match their intuitiveinterpretation defined as the variance contribution of the effect as intended by the user. Additionally, the package also contains functions to define the modified version of P-Spline effects: specifically, unidimensional P-Spline effects of first- and second-order, and two-dimensional P-Splines of first-order.
+Description: scaleGMRF is a package that provides useful functions to standardize Gaussian Markov Random Fields effects used in Latent Gaussian models. The standardization guarantees that the corresponding scale parameters of the effects match their intuitive interpretation, defined as the variance contribution of the effect as intended by the user. Additionally, the package also contains functions to define the modified version of P-Spline effects: specifically, unidimensional P-Spline effects of first- and second-order, and two-dimensional P-Splines of first-order.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
@@ -20,8 +20,29 @@ Imports:
     splines,
     stats,
     tidyr
+Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.1
 Suggests: 
     knitr,
     rmarkdown
 VignetteBuilder: knitr
+Collate:
+ 'isSPSD.R'
+ 'gen_inv.R'
+ 'isValidBasis.R'
+ 'mean0.R'
+ 'scale.R'
+ 'standardize.R'
+ 'isOrderedFactor.R'
+ 'iid.R'
+ 'rw.R'
+ 'besag.R'
+ 'checkBoundaries.R'
+ 'linear.R'
+ 'bspline.R'
+ 'bspline2D.R'
+ 'pspline.R' 
+ 'pspline2D.R'
+ 'check.R'
+ 'f_Xunif.R'
+ 

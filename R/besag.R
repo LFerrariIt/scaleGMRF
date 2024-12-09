@@ -1,20 +1,12 @@
-#' Standardized Besag or ICAR effects
+#' Standardize Besag (ICAR) effects
 #'
 #' #'@description
 #' `besag_standard()` provides a list of elements to build a standardized Besag effect.
 #'
 #' @param x An ordered factor, with more than 1 level.
-#' @param adj_mat Matrix needed for `model="besag"`, representing the adjacency matrix from the lattice.
+#' @param adj_mat Matrix representing the adjacency matrix of the cells of a lattice.
 #'
-#' @return A list of 6 elements, containing:
-#' \itemize{
-#' \item{`precision`: precision matrix.}
-#' \item{`basis`:  basis matrix evaluated at `x`}
-#' \item{`scaling_constant`: a positive number, representing the appropriate scaling constant.}
-#'  \item{`null_space`: a matrix, representing the null space of the precision matrix.}
-#'  \item{`X_distribution`: a numeric vector sampled from the Uniform distribution on X.}
-#'  \item{`basis_distribution`: basis matrix evaluated at `X_distribution`.}
-#' }
+#' @inherit iid_standard return
 #'
 besag_standard <- function(x, adj_mat) {
   isOrderedFactor(x)
