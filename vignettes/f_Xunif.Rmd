@@ -1,0 +1,20 @@
+---
+title: "f_Xunif"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{f_Xunif}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+UNDER CONSTRUCTION
+
+```{r setup}
+library(scaleGMRF)
+```
