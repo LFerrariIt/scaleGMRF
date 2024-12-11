@@ -7,15 +7,15 @@
 pspline_standard(x, K, order, m = NULL, M = NULL, sparse_sol = T)
 }
 \arguments{
-\item{x}{A numeric vector.}
+\item{x}{A numeric vector, indicating the values on which the basis must be evaluated.}
 
 \item{K}{A positive integer larger than 3, specifying the number of basis functions.}
 
 \item{order}{Either 1 or 2, representing the order of the random walk.}
 
-\item{m, M}{A pair of numbers indicating respectively the lower and upper boundaries of the support of X. If not provided, it is set to the extreme values of \code{x}.}
+\item{m, M}{A pair of numbers indicating respectively the lower and upper boundary of the support of X. If not provided, they are set to the minimum and maximum values of \code{x}.}
 
-\item{sparse_sol}{Logical, indicating whether the solution is to be provided in the sparse version. Otherwise, the solution is provided in a non-sparse format. By default, TRUE.}
+\item{sparse_sol}{Logical, indicating whether the output is to be provided via sparse matrices. Otherwise, the solution is provided in a non-sparse format. By default, TRUE.}
 }
 \value{
 A list of 6 elements, containing:
@@ -24,19 +24,19 @@ A list of 6 elements, containing:
 \item \code{basis}:  basis matrix evaluated at \code{x}
 \item \code{scaling_constant}: a positive number, representing the appropriate scaling constant
 \item \code{null_space}: a matrix, representing the null space of the precision matrix
-\item \code{X_distribution}: a numeric vector of values sampled from the Uniform distribution of X
+\item \code{X_distribution}: a numeric vector (or matrix) of values sampled from the Uniform distribution of X
 \item \code{basis_distribution}: basis matrix evaluated at \code{X_distribution}
 }
 }
 \description{
-\code{pspline_standard()} provides a list of elements to build a standardized P-Spline effect with a random walk process of order 1 or 2 on the coefficients. Note that the modified version is used, as detailed in ???.
+\code{pspline_standard()} provides a list of elements to build a standardized P-Spline effect with an IGMRF prior of order 1 or 2 on the coefficients.
+}
+\details{
+This function is used in the \code{f_Xunif()} function of the \code{scaleGMRF} package to provide the elements to build a standardized P-Spline effect. This function provides a modified version of P-Spline effects. See more details in \code{vignette("psplines", package="scaleGMRF")}.
 }
 \examples{
 x <- seq(0, 1, length.out = 100)
 
-pspline_standard(x, K = 10, order = 1)
 pspline_standard(x, K = 20, order = 1)
-pspline_standard(x, K = 10, order = 2)
-pspline_standard(x, K = 20, order = 2)
 
 }

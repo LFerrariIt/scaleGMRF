@@ -18,20 +18,12 @@ knitr::opts_chunk$set(
 <!-- badges: start -->
 <!-- badges: end -->
 
+scaleGMRF is a package that provides useful functions to standardize Gaussian Markov Random Fields (GMRF) effects used in Latent Gaussian models.
 
-<!-- README.md is generated from README.Rmd. Please edit that file -->
-
-# scaleGMRF
-
-<!-- badges: start -->
-<!-- badges: end -->
-
-scaleGMRF is a package that provides useful functions to standardize Gaussian Markov Random Fields effects used in Latent Gaussian models.
-
-The reason to standardize IGMRF effects is to guarantee that their scale parameters match their intuitive interpretation, which is here defined as the
+The reason to standardize GMRF effects is to guarantee that their scale parameters match their intuitive interpretation, defined as the
 variance contribution of the effects as intended by the user. This is important to correctly reflect prior information about the variance contributions of the different effects of Latent Gaussian models through prior specification on the scale parameters.
 
-Additionally, the package also contains functions to specify a modified
+The package also contains functions to specify a modified
 version of P-Spline effects (either in one or two dimensions).
 
 A working paper about the new tools implemented in this package is under development.
@@ -50,6 +42,7 @@ devtools::install_github("LFerrariIt/scaleGMRF")
 ## Usage 
 ### standardize_GMRF()
 #example
+
 ### f_Xunif()
 #example
 ### P-Splines
@@ -59,3 +52,5 @@ devtools::install_github("LFerrariIt/scaleGMRF")
 
 ## Getting help
 If you need help or find any bug, please send an email to luisa.ferrari5@unibo.it. 
+
+## References

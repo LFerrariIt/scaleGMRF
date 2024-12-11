@@ -7,14 +7,15 @@
 <!-- badges: end -->
 
 scaleGMRF is a package that provides useful functions to standardize
-Gaussian Markov Random Fields effects used in Latent Gaussian models.
+Gaussian Markov Random Fields (GMRF) effects used in Latent Gaussian
+models.
 
-The reason to standardize IGMRF effects is to guarantee that their scale
-parameters match their intuitive interpretation, which is here defined
-as the variance contribution of the effects as intended by the user.
-This is important to correctly reflect prior information about the
-variance contributions of the different effects of Latent Gaussian
-models through prior specification on the scale parameters.
+The reason to standardize GMRF effects is to guarantee that their scale
+parameters match their intuitive interpretation, defined as the variance
+contribution of the effects as intended by the user. This is important
+to correctly reflect prior information about the variance contributions
+of the different effects of Latent Gaussian models through prior
+specification on the scale parameters.
 
 The package also contains functions to specify a modified version of
 P-Spline effects (either in one or two dimensions).
