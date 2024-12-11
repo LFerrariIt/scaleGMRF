@@ -8,41 +8,47 @@
 
 scaleGMRF is a package that provides useful functions to standardize
 Gaussian Markov Random Fields effects used in Latent Gaussian models.
-The standardization guarantees that the corresponding scale parameters
-of the effects match their intuitive interpretation defined as the
-variance contribution of the effect as intended by the user.
-Additionally, the package also contains function to define the modified
-version of P-Spline effects: specifically, unidimensional P-Spline
-effects of first- and second-order, and two-dimensional P-Splines of
-first-order.
+
+The reason to standardize IGMRF effects is to guarantee that their scale
+parameters match their intuitive interpretation, which is here defined
+as the variance contribution of the effects as intended by the user.
+This is important to correctly reflect prior information about the
+variance contributions of the different effects of Latent Gaussian
+models through prior specification on the scale parameters.
+
+The package also contains functions to specify a modified version of
+P-Spline effects (either in one or two dimensions).
+
+A working paper about the new tools implemented in this package is under
+development.
 
 ## Installation
 
-You can install the development version of scaleGMRF from
-[GitHub](https://github.com/) with:
+You can install the scaleGMRF package from [GitHub](https://github.com/)
+with:
 
 ``` r
 # install.packages("devtools")
 devtools::install_github("LFerrariIt/scaleGMRF")
 ```
 
-\##How to write README
+## Overview
 
-The goal of the README is to answer the following questions about your
-package:
+## Usage
 
-Why should I use it? How do I use it? How do I get it?
+### standardize_GMRF()
 
-When you write your README, try to put yourself in the shoes of someone
-who’s come across your package and is trying to figure out if it solves
-a problem they have. If they decide that your package looks promising,
-the README should also show them how to install it and how to do one or
-two basic tasks.
+\#example
 
-A paragraph that describes the high-level purpose of the package.
+### f_Xunif()
 
-An example that shows how to use the package to solve a simple problem.
+\#example \### P-Splines \#example
 
-An overview that describes the main components of the package. Point to
-vignettes for more details. This is also a good place to describe how
-your package fits into the ecosystem of its target domain.
+## Integration with INLA
+
+## Getting help
+
+If you need help or find any bug, please send an email to
+<luisa.ferrari5@unibo.it>.
+
+## References

@@ -8,11 +8,10 @@ if(!require("scaleGMRF")) {
 }
 
 # Library loading -------------------------------------------
-library(R2BayesX)
+library(scaleGMRF)
 library(fastDummies)
 library(spam)
 library(ggpubr)
-library(scaleGMRF)
 library(INLA)
 
 # This option is necessary for the use of inla.jp.define()
@@ -84,9 +83,7 @@ D_SEX <- as.matrix(
 
 # Precision matrices
 #map of the districts in North East England
-nwengland <- read.bnd(system.file("otherdata/nwengland.bnd",
-                                 package = "spBayesSurv"))
-Q_S <- bnd2gra(nwengland)[(1:24),(1:24)]
+Q_S <- diag(rowSums(nwEngland_adj_mat))-nwEngland_adj_mat
 Q_T <- as.matrix(precmat.RW1(K_T))
 Q_SEX <- gen_inv(matrix(c(0.5,-0.5,-0.5,0.5),ncol=2),rank_def = 1)
 
@@ -459,7 +456,7 @@ ggarrange(
 ggsave(filename = "covariates.png",covariates_plot,
        width=1600,height=1800,units="px",bg="white")
 
-dst_map <- fortify(bnd2sp(nwengland))
+dst_map <- fortify(nwEngland_sp)
 dst_scaled <- scaled_model$summary.random$u_S$mean[as.numeric(districts_map$id)]
 dst_unscaled <- unscaled_model$summary.random$u_S$mean[as.numeric(districts_map$id)]
 

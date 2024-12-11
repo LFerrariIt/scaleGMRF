@@ -1,4 +1,4 @@
-#' Standardize Besag (ICAR) effects
+#' Standardized Besag (ICAR) effects
 #'
 #' #'@description
 #' `besag_standard()` provides a list of elements to build a standardized Besag effect.
@@ -8,6 +8,12 @@
 #'
 #' @inherit iid_standard return
 #'
+#' @examples
+#' # Example with the North West England districts ------------
+#' data("nwEngland_adj_mat")
+#' K <- nrow(nwEngland_adj_mat)
+#' x <- factor(1:K, ordered = TRUE, levels = c(1:K))
+#' besag_standard(x, adj_mat = nwEngland_adj_mat)
 besag_standard <- function(x, adj_mat) {
   isOrderedFactor(x)
 
@@ -24,7 +30,7 @@ besag_standard <- function(x, adj_mat) {
     stop("`adj_mat` must be a matrix. Instead, it is a", class(adj_mat), ".")
   }
 
-  if (!isSymmetric(adj_mat)) {
+  if (!isSymmetric(unname(adj_mat))) {
     stop("`adj_mat` must be a symmetric matrix.")
   }
 

@@ -1,16 +1,23 @@
-#' Expectation-based scaling for an LGM effect
+#' Scaling constant for a GMRF
 #'
-#' `scale_GMRF()` returns the appropriate scaling constant for a Gaussian effect, defined through a basis matrix and a set of Normally distributed coefficients with null mean and given precision matrix.
+#' `scale_GMRF()` returns the appropriate scaling constant for a Gaussian effect.
 #'
 #' @inheritParams mean0_GMRF
 #'
-#' @return A positive number to be used for scaling.
+#' @return `scaling_constant`A positive number.
+#'
+#' @details This function is used in the `standardize_GMRF()` function of the `scaleGMRF` package to appropriately scale Gaussian effects multiplying their precision matrix by the scaling constant returned by the `scale_GMRF()` function.
 #'
 #' @examples
+#' # Example for an i.i.d. effect --------------------
 #' scale_GMRF(Q = diag(10))
-#' prec <- as.matrix(spam::precmat.RW1(10))
-#' scale_GMRF(Q = prec, rank_def = 1)
-
+#'
+#' # Example for a linear effect ------------------------
+#' scale_GMRF(Q = matrix(1), D = matrix(runif(100)))
+#'
+#' # Example for a random walk effect of order 1 --------
+#' scale_GMRF(Q = as.matrix(spam::precmat.RW1(10)), rank_def = 1)
+#'
 scale_GMRF <- function(Q, D = NULL, rank_def = NULL) {
   isSPSD(Q)
 
@@ -33,6 +40,7 @@ scale_GMRF <- function(Q, D = NULL, rank_def = NULL) {
   }
 
   C <- mean(var_diag)
+  names(C) <- "scaling_constant"
 
   return(C)
 }

@@ -1,6 +1,5 @@
 #' Standardized random walk effects
 #'
-#' @description
 #' `rw_standard()` provides a list of elements to build a standardized random walk effect of order 1 or 2.
 #'
 #' @param x An ordered factor, with more than 1 level.
@@ -12,7 +11,10 @@
 #' K <- 20
 #' x <- factor(sample(1:K, 100, replace = TRUE), ordered = TRUE, levels = c(1:K))
 #'
+#' # Example for a random walk of order 1 --------------------
 #' rw_standard(x, order = 1)
+#'
+#' # Example for a random walk of order 2 --------------------
 #' rw_standard(x, order = 2)
 rw_standard <- function(x, order) {
   isOrderedFactor(x)

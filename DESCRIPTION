@@ -30,14 +30,17 @@ Collate:
  'isSPSD.R'
  'gen_inv.R'
  'isValidBasis.R'
+ 'r_GMRF.R'
  'mean0.R'
  'scale.R'
  'standardize.R'
  'isOrderedFactor.R'
  'iid.R'
  'rw.R'
+ 'nwEngland_sp.R'
+ 'nwEngland_adj_mat.R'
  'besag.R'
- 'checkBoundaries.R'
+ 'xBoundaries.R'
  'linear.R'
  'bspline.R'
  'bspline2D.R'
@@ -45,4 +48,5 @@ Collate:
  'pspline2D.R'
  'check.R'
  'f_Xunif.R'
- 
+Depends: 
+    R (>= 2.10)
