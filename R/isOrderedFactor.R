@@ -6,16 +6,22 @@
 #'
 #' @return NULL
 #'
+#' @details This function is used in other functions of the `scaleGMRF` package to check whether their first argument is an ordered factor.
+#'
 #' @examples
 #' K <- 20
 #' x <- factor(1:K, ordered = TRUE, levels = c(1:K))
+#'
+#' # Valid example -------------------------------------------------
 #' isOrderedFactor(x) # NULL
-#' try(isOrderedFactor(c(x, NA))) # error
-#' try(isOrderedFactor(factor(1:K, levels = c(1:K)))) # error
-#' try(isOrderedFactor(factor(rep(1, K), levels = 1))) # error
+#'
+#' # Examples throwing errors ---------------------------------------
+#' try(isOrderedFactor(c(x, NA)))
+#' try(isOrderedFactor(factor(1:K, levels = c(1:K))))
+#' try(isOrderedFactor(factor(rep(1, K), levels = 1)))
 isOrderedFactor <- function(x) {
   if (!is.ordered(x)) {
-    stop("`x` must be an ordered factor. Instead, it is a", class(x), ".")
+    stop("`x` must be an ordered factor. Instead, it is a ", class(x), ".")
   }
 
   if (any(is.na(x))) {

@@ -7,16 +7,24 @@
 gen_inv(Q, rank_def = NULL)
 }
 \arguments{
-\item{Q}{A matrix, which must be symmetric positive (semi-)definite.}
+\item{Q}{An SPSD matrix.}
 
 \item{rank_def}{A non-negative integer, indicating the rank deficiency of the matrix. If \code{NULL}, the rank deficiency is estimated.}
 }
 \description{
-\code{gen_inv()} calculates the Moore-Penrose generalized inverse of a symmetric positive (semi-)definite matrix, with the possibility of explicitly stating the rank-deficiency when the matrix is positive semi-definite.
+\code{gen_inv()} calculates the Moore-Penrose generalized inverse of a Symmetric Positive (Semi-)Definite (SPSD) matrix, with the possibility of explicitly stating the rank-deficiency when the matrix is positive semi-definite.
+}
+\details{
+This function is used in other functions of the \code{scaleGMRF} package to compute the inverse of rank-deficient precision matrices, for which the rank-deficiency is known and does not need to be estimated, as it happens in the function \code{\link[MASS:ginv]{MASS::ginv()}}.
 }
 \examples{
+# Example with a diagonal matrix -----------------------------------
 gen_inv(diag(10), rank_def = 0)
+
+# Example with a random walk of order 1 precision matrix ------------
 gen_inv(as.matrix(spam::precmat.RW1(10)), rank_def = 1)
+
+# Example with a random walk of order 2 precision matrix ------------
 gen_inv(as.matrix(spam::precmat.RW2(10)), rank_def = 2)
 
 }

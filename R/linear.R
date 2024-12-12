@@ -1,10 +1,9 @@
-#' Standardized linear effect
+#' Standardized linear effects
 #'
-#' @description
 #' `linear_standard()` provides a list of elements to build a standardized linear effect.
 #'
-#' @param x A numeric vector.
-#' @param m,M A pair of numbers indicating respectively the lower and upper boundaries of the support of X. If not provided, it is set to the extreme values of `x`.
+#' @param x A numeric vector, indicating the values on which the basis must be evaluated.
+#' @param m,M A pair of numbers indicating respectively the lower and upper boundary of the support of X. If not provided, they are set to the minimum and maximum values of `x`.
 #'
 #' @inherit iid_standard return
 #'
@@ -16,7 +15,7 @@
 linear_standard <- function(x, m = NULL, M = NULL) {
   # Error messages on the arguments
 
-  m_M <- checkBoundaries(x = x, m = m, M = M)
+  m_M <- xBoundaries(x = x, m = m, M = M)
 
   m <- m_M[1]
 

@@ -2,29 +2,43 @@
 % Please edit documentation in R/mean0.R
 \name{mean0_GMRF}
 \alias{mean0_GMRF}
-\title{Precision matrix of a GMRF subject to 0-mean constraint.}
+\title{0-mean constraint imposition on GMRF.}
 \usage{
 mean0_GMRF(Q, D = NULL, rank_def = NULL)
 }
 \arguments{
-\item{Q}{A square matrix, representing the precision matrix on the coefficients of the Gaussian effect.}
+\item{Q}{A matrix, representing the precision matrix on the coefficients of the Gaussian effect.}
 
-\item{D}{A matrix, representing the basis matrix of the effect. If not provided, it is set to an identity matrix of dimension equal to \code{Q}.}
+\item{D}{A matrix, representing the basis of the effect. If not provided, it is set to an identity matrix of dimension equal to \code{Q}.}
 
-\item{rank_def}{The rank deficiency of the matrix \code{Q}. If not provided, it is estimated.}
+\item{rank_def}{A non-negative integer, indicating the rank deficiency of the matrix \code{Q}. If not provided, it is estimated.}
 }
 \value{
 A list of 3 elements containing:
 \itemize{
 \item \code{Q}: a matrix, representing the precision matrix subject to the 0-mean constraint.
-\item \code{D}: a matrix, representing the basis subject to the 0-mean
+\item \code{D}: a matrix, representing the basis subject to the 0-mean constraint.
 \item \code{A}: a matrix with 1 column, representing the 0-mean constraint as the coefficients of a linear combination.
 }
 }
 \description{
-\code{mean0_GMRF} returns the precision matrix subject to a 0-mean constraint of a Gaussian effect, defined through a basis matrix and a set of Normally distributed coefficients with null mean and given precision matrix.
+\code{mean0_GMRF} returns the precision and basis matrices of a Gaussian effect subject to a 0-mean constraint, along with the constraint itself.
 }
-\examples{
-mean0_GMRF(diag(10))
-mean0_GMRF(as.matrix(spam::precmat.RW1(10)), rank_def = 1)
+\details{
+This function is used in the \code{standardize_GMRF()} function of the \code{scaleGMRF} package to impose the 0-mean constraint, which is required for the standardization of fixed effects. The function first checks whether the effect already respects the 0-mean constraint. If not, the function proceeds by appropriately modifying either the basis (for effects with a single basis function) or the precision matrix (for effects with more than 1 basis function) following Equation 2.29 from Rue & Held, 2005. The correct imposition of the 0-mean constraint can be checked on the output of the function computing \code{mean(D)} if there is only one basis function or \code{Q\%*\%A} for effects with more than one basis function: the result should be a 0 vector of length equal to the number of basis functions.
 }
+\section{Example for an i.i.d. effect -------------------------------}{
+result <- mean0_GMRF(diag(10))
+result$Q \%*\% result$A
+}
+
+\section{Example for a linear effect -------------------------------}{
+result <- mean0_GMRF(Q=matrix(1),D=matrix(runif(100)))
+mean(result$D)
+}
+
+\section{Example for a random walk effect of order 1------------------------}{
+result <- mean0_GMRF(as.matrix(spam::precmat.RW1(10)), rank_def = 1)
+result$Q \%*\% result$A
+}
+

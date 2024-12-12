@@ -2,25 +2,34 @@
 % Please edit documentation in R/scale.R
 \name{scale_GMRF}
 \alias{scale_GMRF}
-\title{Expectation-based scaling for an LGM effect}
+\title{Scaling constant for a GMRF}
 \usage{
 scale_GMRF(Q, D = NULL, rank_def = NULL)
 }
 \arguments{
-\item{Q}{A square matrix, representing the precision matrix on the coefficients of the Gaussian effect.}
+\item{Q}{A matrix, representing the precision matrix on the coefficients of the Gaussian effect.}
 
-\item{D}{A matrix, representing the basis matrix of the effect. If not provided, it is set to an identity matrix of dimension equal to \code{Q}.}
+\item{D}{A matrix, representing the basis of the effect. If not provided, it is set to an identity matrix of dimension equal to \code{Q}.}
 
-\item{rank_def}{The rank deficiency of the matrix \code{Q}. If not provided, it is estimated.}
+\item{rank_def}{A non-negative integer, indicating the rank deficiency of the matrix \code{Q}. If not provided, it is estimated.}
 }
 \value{
-A positive number to be used for scaling.
+\code{scaling_constant}A positive number.
 }
 \description{
-\code{scale_GMRF()} returns the appropriate scaling constant for a Gaussian effect, defined through a basis matrix and a set of Normally distributed coefficients with null mean and given precision matrix.
+\code{scale_GMRF()} returns the appropriate scaling constant for a Gaussian effect.
+}
+\details{
+This function is used in the \code{standardize_GMRF()} function of the \code{scaleGMRF} package to appropriately scale Gaussian effects multiplying their precision matrix by the scaling constant returned by the \code{scale_GMRF()} function.
 }
 \examples{
+# Example for an i.i.d. effect --------------------
 scale_GMRF(Q = diag(10))
-prec <- as.matrix(spam::precmat.RW1(10))
-scale_GMRF(Q = prec, rank_def = 1)
+
+# Example for a linear effect ------------------------
+scale_GMRF(Q = matrix(1), D = matrix(runif(100)))
+
+# Example for a random walk effect of order 1 --------
+scale_GMRF(Q = as.matrix(spam::precmat.RW1(10)), rank_def = 1)
+
 }

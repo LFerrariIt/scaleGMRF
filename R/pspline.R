@@ -1,43 +1,29 @@
 #' Standardized P-Spline effects
 #'
 #' @description
-#' `pspline_standard()` provides a list of elements to build a standardized P-Spline effect with a random walk process of order 1 or 2 on the coefficients. Note that the modified version is used, as detailed in ???.
+#' `pspline_standard()` provides a list of elements to build a standardized P-Spline effect with an IGMRF prior of order 1 or 2 on the coefficients.
 #'
-#' @inherit linear_standard params
-#' @param K A positive integer larger than 3, specifying the number of basis functions.
+#' @inheritParams  bspline
 #' @param order Either 1 or 2, representing the order of the random walk.
-#' @param sparse_sol Logical, indicating whether the solution is to be provided in the sparse version. Otherwise, the solution is provided in a non-sparse format. By default, TRUE.
+#' @param sparse_sol Logical, indicating whether the output is to be provided via sparse matrices. Otherwise, the solution is provided in a non-sparse format. By default, TRUE.
 #'
 #' @inherit iid_standard return
+#'
+#' @details This function is used in the `f_Xunif()` function of the `scaleGMRF` package to provide the elements to build a standardized P-Spline effect. This function provides a modified version of P-Spline effects. See more details in `vignette("psplines", package="scaleGMRF")`.
 #'
 #' @examples
 #' x <- seq(0, 1, length.out = 100)
 #'
-#' pspline_standard(x, K = 10, order = 1)
 #' pspline_standard(x, K = 20, order = 1)
-#' pspline_standard(x, K = 10, order = 2)
-#' pspline_standard(x, K = 20, order = 2)
 #'
 pspline_standard <- function(x, K, order, m = NULL, M = NULL, sparse_sol = T) {
-  # Error messages on the arguments
-
-  if (!is.numeric(K) | !is.vector(K) | length(K) != 1) {
-    stop("`K` must be a number.")
-  }
-
-  if (K < 4 | K %% 1 != 0) {
-    stop("`K` must be an whole number larger than 3. Instead, K=", K, ".")
-  }
-
-  m_M <- checkBoundaries(x = x, m = m, M = M)
+  m_M <- xBoundaries(x = x, m = m, M = M)
   m <- m_M[1]
   M <- m_M[2]
 
   B <- bspline(x, K = K, m = m, M = M)
   x_unif <- seq(m, M, length.out = 1000)
   B_unif <- bspline(x_unif, K = K, m = m, M = M)
-
-  # P-Spline with Random Walk of order 1 on the coefficients
 
   # Definition of original matrices
 
@@ -95,21 +81,18 @@ pspline_standard <- function(x, K, order, m = NULL, M = NULL, sparse_sol = T) {
     S_tilde <- S_tilde[, 1]
   }
 
-  # Function computing the KLD for a given choice of lambdas
-  optim_function <- function(lambdas) {
+  # Design of the new process for a given choice of symmetric lambdas
+  tilde_f_fun <- function(lambdas) {
     lambdas <- abs(lambdas)
-
-    # Creation of the diagonal matrix Lambda
+    # Lambda matrix
     if (K %% 2 == 0) {
       Lambda <- diag(c(lambdas, rev(lambdas)))
     } else {
       Lambda <- diag(c(lambdas, rev(lambdas)[-1]))
     }
-
-    # Null space for the R matrix
+    # Null space of R matrix
     new_S <- Lambda %*% S_tilde
-
-    # New W, G, R matrix and generalized inverse of new Q
+    # New W,G,R,Q matrices
     if (order == 1) {
       W_tilde <- W / (new_S %*% t(new_S))
       G_tilde <- diag(as.vector(W_tilde %*% new_S / new_S))
@@ -126,51 +109,52 @@ pspline_standard <- function(x, K, order, m = NULL, M = NULL, sparse_sol = T) {
     }
 
     R_tilde <- G_tilde - W_tilde
-    Sigma_tilde <- Lambda %*% gen_inv(R_tilde, rank_def = order) %*% Lambda
-    # Computation of the KLD (only the non-constant part wrt to lambda)
+
+    return(list(
+      "R_tilde" = R_tilde,
+      "Lambda" = Lambda,
+      "new_S" = new_S
+    ))
+  }
+
+  # Function computing the KLD for a given choice of lambdas
+  kld_fun <- function(lambdas) {
+    # New process
+    tilde_f <- tilde_f_fun(lambdas)
+    R_tilde <- tilde_f$R_tilde
+    Lambda <- tilde_f$Lambda
+    new_S <- tilde_f$new_S
+    # Covariance matrix
+    Sigma_tilde <- Lambda %*%
+      gen_inv(R_tilde, rank_def = order) %*%
+      Lambda
+    # only the non-constant part of KLD wrt to lambdas
     kld <- sum(colSums(Q * Sigma_tilde)) -
       sum(log(eigen(Sigma_tilde)$values[1:(K - order)]))
     return(kld)
   }
   # Optimization of the KLD function with symmetric entries for lambda
-  results <- stats::nlm(optim_function, rep(1, ceiling(K / 2)), print.level = 2)
-  # Save the lambda values that minimize the KLD
-  lambdas <- abs(results$estimate)
-  # Lambda matrix
-  if (K %% 2 == 0) {
-    Lambda <- diag(c(lambdas, rev(lambdas)))
-  } else {
-    Lambda <- diag(c(lambdas, rev(lambdas)[-1]))
-  }
-  # Null space of R matrix
-  new_S <- Lambda %*% S_tilde
-  # New W,G,R,Q matrices
-  if (order == 1) {
-    W_tilde <- W / (new_S %*% t(new_S))
-    G_tilde <- diag(as.vector(W_tilde %*% new_S / new_S))
-  } else if (order == 2) {
-    W_tilde <- matrix(0, nrow = K, ncol = K)
-    G_tilde <- matrix(0, nrow = K, ncol = K)
-    for (k in 1:K) {
-      for (l in 1:K) {
-        W_tilde[k, l] <- (l - k) * W[k, l] / (new_S[k, 1] * new_S[l, 2] - new_S[k, 2] * new_S[l, 1])
-      }
-      W_tilde[k, k] <- 0
-      G_tilde[k, k] <- W_tilde[k, ] %*% new_S[, 1] / new_S[k, 1]
-    }
-  }
-
-  R_tilde <- G_tilde - W_tilde
-
-  # Basis matrix evaluated at x
-  scaling_constant <- scale_GMRF(R_tilde, B_unif %*% Lambda, rank_def = order)
+  optimal_lambdas <- stats::nlm(kld_fun, rep(1, ceiling(K / 2)), print.level = 2)$estimate
+  # Process for the optimal lambdas
+  tilde_f <- tilde_f_fun(optimal_lambdas)
+  R_tilde <- tilde_f$R_tilde
+  Lambda <- tilde_f$Lambda
+  new_S <- tilde_f$new_S
+  # Scaling constant
+  scaling_constant <- scale_GMRF(
+    R_tilde,
+    B_unif %*% Lambda,
+    rank_def = order
+  )
 
   if (sparse_sol) {
+    # Sparse version
     basis <- B %*% Lambda
     precision <- R_tilde * scaling_constant
     null_space <- new_S
     basis_dist <- B_unif %*% Lambda
   } else {
+    # Dense version
     Q_tilde <- gen_inv(Lambda %*%
       gen_inv(R_tilde, rank_def = order) %*%
       Lambda, rank_def = order)

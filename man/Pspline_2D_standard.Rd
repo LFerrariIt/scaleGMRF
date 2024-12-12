@@ -2,20 +2,18 @@
 % Please edit documentation in R/pspline2D.R
 \name{pspline_2D_standard}
 \alias{pspline_2D_standard}
-\title{Standardized 2D P-Spline effect}
+\title{Standardized 2D P-Spline effects}
 \usage{
 pspline_2D_standard(x, K, m = NULL, M = NULL, sparse_sol = T)
 }
 \arguments{
-\item{x}{A matrix of 2 columns of numeric entries.}
+\item{x}{A numeric matrix with 2 columns, indicating the values on which the basis must be evaluated.}
 
-\item{K}{A vector containing 2 positive integers larger than 3, specifying the number of basis functions respectively for the first and second dimensions.}
+\item{K}{Two positive integers larger than 3, indicating the number of basis functions for each dimension.}
 
-\item{m}{A vector of 2 numbers, indicating the lower extremes in the two dimensions. If not provided, it is set to the minimum values from the \code{x} columns.}
+\item{m, M}{Two pairs of numbers, indicating respectively the lower and upper boundaries of the rectangular support on which to define the basis functions. If not provided, they are estimated using the minimum and maximum values from the columns of \code{x}.}
 
-\item{M}{A vector of 2 numbers, indicating the upper extremes in the two dimensions. If not provided, it is set to the maximum values from the \code{x} columns.}
-
-\item{sparse_sol}{Logical, indicating whether the solution is to be provided in its sparse version. Otherwise, the solution is provided in a non-sparse format. By default, TRUE.}
+\item{sparse_sol}{Logical, indicating whether the output is to be provided via sparse matrices. Otherwise, the solution is provided in a non-sparse format. By default, TRUE.}
 }
 \value{
 A list of 6 elements, containing:
@@ -24,12 +22,15 @@ A list of 6 elements, containing:
 \item \code{basis}:  basis matrix evaluated at \code{x}
 \item \code{scaling_constant}: a positive number, representing the appropriate scaling constant
 \item \code{null_space}: a matrix, representing the null space of the precision matrix
-\item \code{X_distribution}: a matrix with 2 columns of values sampled from the Uniform distribution of X
+\item \code{X_distribution}: a numeric vector (or matrix) of values sampled from the Uniform distribution of X
 \item \code{basis_distribution}: basis matrix evaluated at \code{X_distribution}
 }
 }
 \description{
-\code{pspline_2D_standard()} provides a list of elements to build a standardized 2-dimensional P-Spline effect. Specifically, the scaled precision matrix, the basis matrix, the null space, and the scaling constant are provided.
+\code{pspline_2D_standard()} provides a list of elements to build a standardized 2-dimensional P-Spline effect with an IGMRF prior of order 1 on the coefficients.
+}
+\details{
+This function is used in the \code{f_Xunif()} function of the \code{scaleGMRF} package to provide the elements to build a standardized 2D P-Spline effect. This function provides a modified version of P-Spline effects. See more details in \code{vignette("psplines", package="scaleGMRF")}.
 }
 \examples{
 x_grid <- as.matrix(expand.grid(

@@ -2,7 +2,7 @@
 % Please edit documentation in R/standardize.R
 \name{standardize_GMRF}
 \alias{standardize_GMRF}
-\title{Standardize a GMRF}
+\title{Standardization of a GMRF}
 \usage{
 standardize_GMRF(
   Q,
@@ -11,43 +11,58 @@ standardize_GMRF(
   fixed = TRUE,
   scale_Q = TRUE,
   plot_check = FALSE,
-  n_sim = 1000
+  n_sim = 100
 )
 }
 \arguments{
-\item{Q}{A square matrix, representing the precision matrix on the coefficients.}
+\item{Q}{A matrix, representing the precision matrix on the coefficients of the Gaussian effect.}
 
-\item{D}{A matrix, representing the basis matrix of the effect. If not provided, it is set to an identity matrix of dimension equal to \code{Q}.}
+\item{D}{A matrix, representing the basis of the effect. If not provided, it is set to an identity matrix of dimension equal to \code{Q}.}
 
-\item{rank_def}{The rank deficiency of the matrix \code{Q}. If not provided, it is estimated.}
+\item{rank_def}{A non-negative integer, indicating the rank deficiency of the matrix \code{Q}. If not provided, it is estimated.}
 
-\item{fixed}{Logical, indicating whether the effect must be treated as fixed or random. By default, \code{TRUE}.}
+\item{fixed}{Logical, indicating whether the effect must be treated as fixed or random. An effect is always considered fixed if it only has one basis function. By default, \code{TRUE}.}
 
-\item{scale_Q}{Logical, indicating whether the precision matrix to be returned must already be scaled or not. By default, \code{TRUE}.}
+\item{scale_Q}{Logical, indicating whether the precision matrix must be scaled or not. By default, \code{TRUE}.}
 
 \item{plot_check}{Logical, indicating whether a plot to check the standardization must be printed or not. By default, \code{FALSE}.}
 
-\item{n_sim}{Positive integer, indicating the number of realizations to generate for the check plot. By default, \code{n_sim=1000}.}
+\item{n_sim}{Positive integer, indicating the number of realizations to generate for the check plot. By default, \code{n_sim=100}.}
 }
 \value{
 A list of 4 elements containing:
 \itemize{
-\item \code{Q}: a matrix, representing the precision subject to the 0-mean constraint.
-\item \code{D}: a matrix, representing the basis subject to the 0-mean constraint.
+\item \code{Q}: a matrix, representing the precision matrix.
+\item \code{D}: a matrix, representing the basis.
 \item \code{C}: a positive number, representing the scaling constant.
-\item \code{A}: a matrix with 1 column, representing the 0-mean constraint as the coefficients of a linear combination. \code{NULL} for random effects for which the 0-mean constraint is not required, i.e. \code{fixed=FALSE}.
+\item \code{A}: a matrix with 1 column, representing the 0-mean constraint as the coefficients of a linear combination. \code{NULL} for \code{fixed=FALSE}.
 }
 }
 \description{
-\code{scale_GMRF()} returns the appropriate scaling constant for a given Gaussian effect, defined through a basis matrix and a set of Normally distributed coefficients with null mean and given precision matrix.
+\code{standardize_GMRF()} standardizes a Gaussian effect and returns the elements needed to specify the standardized effect in INLA.
+}
+\details{
+This function is one of the two main functions of the \code{scaleGMRF} package. More details about this function can be found in \code{vignette("standardization",package="scaleGMRF")}.
 }
 \examples{
-# Random walk example --------------------------------------
-prec <- as.matrix(spam::precmat.RW1(10))
-standardize_GMRF(prec, rank_def = 1) # fixed effect
-standardize_GMRF(prec, rank_def = 1, fixed = FALSE) # random effect
 
-# Cluster effect example -----------------------------------
-standardize_GMRF(diag(10)) # fixed effect
-standardize_GMRF(diag(10), fixed = FALSE) # random effect
+# Example for an i.i.d effect ------------------------
+prec <- diag(10)
+# fixed effect
+standardize_GMRF(prec)
+# random effect
+standardize_GMRF(prec, fixed = FALSE)
+
+# Example for a linear effect ------------------------
+basis <- matrix(runif(100))
+# fixed effect
+standardize_GMRF(Q = matrix(1), D = basis)
+
+# Example for a random walk effect of order 1 ------------------------
+prec <- as.matrix(spam::precmat.RW1(10))
+# fixed effect
+standardize_GMRF(prec, rank_def = 1)
+# random effect
+standardize_GMRF(prec, rank_def = 1, fixed = FALSE)
+
 }

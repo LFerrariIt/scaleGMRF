@@ -2,7 +2,7 @@
 % Please edit documentation in R/check.R
 \name{check_GMRF}
 \alias{check_GMRF}
-\title{Checks if the effect has been properly standardized.}
+\title{Plots to check standardization of a GMRF.}
 \usage{
 check_GMRF(realizations, fixed = T, X_dist = NULL)
 }
@@ -11,11 +11,14 @@ check_GMRF(realizations, fixed = T, X_dist = NULL)
 
 \item{fixed}{Logical, indicating whether the effect must be treated as fixed or random. By default, \code{TRUE}.}
 
-\item{X_dist}{A numeric matrix, containing a realization of the process in each column.}
+\item{X_dist}{A numeric matrix, containing values sampled from the distribution of X. By default, \code{NULL}.}
 }
 \value{
 Plot.
 }
 \description{
-\code{check_GMRF()} returns a plot with 2 panels: the means and variances of the realizations are plotted via histograms. The means of both statistics are also reported, which should be equal respectively to 0 (only if \code{fixed=TRUE}) and 1.
+\code{check_GMRF()} returns a plot made up by 1 or more panels to check the standardization of a Gaussian effect. If a sample of the distribution of the covariate is specified, a plot of the realizations is also returned.
+}
+\details{
+This function is used to visually check the standardization of the Gaussian effect. It is called in the functions \code{standardize_GMRF()} and \code{f_Xunif()} of the \code{scaleGMRF} package when \code{plot_check=T}. The plot provided in the output is different for fixed and random effects: in both cases, the "Mean" value in the plot should be close to 1 if standardization has been correctly applied. See \code{vignette("standardization",package="scaleGMRF")} for more details.
 }

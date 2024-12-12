@@ -2,7 +2,7 @@
 % Please edit documentation in R/isValidBasis.R
 \name{isValidBasis}
 \alias{isValidBasis}
-\title{Test if a matrix is an appropriate basis}
+\title{Check if a matrix is an appropriate basis}
 \usage{
 isValidBasis(D, Q)
 }
@@ -14,9 +14,14 @@ isValidBasis(D, Q)
 \description{
 \code{isValidBasis()} throws an error message if the first argument is not a non-empty matrix of the correct dimension. The error message explains which property is not respected.
 }
+\details{
+This function is used in other functions of the \code{scaleGMRF} package to check whether a matrix is a valid basis matrix for a given precision matrix.
+}
 \examples{
+# Example with basis of correct dimension ------------------------
 x <- seq(0, 1, length.out = 100)
 isValidBasis(D = bspline(x, K = 10), Q = diag(10)) # NULL
 
+# Example with basis of incorrect dimension -----------------------
 try(isValidBasis(D = bspline(x, K = 20), Q = diag(10))) # error
 }

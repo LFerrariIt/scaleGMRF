@@ -18,16 +18,19 @@ A list of 6 elements, containing:
 \item \code{basis}:  basis matrix evaluated at \code{x}
 \item \code{scaling_constant}: a positive number, representing the appropriate scaling constant
 \item \code{null_space}: a matrix, representing the null space of the precision matrix
-\item \code{X_distribution}: a numeric vector of values sampled from the Uniform distribution of X
+\item \code{X_distribution}: a numeric vector (or matrix) of values sampled from the Uniform distribution of X
 \item \code{basis_distribution}: basis matrix evaluated at \code{X_distribution}
 }
 }
 \description{
-Standardized cluster effect
+\code{iid_standard()} provides a list of elements to build a standardized cluster effect.
 }
 \examples{
 K <- 20
 x <- factor(sample(1:K, 100, replace = TRUE), ordered = TRUE, levels = c(1:K))
+#Example as fixed effect ------------
 iid_standard(x)
+
+#Example as random effect ------------
 iid_standard(x, fixed = FALSE)
 }

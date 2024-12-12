@@ -2,14 +2,14 @@
 % Please edit documentation in R/linear.R
 \name{linear_standard}
 \alias{linear_standard}
-\title{Standardized linear effect}
+\title{Standardized linear effects}
 \usage{
 linear_standard(x, m = NULL, M = NULL)
 }
 \arguments{
-\item{x}{A numeric vector.}
+\item{x}{A numeric vector, indicating the values on which the basis must be evaluated.}
 
-\item{m, M}{A pair of numbers indicating respectively the lower and upper boundaries of the support of X. If not provided, it is set to the extreme values of \code{x}.}
+\item{m, M}{A pair of numbers indicating respectively the lower and upper boundary of the support of X. If not provided, they are set to the minimum and maximum values of \code{x}.}
 }
 \value{
 A list of 6 elements, containing:
@@ -18,7 +18,7 @@ A list of 6 elements, containing:
 \item \code{basis}:  basis matrix evaluated at \code{x}
 \item \code{scaling_constant}: a positive number, representing the appropriate scaling constant
 \item \code{null_space}: a matrix, representing the null space of the precision matrix
-\item \code{X_distribution}: a numeric vector of values sampled from the Uniform distribution of X
+\item \code{X_distribution}: a numeric vector (or matrix) of values sampled from the Uniform distribution of X
 \item \code{basis_distribution}: basis matrix evaluated at \code{X_distribution}
 }
 }

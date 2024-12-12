@@ -2,22 +2,25 @@
 % Please edit documentation in R/bspline2D.R
 \name{bspline_2D}
 \alias{bspline_2D}
-\title{Create a basis of cubic uniform 2D B-Spline functions}
+\title{Create a basis of equidistant cubic 2D B-Spline functions}
 \usage{
-bspline_2D(x, K, m = c(0, 0), M = c(1, 1))
+bspline_2D(x, K, m = NULL, M = NULL)
 }
 \arguments{
-\item{x}{A matrix of 2 columns. The first column must contain values between \code{m[1]} and \code{M[1]}. The second column must contain values between \code{m[2]} and \code{M[2]}.}
+\item{x}{A numeric matrix with 2 columns, indicating the values on which the basis must be evaluated.}
 
-\item{K}{Two positive integers larger than 3, specifying the number of basis functions on each dimension.}
+\item{K}{Two positive integers larger than 3, indicating the number of basis functions for each dimension.}
 
-\item{m, M}{Two pairs of numbers indicating respectively the lower and upper bounds of the rectangular support on which to define the basis functions. By default, \code{c(0,0)} and \code{c(1,1)}.}
+\item{m, M}{Two pairs of numbers, indicating respectively the lower and upper boundaries of the rectangular support on which to define the basis functions. If not provided, they are estimated using the minimum and maximum values from the columns of \code{x}.}
 }
 \value{
-A matrix with \code{K1}x\code{K2} columns and a number of rows equal to the length of \code{x1} and \code{x2}.
+A matrix with \code{K[1]}x\code{K[2]} columns and a number of rows equal to the one of \code{x}.
 }
 \description{
-\code{bspline_2D()} creates a basis matrix with \code{K1}x\code{K2} columns, each of them evaluating the numeric vector \code{x} at a 2-dimensional cubic B-Spline function, defined through the Kronecker product of 2 unidimensional B-Spline functions on the rectangular support delimited by \verb{m,M}.
+\code{bspline_2D()} creates a basis matrix with \code{K[1]}x\code{K[2]} columns, each of them evaluating the values in \code{x} at a bivariate cubic B-Spline function, defined as the Kronecker product between 2 univariate B-Spline functions.
+}
+\details{
+This function is used in the \code{pspline_2D_standard()} function of the \code{scaleGMRF} package to build a basis of equidistant cubic 2D B-Splines on a rectangular support.
 }
 \examples{
 x_grid <- as.matrix(expand.grid(
@@ -25,6 +28,6 @@ x_grid <- as.matrix(expand.grid(
   seq(0, 1, length.out = 100)
 ))
 
-bspline_2D(x_grid, K=c(5,5))
+bspline_2D(x_grid, K = c(5, 5))
 
 }

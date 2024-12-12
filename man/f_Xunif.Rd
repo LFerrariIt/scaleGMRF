@@ -14,7 +14,7 @@ f_Xunif(
   fixed = TRUE,
   scale_Q = T,
   plot_check = F,
-  n_sim = 1000
+  n_sim = 100
 )
 }
 \arguments{
@@ -26,7 +26,7 @@ f_Xunif(
 
 \item{adj_mat}{Matrix required for \code{model="besag"}, representing the adjacency matrix from the lattice. See Details.}
 
-\item{m, M}{A pair of numbers indicating respectively the lower and upper boundaries of the support of X. If not provided, it is set to the extreme values from \code{x}. Required for \verb{model="linear","pspline1","pspline2","pspline_2D"}.}
+\item{m, M}{A pair of numbers indicating respectively the lower and upper boundaries of the support of X. If not provided, they are set to the extreme values from \code{x}. Required for \verb{model="linear","pspline1","pspline2","pspline_2D"}.}
 
 \item{fixed}{Logical, indicating whether the effect must be treated as fixed or random. By default, \code{TRUE}.}
 
@@ -34,7 +34,7 @@ f_Xunif(
 
 \item{plot_check}{Logical, indicating whether a plot to check the standardization must be printed or not. By default, \code{FALSE}.}
 
-\item{n_sim}{Positive integer, indicating the number of realizations to generate for the check plot. By default, \code{n_sim=1000}.}
+\item{n_sim}{Positive integer, indicating the number of realizations to generate for the check plot. By default, \code{n_sim=100}.}
 }
 \value{
 A list of 6 elements, containing:
@@ -43,26 +43,26 @@ A list of 6 elements, containing:
 \item \code{basis}:  basis matrix evaluated at \code{x}
 \item \code{scaling_constant}: a positive number, representing the appropriate scaling constant
 \item \code{null_space}: a matrix, representing the null space of the precision matrix
-\item \code{X_distribution}: a numeric vector (or a matrix of 2 columns) of values sampled from the Uniform distribution of X
-\item \code{basis_distribution}: basis matrix evaluated at \code{X_distribution}#'
+\item \code{X_distribution}: a numeric vector (or matrix) of values sampled from the Uniform distribution of X
+\item \code{basis_distribution}: basis matrix evaluated at \code{X_distribution}
 }
 }
 \description{
-\code{f_Xunif()} returns a list to build various standardized effects (specified through the \code{model} argument) under the assumption that the corresponding covaiate follows a Uniform distribution (either, discrete or continuous). The first three elements of the list are designed to be used in INLA to specify an effect in its standardized version through the model \code{generic0}. The list also reports the scaling constant, a sample from the Uniform distribution on the covariate, and  the basis matrix evaluated at this sample: these elements can be useful for the user. The argument \code{plot_check=TRUE} returns a plot showing realizations of the standardized effect along with the histograms of the mean and variance of each realization.
+\code{f_Xunif()} provides a list of elements to build various standardized effects (chosen through the \code{model} argument) under the assumption that the corresponding covaiate follows a Uniform distribution.
+}
+\details{
+This function is designed so that the first three elements of the output list can directly be used to specify a model effect in INLA through the model \code{generic0} (see \code{inla.doc(generic0)}). More details about this function can be found in \code{vignette("f_Xunif",package="scaleGMRF")}.
 }
 \examples{
 # Examples for discrete covariates --------------------------
 K <- 20 # number of levels
-x <- factor(sample(1:K, 100, replace = TRUE), ordered = TRUE, levels = c(1:K)) # sample from X as an ordered factor object
+x <- factor(sample(1:K, 100, replace = TRUE), ordered = TRUE, levels = c(1:K))
 f_Xunif(x, model = "iid", plot_check = TRUE) # fixed iid effect
-f_Xunif(x, model = "iid", fixed = FALSE, plot_check = TRUE) # random iid effect
 f_Xunif(x, model = "rw1", plot_check = TRUE) # random walk of order 1
-f_Xunif(x, model = "rw2", plot_check = TRUE) # random walk of order 2
 
 # Examples for continuous covariates --------------------------
 x <- runif(1000, min = 2, max = 5)
 f_Xunif(x, model = "linear", plot_check = TRUE) # linear effect
 K <- 20 # number of b-spline basis functions
-f_Xunif(x, model = "pspline1", K = K, plot_check = TRUE) # p-spline of order 1
 f_Xunif(x, model = "pspline2", K = K, plot_check = TRUE) # p-spline of order 2
 }

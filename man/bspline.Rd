@@ -2,22 +2,25 @@
 % Please edit documentation in R/bspline.R
 \name{bspline}
 \alias{bspline}
-\title{Create a basis of cubic uniform B-Spline functions}
+\title{Create a basis of equidistant cubic B-Spline functions}
 \usage{
-bspline(x, K, m = 0, M = 1)
+bspline(x, K, m = NULL, M = NULL)
 }
 \arguments{
-\item{x}{A numeric vector, with values contained between 0 and 1.}
+\item{x}{A numeric vector, indicating the values on which the basis must be evaluated.}
 
 \item{K}{A positive integer larger than 3, specifying the number of basis functions.}
 
-\item{m, M}{A pair of numbers indicating respectively the lower and upper boundaries of the support. By default, 0 and 1.}
+\item{m, M}{A pair of numbers indicating respectively the lower and upper boundary of the support of X. If not provided, they are set to the minimum and maximum values of \code{x}.}
 }
 \value{
 A matrix with \code{K} columns and a number of rows equal to the length of \code{x}.
 }
 \description{
 \code{bspline()} creates a basis matrix with \code{K} columns, each of them evaluating the numeric vector \code{x} at a cubic B-Spline function defined on equidistant nodes on the \verb{m,M} interval.
+}
+\details{
+This function is used in the \code{pspline_standard()} function of the \code{scaleGMRF} package to build a basis of equidistant cubic B-Splines on a given interval. It is also used in the function \code{bspline_2D()} to create bivariate B-Spline bases on a rectangular support.
 }
 \examples{
 x <- seq(0, 1, length.out = 100)
