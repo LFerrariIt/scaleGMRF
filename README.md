@@ -1,12 +1,12 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# scaleGMRF
+# `scaleGMRF`
 
 <!-- badges: start -->
 <!-- badges: end -->
 
-scaleGMRF is a package that provides useful functions to standardize
+`scaleGMRF` is a package that provides useful functions to standardize
 Gaussian Markov Random Fields (GMRF) effects used in Latent Gaussian
 models.
 
