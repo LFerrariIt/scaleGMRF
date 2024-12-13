@@ -8,31 +8,28 @@
 
 `scaleGMRF` is an R package that provides useful functions to
 standardize Gaussian Markov Random Fields (GMRF) effects in Latent
-Gaussian models.
+Gaussian models (LGM).
 
-The reason to standardize GMRF effects is to guarantee that their
-variance parameters match their intuitive interpretation, defined as the
-variance contribution of the effects as intended by the user.
-Standardization greatly facilitates prior specification, as it
-guarantees that prior information about the variance contributions of
-the different effects of a model can be directly introduced through the
-specification of appropriate prior distributions on the corresponding
-variance parameters.
+Standardizing GMRF effects guarantees that their variance parameters
+match their intuitive interpretation, defined as the variance
+contribution of the effects as intended by the user: this greatly
+simplifies the task of prior specification of the variance parameters of
+LGMs.
 
 A working paper about the new tools implemented in this package is under
 development.
 
 ## Installation
 
-You can install the `scaleGMRF` package from
-[GitHub](https://github.com/) with:
+The `scaleGMRF` package can be installed from
+[GitHub](https://github.com/):
 
 ``` r
 # install.packages("devtools")
 devtools::install_github("LFerrariIt/scaleGMRF")
 ```
 
-## Overview
+## Context
 
 A Latent Gaussian model (Hrafnkelsson, 2023) is defined as a Bayesian
 Hierarchical model in which the linear predictor contains one or more
@@ -53,10 +50,7 @@ multivariate Gaussian distribution. Another name for multivariate
 Gaussian distributions is Gaussian Markov Random Fields (GMRF), which
 have been thoroughly studied in Rue & Held, 2005.
 
-The package contains a function `r_GMRF()` that generates realizations
-of GMRF effects over a given sample **x** of values of the covariate.
-
-In this context, we define “standardization” as a procedure that ensures
+In this context, we define “standardization” a procedure that ensures
 that the variance parameters of GMRFs match quantities that are
 intuitive for the users, namely the variance contributions of the
 effects. This is useful as it greatly simplifies the process of prior
@@ -65,7 +59,11 @@ variance contribution of an effects can be directly reflected through a
 prior on the corresponding variance parameters. The standardization
 procedure that this package proposes differs for fixed and random
 effects, as two different definitions of “variance contribution of an
-effect” are adopted for these categories.
+effect” are adopted for the two categories.
+
+## Overview
+
+### Main function: `standardize_GMRF()`
 
 The main function of the package is `standardize_GMRF()`, which takes as
 arguments a GMRF effect (via its 3 components) and its categorization as
@@ -76,9 +74,10 @@ directly used to specify an effect of an `INLA` model using the
 `inla.stack()` function and the model `"generic0"` (www.r-inla.org, Rue
 et al. 2009).
 
-The concept of “standardization” and the usage of `standardize_GMRF()`
-are thoroughly discussed in
+The design and usage of `standardize_GMRF()` are thoroughly discussed in
 `vignette("standardization",package="scaleGMRF")`.
+
+### User-friendly wrapper: `f_Xunif()`
 
 Another useful function of the package is `f_Xunif()`, which is a
 user-friendly wrapper of `standardize_GMRF()` that returns standardized
@@ -89,10 +88,9 @@ indicating the type of effect, e.g. `"linear","iid","besag"`, etc. More
 details about the function and the list of effects implemented in
 `f_Xunif()` can be found in `vignette("f_Xunif",package="scaleGMRF")`.
 
-Setting the argument `plot_check=TRUE` in both `standardize_GMRF()` and
-`f_Xunif()` causes the functions to print plots that can be used to
-visually check whether the standardization procedure has been
-successful.
+<!--#  Setting the argument plot_check=TRUE in both standardize_GMRF() and f_Xunif() causes the functions to print plots that can be used to visually check whether the standardization procedure has been successful -->
+
+### Modified P-Splines
 
 An important class of effects implemented in the `f_Xunif()` function
 are the P-Spline effects (Fahrmeir et al. 2004). Applying the
@@ -101,12 +99,19 @@ of the precision matrices traditionally used for their specification.
 The motivation and the design of this modified version of P-Splines is
 presented in `vignette("psplines",package="scaleGMRF")`.
 
-## Example of usage with `INLA`
+### Worked example
+
+The folder “Leuk_application” contains a worked example on the usage of
+the package on a real dataset: the functions of `scaleGMRF` are used to
+standardize the effects of a LGM model designed for the INLA dataset
+`Leuk`.
+
+## Example of usage
 
 The standardization of a first-order random walk effect and its
 consequent inclusion in a simple Gaussian model is reported here to
-illustrate the integrability of the `scaleGMRF` package within the INLA
-framework.
+illustrate the usage of `scaleGMRF` and its integrability within the
+INLA framework.
 
 ``` r
 rm(list=ls())
