@@ -1,6 +1,8 @@
 ---
 title: "f_Xunif"
 output: rmarkdown::html_vignette
+header-includes:
+   - \usepackage{amsmath}
 vignette: >
   %\VignetteIndexEntry{f_Xunif}
   %\VignetteEngine{knitr::rmarkdown}
@@ -13,7 +15,12 @@ knitr::opts_chunk$set(
   comment = "#>"
 )
 ```
+
 UNDER CONSTRUCTION
+
+$$
+\mathbf{10}
+$$
 
 ```{r setup}
 library(scaleGMRF)

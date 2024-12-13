@@ -24,8 +24,8 @@ development.
 
 ## Installation
 
-You can install the scaleGMRF package from [GitHub](https://github.com/)
-with:
+You can install the `scaleGMRF` package from
+[GitHub](https://github.com/) with:
 
 ``` r
 # install.packages("devtools")
@@ -108,6 +108,7 @@ illustrate the integrability of the `scaleGMRF` package within the INLA
 framework.
 
 ``` r
+rm(list=ls())
 library(INLA)
 library(scaleGMRF)
 
@@ -119,6 +120,7 @@ x <- factor(1:K,ordered = TRUE)
 
 # Standardized random walk effect of order 1
 standard_rw1 <- f_Xunif(x,model="rw1",fixed=TRUE,plot_check = T)
+summary(standard_rw1)
 
 # Realizations of a response Y
 real_rw1_process <- r_GMRF(Q=standard_rw1$precision,
@@ -154,13 +156,13 @@ model <- inla(
   family = 'gaussian',
   data = inla.stack.data(data_stack),
   control.predictor = list(A = inla.stack.A(data_stack)))
+```
 
-# Plot of response, real random walk process, and estimated one
+<!-- ----# Plot of response, real random walk process, and estimated one
 plot(as.numeric(x),Y)
 lines(as.numeric(x),real_rw1_process)
 lines(as.numeric(x),
-      model$summary.fixed$mean+model$summary.random$u_rw1$mean,col=2)
-```
+      model$summary.fixed$mean+model$summary.random$u_rw1$mean,col=2)---- -->
 
 ## Getting help
 
