@@ -34,10 +34,11 @@ devtools::install_github("LFerrariIt/scaleGMRF")
 
 ## Overview
 
-A Latent Gaussian model (Hrafnkelsson, 2023) is defined as a model in
-which the linear predictor contains one or more Gaussian effects for
-different covariates (Hrafnkelsson, 2023). A Gaussian effect for a given
-covariate $X$ is specified in this package by the choice of:
+A Latent Gaussian model (Hrafnkelsson, 2023) is defined as a Bayesian
+Hierarchical model in which the linear predictor contains one or more
+Gaussian effects for different covariates (Hrafnkelsson, 2023). A
+Gaussian effect for a given covariate $X$ is specified in this package
+by the choice of:
 
 1.  a basis, i.e. a set of known functions of the covariate;
 
