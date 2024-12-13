@@ -173,7 +173,7 @@ This package has been developed by [Luisa
 Ferrari](https://www.unibo.it/sitoweb/luisa.ferrari5/en) and
 [Prof. Massimo
 Ventrucci](https://www.unibo.it/sitoweb/massimo.ventrucci/en) from the
-University of Bologna (Italy)
+University of Bologna (Italy).
 
 The project has been supported by the research grant “PRIN 2022 - COD.
 2022PA3BS2 - META 2 - METAbarcoding for METAcommunities: towards a
