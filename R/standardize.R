@@ -99,7 +99,7 @@ standardize_GMRF <- function(
       D = result$basis, n_sim = n_sim
     )
 
-    return(check_GMRF(realizations, fixed = fixed, X_dist = NULL))
+    print(check_GMRF(realizations, fixed = fixed, X_dist = NULL))
   }
 
   return(result)

@@ -74,7 +74,7 @@ f_Xunif <- function(
       n_sim = n_sim
     )
 
-    return(
+    print(
       ggpubr::annotate_figure(
         check_GMRF(realizations,
           fixed = fixed,
