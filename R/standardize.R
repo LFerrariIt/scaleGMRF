@@ -3,7 +3,7 @@
 #' `standardize_GMRF()` standardizes a Gaussian effect and returns the elements needed to specify the standardized effect in INLA.
 #'
 #' @inheritParams mean0_GMRF
-#' @param fixed Logical, indicating whether the effect must be treated as fixed or random. An effect is always considered fixed if it only has one basis function. By default, `TRUE`.
+#' @param fixed Logical, indicating whether the effect must be treated as fixed or random. An effect is always considered fixed if it only has one basis function. By default, `FALSE`.
 #' @param scale_Q Logical, indicating whether the precision matrix must be scaled or not. By default, `TRUE`.
 #' @param plot_check Logical, indicating whether a plot to check the standardization must be printed or not. By default, `FALSE`.
 #' @param n_sim Positive integer, indicating the number of realizations to generate for the check plot. By default, `n_sim=100`.
@@ -40,7 +40,7 @@
 #'
 standardize_GMRF <- function(
     Q, D = NULL, rank_def = NULL,
-    fixed = TRUE, scale_Q = TRUE,
+    fixed = FALSE, scale_Q = TRUE,
     plot_check = FALSE, n_sim = 100) {
   isSPSD(Q)
 

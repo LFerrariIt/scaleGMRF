@@ -7,7 +7,7 @@
 #' @param K A positive integer larger than 3, specifying the number of basis functions. Required for `model="pspline1","pspline2","pspline_2D"`.
 #' @param adj_mat Matrix required for `model="besag"`, representing the adjacency matrix from the lattice. See Details.
 #' @param m,M A pair of numbers indicating respectively the lower and upper boundaries of the support of X. If not provided, they are set to the extreme values from `x`. Required for `model="linear","pspline1","pspline2","pspline_2D"`.
-#' @param fixed Logical, indicating whether the effect must be treated as fixed or random. By default, `TRUE`.
+#' @param fixed Logical, indicating whether the effect must be treated as fixed or random. By default, `FALSE`.
 #' @param scale_Q Logical, indicating whether the precision matrix to be returned must already be scaled or not. By default, `TRUE`.
 #' @param plot_check Logical, indicating whether a plot to check the standardization must be printed or not. By default, `FALSE`.
 #' @param n_sim Positive integer, indicating the number of realizations to generate for the check plot. By default, `n_sim=100`.
@@ -31,7 +31,7 @@
 f_Xunif <- function(
     x, model, K,
     adj_mat, m = NULL, M = NULL,
-    fixed = TRUE, scale_Q = T,
+    fixed = FALSE, scale_Q = T,
     plot_check = F, n_sim = 100) {
   # Discrete ------
   if (model == "iid") {
@@ -48,6 +48,7 @@ f_Xunif <- function(
   }
   # Continuous -----
   if (model == "linear") {
+    fixed <- TRUE
     result <- linear_standard(x = x, m = m, M = M)
   }
   if (model == "pspline1") {
@@ -57,7 +58,7 @@ f_Xunif <- function(
     result <- pspline_standard(x = x, K = K, order = 2, m = m, M = M)
   }
   if (model == "pspline_2D") {
-    result <- Pspline_2D_standard(x = x, K = K, m = m, M = M)
+    result <- pspline_2D_standard(x = x, K = K, m = m, M = M)
   }
 
   # Precision matrix unscaling -----

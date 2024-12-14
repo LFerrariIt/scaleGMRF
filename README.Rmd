@@ -19,7 +19,7 @@ knitr::opts_chunk$set(
 
 <!-- badges: end -->
 
-`scaleGMRF` is an R package that provides useful functions to standardize Gaussian Markov Random Fields (GMRF) effects in Latent Gaussian models (LGM).
+`scaleGMRF` is an R package that provides useful functions to standardize Gaussian Markov Random Fields (GMRF) effects in Latent Gaussian Models (LGM).
 
 Standardizing GMRF effects guarantees that their variance parameters match their intuitive interpretation, defined as the variance contribution of the effects as intended by the user: this greatly simplifies the task of prior specification of the variance parameters of LGMs.
 
@@ -36,7 +36,7 @@ devtools::install_github("LFerrariIt/scaleGMRF")
 
 ## Context
 
-A Latent Gaussian model (Hrafnkelsson, 2023) is defined as a Bayesian Hierarchical model in which the linear predictor contains one or more Gaussian effects for different covariates (Hrafnkelsson, 2023). A Gaussian effect for a given covariate $X$ is specified in this package by the choice of:
+A Latent Gaussian model (Hrafnkelsson, 2023) is defined as a Bayesian Hierarchical model in which the linear predictor contains one or more Gaussian effects for different covariates (Hrafnkelsson, 2023). A Gaussian effect for a given covariate can be specified by the choice of:
 
 1.  a basis, i.e. a set of known functions of the covariate;
 
@@ -52,86 +52,70 @@ In this context, we define "standardization" a procedure that ensures that the v
 
 ### Main function: `standardize_GMRF()`
 
-The main function of the package is `standardize_GMRF()`, which takes as arguments a GMRF effect (via its 3 components) and its categorization as either fixed or random. `standardize_GMRF()` implements standardization and returns a standardized version of the GMRF as a list of elements. The function is built such that the elements of its output can be directly used to specify an effect of an `INLA` model using the `inla.stack()` function and the model `"generic0"` (www.r-inla.org, Rue et al. 2009).
+The main function of the package is `standardize_GMRF()`, which takes as arguments a GMRF effect (via its 3 components) and its categorization as either fixed or random. `standardize_GMRF()` implements standardization and returns a standardized version of the GMRF as a list of elements. The function is built such that the elements of its output can be directly used to specify an effect of an `INLA` model using the `inla.stack()` function and the model `"generic0"` (www.r-inla.org, Rue et al. 2009). If the argument `plot_check=TRUE`, the function also prints a graphical output that can be used to visually assess whether the standardization procedure has been successful.
 
-The design and usage of `standardize_GMRF()` are thoroughly discussed in `vignette("standardization",package="scaleGMRF")`.
+The design and usage of `standardize_GMRF()` are thoroughly discussed in `vignette("standardization", package = "scaleGMRF")`.
 
 ### User-friendly wrapper: `f_Xunif()`
 
-Another useful function of the package is `f_Xunif()`, which is a user-friendly wrapper of `standardize_GMRF()` that returns standardized versions of popular GMRF effects, under the convenient assumption that the covariate $X$ has a Uniform distribution. The function takes as arguments simply a sample of values of the covariate and a string indicating the type of effect, e.g. `"linear","iid","besag"`, etc. More details about the function and the list of effects implemented in `f_Xunif()` can be found in `vignette("f_Xunif",package="scaleGMRF")`.
+Another useful function of the package is `f_Xunif()`, which is a user-friendly wrapper of `standardize_GMRF()` that returns standardized versions of popular GMRF effects, under the convenient assumption that the covariate follows a Uniform distribution. The function takes as arguments simply a sample of values of the covariate and a string indicating the type of effect, e.g. `"linear","iid","besag"`, etc. More details about the function and the list of effects implemented in `f_Xunif()` can be found in `vignette("f_Xunif", package = "scaleGMRF")`.
 
-<!--#  Setting the argument plot_check=TRUE in both standardize_GMRF() and f_Xunif() causes the functions to print plots that can be used to visually check whether the standardization procedure has been successful -->
+<!--### Modified P-Splines
 
-### Modified P-Splines
-
-An important class of effects implemented in the `f_Xunif()` function are the P-Spline effects (Fahrmeir et al. 2004). Applying the standardization procedure to these effects require a slight modification of the precision matrices traditionally used for their specification. The motivation and the design of this modified version of P-Splines is presented in `vignette("psplines",package="scaleGMRF")`.
+An important class of effects implemented in the `f_Xunif()` function are the P-Spline effects, which are popularly used in LGMs (Fahrmeir et al. 2004). Applying the standardization procedure to these effects require a slight modification of the precision matrices traditionally used for their specification. The motivation and the design of this modified version of P-Splines is presented in `vignette("psplines", package = "scaleGMRF")`.---->
 
 ### Worked example
 
-The folder "Leuk_application" contains a worked example on the usage of the package on a real dataset: the functions of `scaleGMRF` are used to standardize the effects of a LGM model designed for the INLA dataset `Leuk`.
+The folder "Leuk_application" contains a worked example on the usage of the package on a real dataset: the functions of `scaleGMRF` are used to standardize the effects of a LGM model designed for the INLA dataset `Leuk`. <!--The folder contains both a commented `.R` script file and a `.Rmd` walk-through version.---->
 
 ## Example of usage
 
 The standardization of a first-order random walk effect and its consequent inclusion in a simple Gaussian model is reported here to illustrate the usage of `scaleGMRF` and its integrability within the INLA framework.
 
 ```{r, eval = FALSE}
-rm(list=ls())
+rm(list = ls())
 library(INLA)
 library(scaleGMRF)
-
 # Number of values of a discrete covariate X
 K <- 50
-
 # Values of the covariate as an ordered factor
-x <- factor(1:K,ordered = TRUE)
-
+x <- factor(1:K, ordered = TRUE)
 # Standardized random walk effect of order 1
-standard_rw1 <- f_Xunif(x,model="rw1",fixed=TRUE,plot_check = T)
+standard_rw1 <- f_Xunif(x, model = "rw1", fixed = TRUE, plot_check = T)
 summary(standard_rw1)
-
 # Realizations of a response Y
-real_rw1_process <- r_GMRF(Q=standard_rw1$precision,
-                          D=standard_rw1$basis,
-                          rank_def=1,sigma2 = 1,n_sim = 1)
-real_iid_process <- rnorm(K,sd=1)
-Y <- real_rw1_process+real_iid_process
-
+Y <- cumsum(rnorm(K)) + rnorm(K,sd = 2)
 # INLA data stack
 data_stack <- inla.stack(
-  # response
-  data = list(Y=Y),
-  # basis matrices
-  A = list(1,
-           standard_rw1$basis
-  ),
-  effects=list(data.frame(
-    intercept=rep(1,length(Y))
-  ),
-  # coefficients
-  list(u_rw1=1:K)
-  ))
-
+  data = list(Y = Y), # response
+  A = list(1, standard_rw1$basis), # basis matrices
+  effects = list(
+    data.frame(intercept = rep(1, length(Y))),
+    list(u_rw1 = 1:K) # coefficients
+  )
+)
 # INLA model
 model <- inla(
-  Y ~ -1+intercept+
-    f(u_rw1,model="generic0",constr=FALSE,
-      Cmatrix =standard_rw1$precision,       # precision matrix
-      extraconstr =                          # constraints
-        list(A=t(standard_rw1$null_space),   
-             e=matrix(rep(0,ncol(standard_rw1$null_space))))
+  Y ~ -1 + intercept +
+    f(u_rw1,
+      model = "generic0", constr = FALSE,
+      Cmatrix = standard_rw1$precision, # precision matrix
+      extraconstr = # constraints
+        list(
+          A = t(standard_rw1$null_space),
+          e = matrix(rep(0, ncol(standard_rw1$null_space)))
+        )
     ),
-  family = 'gaussian',
-  data = inla.stack.data(data_stack),
-  control.predictor = list(A = inla.stack.A(data_stack)))
+  family = "gaussian", data = inla.stack.data(data_stack),
+  control.predictor = list(A = inla.stack.A(data_stack))
+)
 ```
 
-```{=html}
 <!-- ----# Plot of response, real random walk process, and estimated one
 plot(as.numeric(x),Y)
 lines(as.numeric(x),real_rw1_process)
 lines(as.numeric(x),
-      model$summary.fixed$mean+model$summary.random$u_rw1$mean,col=2)---- -->
-```
+      model$summary.fixed$mean+model$summary.random$u_rw1$mean,col=2) -->
 
 ## Getting help
 

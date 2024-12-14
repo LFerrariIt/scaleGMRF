@@ -20,6 +20,8 @@ inla.setOption(num.threads = "1")
 # Step 1: creation of the transformed dataset---------------
 #The dataset is available in INLA as Leuk
 data(Leuk)
+data(nwEngland_sp)
+data(nwEngland_adj_mat)
 
 K_T <- 27 # number of intervals for time (about half a year)
 
@@ -34,63 +36,34 @@ transf_data <- cph.leuk$data[,c(1:3,5,12:16)]
 colnames(transf_data) <- c("y","E","patient","time",
                            colnames(transf_data[,5:9]))
 
+transf_data$sex <- factor(transf_data$sex,ordered = T)
+transf_data$district <- factor(transf_data$district,ordered = T)
+transf_data$time <- factor(transf_data$time,ordered = T)
+
 #Step 2: define the effects of the model ----
 
-## Age, Wbc, Tpi --------------------------------------------
-# Mean and variance assuming Uniformity on the empirical range
-E_AGE <- (min(transf_data$age)+max(transf_data$age))/2
-E_WBC <- (min(transf_data$wbc)+max(transf_data$wbc))/2
-E_TPI <- (min(transf_data$tpi)+max(transf_data$tpi))/2
-
-C_t_AGE <- ((max(transf_data$age)-min(transf_data$age))^2)/12
-C_t_WBC <- ((max(transf_data$wbc)-min(transf_data$wbc))^2)/12
-C_t_TPI <- ((max(transf_data$tpi)-min(transf_data$tpi))^2)/12
-
-# Basis matrices of the linear effect under 0-mean constraint
-D_t_AGE <- as.matrix(transf_data$age-E_AGE)
-D_t_WBC <- as.matrix(transf_data$wbc-E_WBC)
-D_t_TPI <- as.matrix(transf_data$tpi-E_TPI)
-
-# Set up the number K_X of basis functions for the P-Spline effects
 K_X <- 50
+f_t_AGE <- f_Xunif(transf_data$age,model="linear",scale_Q=F)
+f_t_WBC <- f_Xunif(transf_data$wbc,model="linear",scale_Q=F)
+f_t_TPI <- f_Xunif(transf_data$tpi,model="linear",scale_Q=F)
+f_n_AGE <- f_Xunif(transf_data$age,model="pspline2",K=K_X,scale_Q=F)
+f_n_WBC <- f_Xunif(transf_data$wbc,model="pspline2",K=K_X,scale_Q=F)
+f_n_TPI <- f_Xunif(transf_data$tpi,model="pspline2",K=K_X,scale_Q=F)
+f_SEX   <- f_Xunif(transf_data$sex,model="iid",scale_Q=F)
+f_DST   <- f_Xunif(transf_data$district,model="besag",scale_Q=F,
+                   adj_mat = nwEngland_adj_mat)
+f_TEM   <- f_Xunif(transf_data$time,transf_data,model="rw1",scale_Q=F)
 
-# Basis matrices of the non-linear effect
-D_r_AGE <-
-  pspline_standard(transf_data$age,K = K_X,order = 2)$basis
-D_r_WBC <-
-  pspline_standard(transf_data$wbc,K = K_X,order = 2)$basis
-D_r_TPI <-
-  pspline_standard(transf_data$tpi,K = K_X,order = 2)$basis
-
-# Other elements for the residual effect
-Pspline_elements <-
-  pspline_standard(transf_data$tpi,K = K_X,order = 2)
-Q_r <- Pspline_elements$precisio/Pspline_elements$scaling_constant #the function already returns the scaled precision matrix: here, we save the unscaled precision and apply scaling manually
-S_r <- Pspline_elements$null_space
-C_r <- Pspline_elements$scaling_constant
-# check that the null space is correct:
-Q_r %*% S_r
-
-## Space, time, and sex -----------------------------------
-
-# Basis matrices
-D_S <- as.matrix(
-  dummy_cols(transf_data$district,remove_selected_columns = T))
-D_T <- as.matrix(
-  dummy_cols(transf_data$time,remove_selected_columns = T))
-D_SEX <- as.matrix(
-  dummy_cols(transf_data$sex,remove_selected_columns = T))
-
-# Precision matrices
-#map of the districts in North East England
-Q_S <- diag(rowSums(nwEngland_adj_mat))-nwEngland_adj_mat
-Q_T <- as.matrix(precmat.RW1(K_T))
-Q_SEX <- gen_inv(matrix(c(0.5,-0.5,-0.5,0.5),ncol=2),rank_def = 1)
-
-# Scaling constants
-C_S <- mean(diag(gen_inv(Q_S,rank_def=1)))
-C_T <- mean(diag(gen_inv(Q_T,rank_def=1)))
-C_SEX <- 1/2
+f_scld_t_AGE <- f_Xunif(transf_data$age,model="linear")
+f_scld_t_WBC <- f_Xunif(transf_data$wbc,model="linear")
+f_scld_t_TPI <- f_Xunif(transf_data$tpi,model="linear")
+f_scld_n_AGE <- f_Xunif(transf_data$age,model="pspline2",K=K_X)
+f_scld_n_WBC <- f_Xunif(transf_data$wbc,model="pspline2",K=K_X)
+f_scld_n_TPI <- f_Xunif(transf_data$tpi,model="pspline2",K=K_X)
+f_scld_SEX   <- f_Xunif(transf_data$sex,model="iid")
+f_scld_DST   <- f_Xunif(transf_data$district,model="besag",
+                   adj_mat = nwEngland_adj_mat)
+f_scld_TEM   <- f_Xunif(transf_data$time,transf_data,model="rw1")
 
 # Step 3: creation of the data stack for INLA ---------------
 
@@ -98,15 +71,15 @@ data_stack <- inla.stack(
   data = list(Y=as.matrix(transf_data$y,ncol=1)),
   # Basis matrices
   A = list(1,
-           D_t_AGE,
-           D_t_WBC,
-           D_t_TPI,
-           D_r_AGE,
-           D_r_WBC,
-           D_r_TPI,
-           D_SEX,
-           D_S,
-           D_T
+           f_t_AGE$basis,
+           f_t_WBC$basis,
+           f_t_TPI$basis,
+           f_n_AGE$basis,
+           f_n_WBC$basis,
+           f_n_TPI$basis,
+           f_SEX$basis,
+           f_DST$basis,
+           f_TEM$basis
   ),
   effects=list(data.frame(
     intercept=rep(1,nrow(transf_data))
@@ -119,8 +92,8 @@ data_stack <- inla.stack(
   list(u_WBC=1:K_X),
   list(u_TPI=1:K_X),
   list(u_SEX=1:2),
-  list(u_S=1:24),
-  list(u_T=1:K_T)
+  list(u_DST=1:24),
+  list(u_TEM=1:K_T)
   ),
   remove.unused = F)
 
@@ -146,9 +119,9 @@ VP_log_joint_prior <- function(theta, theta.desc = NULL) {
 
   # Total Variance
   total_Var <- expression(
-        exp(-t_1)+exp(-t_2)+exp(-t_3)+
-        exp(-t_4)+exp(-t_5)+exp(-t_6)+
-        exp(-t_7)+exp(-t_8)+exp(-t_9))
+    exp(-t_1)+exp(-t_2)+exp(-t_3)+
+      exp(-t_4)+exp(-t_5)+exp(-t_6)+
+      exp(-t_7)+exp(-t_8)+exp(-t_9))
 
   #proportion 1
   omega_1 <- expression(exp(-t_1)/
@@ -164,9 +137,9 @@ VP_log_joint_prior <- function(theta, theta.desc = NULL) {
 
   #proportion 3
   omega_3<- expression(exp(-t_3)/
-                          (exp(-t_1)+exp(-t_2)+exp(-t_3)+
-                             exp(-t_4)+exp(-t_5)+exp(-t_6)+
-                             exp(-t_7)+exp(-t_8)+exp(-t_9)))
+                         (exp(-t_1)+exp(-t_2)+exp(-t_3)+
+                            exp(-t_4)+exp(-t_5)+exp(-t_6)+
+                            exp(-t_7)+exp(-t_8)+exp(-t_9)))
 
   #proportion 4
   omega_4 <- expression(exp(-t_4)/
@@ -332,22 +305,22 @@ VP_log_joint_prior <- function(theta, theta.desc = NULL) {
 unscaled_model <- inla(
   Y ~ -1+intercept+
     # Linear effects
-    f(beta_AGE, model="generic0",Cmatrix = as.matrix(1))+
-    f(beta_WBC, model="generic0",Cmatrix = as.matrix(1))+
-    f(beta_TPI, model="generic0",Cmatrix = as.matrix(1))+
+    f(beta_AGE, model="generic0",Cmatrix = f_t_AGE$precision)+
+    f(beta_WBC, model="generic0",Cmatrix = f_t_WBC$precision)+
+    f(beta_TPI, model="generic0",Cmatrix = f_t_TPI$precision)+
     # Non-linear effects
-    f(u_AGE,model="generic0",Cmatrix = Q_r, constr = F,
-      extraconstr = list(A=t(S_r),e=matrix(c(0,0))))+
-    f(u_WBC,model="generic0",Cmatrix = Q_r,constr = F,
-      extraconstr = list(A=t(S_r),e=matrix(c(0,0))))+
-    f(u_TPI,model="generic0",Cmatrix = Q_r,constr = F,
-      extraconstr = list(A=t(S_r), e=matrix(c(0,0))))+
+    f(u_AGE,model="generic0",Cmatrix = f_n_AGE$precision, constr = F,
+      extraconstr = list(A=t(f_n_AGE$null_space),e=matrix(c(0,0))))+
+    f(u_WBC,model="generic0",Cmatrix = f_n_WBC$precision,constr = F,
+      extraconstr = list(A=t(f_n_WBC$null_space),e=matrix(c(0,0))))+
+    f(u_TPI,model="generic0",Cmatrix = f_n_TPI$precision,constr = F,
+      extraconstr = list(A=t(f_n_TPI$null_space), e=matrix(c(0,0))))+
     # Cluster effect
-    f(u_SEX,model="generic0",Cmatrix = Q_SEX,constr = T)+
+    f(u_SEX,model="generic0",Cmatrix =  f_SEX$precision,constr = T)+
     # Besag effect
-    f(u_S,  model="generic0",Cmatrix = Q_S,constr = T)+
+    f(u_DST,model="generic0",Cmatrix = f_DST$precision,constr = T)+
     # RW1 effect
-    f(u_T,  model="generic0",Cmatrix = Q_T,constr = T),
+    f(u_TEM,model="generic0",Cmatrix = f_TEM$precision,constr = T),
   family = 'poisson',
   data = inla.stack.data(data_stack),
   E =  transf_data$E, verbose=T,
@@ -359,125 +332,132 @@ unscaled_model <- inla(
 
 scaled_model <- inla(
   Y ~ -1+intercept+
-    f(beta_AGE, model="generic0",Cmatrix = C_t_AGE*as.matrix(1))+
-    f(beta_WBC, model="generic0",Cmatrix = C_t_WBC*as.matrix(1))+
-    f(beta_TPI, model="generic0",Cmatrix = C_t_TPI*as.matrix(1))+
-    f(u_AGE,model="generic0",Cmatrix = C_r*Q_r, constr = F,
-      extraconstr = list(A=t(S_r),e=matrix(c(0,0))))+
-    f(u_WBC,model="generic0",Cmatrix = C_r*Q_r,constr = F,
-      extraconstr = list(A=t(S_r),e=matrix(c(0,0))))+
-    f(u_TPI,model="generic0",Cmatrix = C_r*Q_r,constr = F,
-      extraconstr = list(A=t(S_r), e=matrix(c(0,0))))+
-    f(u_SEX,model="generic0",Cmatrix = C_SEX*Q_SEX,constr = T)+
-    f(u_S,  model="generic0",Cmatrix = C_S*Q_S,constr = T)+
-    f(u_T,  model="generic0",Cmatrix = C_T*Q_T,constr = T),
+    # Linear effects
+    f(beta_AGE, model="generic0",Cmatrix = f_scld_t_AGE$precision)+
+    f(beta_WBC, model="generic0",Cmatrix = f_scld_t_WBC$precision)+
+    f(beta_TPI, model="generic0",Cmatrix = f_scld_t_TPI$precision)+
+    # Non-linear effects
+    f(u_AGE,model="generic0",Cmatrix = f_scld_n_AGE$precision, constr = F,
+      extraconstr = list(A=t(f_scld_n_AGE$null_space),e=matrix(c(0,0))))+
+    f(u_WBC,model="generic0",Cmatrix = f_scld_n_WBC$precision,constr = F,
+      extraconstr = list(A=t(f_scld_n_WBC$null_space),e=matrix(c(0,0))))+
+    f(u_TPI,model="generic0",Cmatrix = f_scld_n_TPI$precision,constr = F,
+      extraconstr = list(A=t(f_scld_n_TPI$null_space), e=matrix(c(0,0))))+
+    # Cluster effect
+    f(u_SEX,model="generic0",Cmatrix = f_scld_SEX$precision,constr = T)+
+    # Besag effect
+    f(u_DST,model="generic0",Cmatrix = f_scld_DST$precision,constr = T)+
+    # RW1 effect
+    f(u_TEM,model="generic0",Cmatrix = f_scld_TEM$precision,constr = T),
   family = 'poisson',
   data = inla.stack.data(data_stack),
-  E =  transf_data$E,verbose=T,
+  E =  transf_data$E, verbose=T,
+  # VP prior
   control.expert = list(jp=inla.jp.define(VP_log_joint_prior)),
   control.predictor = list(A = inla.stack.A(data_stack)))
+
 
 # Step 6: compare the differences between the two models
 
 covariates_plot <-
-ggarrange(
-  ggplot()+
-  geom_step(aes(
-    col = " Scaling",
-    x = c(unique(cph.leuk$data$baseline.hazard.time),
-          max(Leuk)) / 365.25,
-    y = c(
-      scaled_model$summary.random$u_T$mean,
-      scaled_model$summary.random$u_T$mean[K_T]
-    )
-  )) +
-    geom_step(aes(
-      col = "No scaling",
-      x = c(unique(cph.leuk$data$baseline.hazard.time), max(Leuk)) / 365.25,
-      y = c(
-        unscaled_model$summary.random$u_T$mean,
-        unscaled_model$summary.random$u_T$mean[K_T]
-      )
-    )) +
-    labs(x = "Time (years)", col = "", y = "Posterior mean") +
-    theme_light()+
-    scale_color_manual(values=c(" Scaling"="black","No scaling"="red")),
-  ggplot() +
-    geom_line(aes(
-      col = " Scaling",
-      x = transf_data$age,
-      y = D_t_AGE %*% scaled_model$summary.random$beta_AGE$mean +
-        D_r_AGE %*% scaled_model$summary.random$u_AGE$mean
-    )) +
-    geom_line(aes(
-      col = "No scaling",
-      x = transf_data$age,
-      y = D_t_AGE %*% unscaled_model$summary.random$beta_AGE$mean +
-        D_r_AGE %*% unscaled_model$summary.random$u_AGE$mean
-    )) +
-    labs(x = "Age", col = "", y = "Posterior mean") +
-    theme_light()+
-    scale_color_manual(values=c(" Scaling"="black","No scaling"="red")),
-  ggplot() +
-    geom_line(aes(
-      col = " Scaling",
-      x = transf_data$wbc,
-      y = D_t_WBC %*% scaled_model$summary.random$beta_WBC$mean +
-        D_r_WBC %*% scaled_model$summary.random$u_WBC$mean
-    )) +
-    geom_line(aes(
-      col = "No scaling",
-      x = transf_data$wbc,
-      y = D_t_WBC %*% unscaled_model$summary.random$beta_WBC$mean +
-        D_r_WBC %*% unscaled_model$summary.random$u_WBC$mean)) +
-    labs(x = "White blood cell count", col = "", title="(a)",
-         y = "Posterior mean") +
-    scale_color_manual(values=c(" Scaling"="black","No scaling"="red"))+
-    theme_light()+ theme(plot.title = element_text(hjust = 0.5)),
-  ggplot() +
-    geom_line(aes(
-      col = " Scaling",
-      x = transf_data$tpi,
-      y = D_t_TPI %*% scaled_model$summary.random$beta_TPI$mean+
-        D_r_TPI %*% scaled_model$summary.random$u_TPI$mean
-    )) +
-    geom_line(aes(
-      col = "No scaling",
-      x = transf_data$tpi,
-      y = D_t_TPI%*%unscaled_model$summary.random$beta_TPI$mean+
-        D_r_TPI%*%unscaled_model$summary.random$u_TPI$mean))+
-    labs(x = "Townsend deprivation index", title="(b)",
-         col = "", y = "Posterior mean") +
-    scale_color_manual(values=c(" Scaling"="black","No scaling"="red"))+
-    theme_light()+
-    theme(plot.title = element_text(hjust = 0.5)),common.legend = T,legend = "bottom"
-)
+  ggarrange(
+    ggplot()+
+      geom_step(aes(
+        col = " Scaling",
+        x = c(unique(cph.leuk$data$baseline.hazard.time),
+              max(Leuk)) / 365.25,
+        y = c(
+          scaled_model$summary.random$u_TEM$mean,
+          scaled_model$summary.random$u_TEM$mean[K_T]
+        )
+      )) +
+      geom_step(aes(
+        col = "No scaling",
+        x = c(unique(cph.leuk$data$baseline.hazard.time), max(Leuk)) / 365.25,
+        y = c(
+          unscaled_model$summary.random$u_TEM$mean,
+          unscaled_model$summary.random$u_TEM$mean[K_T]
+        )
+      )) +
+      labs(x = "Time (years)", col = "", y = "Posterior mean") +
+      theme_light()+
+      scale_color_manual(values=c(" Scaling"="black","No scaling"="red")),
+    ggplot() +
+      geom_line(aes(
+        col = " Scaling",
+        x = transf_data$age,
+        y = f_t_AGE$basis %*% scaled_model$summary.random$beta_AGE$mean +
+          f_n_AGE$basis %*% scaled_model$summary.random$u_AGE$mean
+      )) +
+      geom_line(aes(
+        col = "No scaling",
+        x = transf_data$age,
+        y = f_t_AGE$basis %*% unscaled_model$summary.random$beta_AGE$mean +
+          f_n_AGE$basis %*% unscaled_model$summary.random$u_AGE$mean
+      )) +
+      labs(x = "Age", col = "", y = "Posterior mean") +
+      theme_light()+
+      scale_color_manual(values=c(" Scaling"="black","No scaling"="red")),
+    ggplot() +
+      geom_line(aes(
+        col = " Scaling",
+        x = transf_data$wbc,
+        y = f_t_WBC$basis %*% scaled_model$summary.random$beta_WBC$mean +
+          f_n_WBC$basis %*% scaled_model$summary.random$u_WBC$mean
+      )) +
+      geom_line(aes(
+        col = "No scaling",
+        x = transf_data$wbc,
+        y = f_t_WBC$basis %*% unscaled_model$summary.random$beta_WBC$mean +
+          f_n_WBC$basis %*% unscaled_model$summary.random$u_WBC$mean)) +
+      labs(x = "White blood cell count", col = "", title="(a)",
+           y = "Posterior mean") +
+      scale_color_manual(values=c(" Scaling"="black","No scaling"="red"))+
+      theme_light()+ theme(plot.title = element_text(hjust = 0.5)),
+    ggplot() +
+      geom_line(aes(
+        col = " Scaling",
+        x = transf_data$tpi,
+        y = f_t_TPI$basis %*% scaled_model$summary.random$beta_TPI$mean+
+          f_n_TPI$basis %*% scaled_model$summary.random$u_TPI$mean
+      )) +
+      geom_line(aes(
+        col = "No scaling",
+        x = transf_data$tpi,
+        y = f_t_TPI$basis%*%unscaled_model$summary.random$beta_TPI$mean+
+          f_n_TPI$basis%*%unscaled_model$summary.random$u_TPI$mean))+
+      labs(x = "Townsend deprivation index", title="(b)",
+           col = "", y = "Posterior mean") +
+      scale_color_manual(values=c(" Scaling"="black","No scaling"="red"))+
+      theme_light()+
+      theme(plot.title = element_text(hjust = 0.5)),common.legend = T,legend = "bottom"
+  )
 
 ggsave(filename = "covariates.png",covariates_plot,
        width=1600,height=1800,units="px",bg="white")
 
 dst_map <- fortify(nwEngland_sp)
-dst_scaled <- scaled_model$summary.random$u_S$mean[as.numeric(districts_map$id)]
-dst_unscaled <- unscaled_model$summary.random$u_S$mean[as.numeric(districts_map$id)]
+dst_scaled <- scaled_model$summary.random$u_DST$mean[as.numeric(dst_map$id)]
+dst_unscaled <- unscaled_model$summary.random$u_DST$mean[as.numeric(dst_map$id)]
 
 districts_plot <-
-ggarrange(
-  ggplot(dst_map, aes(x = long, y = lat, group = group)) +
-    geom_polygon(aes(fill=dst_scaled))+
-    labs(title="Scaling",fill="")+
-    scale_fill_gradient2(
-      low="#2cba00",mid="gold",high="red",
-      limits=range(c(dst_unscaled,dst_scaled)))+
-    theme_minimal()+
-    theme(legend.position = "bottom"),
-  ggplot(dst_map, aes(x = long, y = lat, group = group)) +
-    geom_polygon(aes(fill=dst_unscaled))+
-    labs(title="No scaling",fill="")+
-    scale_fill_gradient2(
-      low="#2cba00",mid="gold",high="red",
-      limits=range(c(dst_scaled,dst_scaled)))+
-    theme_minimal()+
-    theme(legend.position = "bottom"))
+  ggarrange(
+    ggplot(dst_map, aes(x = long, y = lat, group = group)) +
+      geom_polygon(aes(fill=dst_scaled))+
+      labs(title="Scaling",fill="")+
+      scale_fill_gradient2(
+        low="#2cba00",mid="gold",high="red",
+        limits=range(c(dst_unscaled,dst_scaled)))+
+      theme_minimal()+
+      theme(legend.position = "bottom"),
+    ggplot(dst_map, aes(x = long, y = lat, group = group)) +
+      geom_polygon(aes(fill=dst_unscaled))+
+      labs(title="No scaling",fill="")+
+      scale_fill_gradient2(
+        low="#2cba00",mid="gold",high="red",
+        limits=range(c(dst_scaled,dst_scaled)))+
+      theme_minimal()+
+      theme(legend.position = "bottom"))
 
 ggsave(filename = "districts.png",districts_plot,
        width=1600,height=1200,units="px",bg="white")
