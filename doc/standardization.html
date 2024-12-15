@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>standardization</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">standardization</h1>
+
+
+
+<p>UNDER CONSTRUCTION
+<!-- Latent Gaussian models are a popular subclass of BHMs that are characterized by the assumption of Gaussianity on the latent parameters. LGMs have become increasingly popular in recent years, mainly due to the work of \cite{RM}, which introduced the Integrated Nested Laplace approximation (INLA) method for fitting this class of models  ???.  -->
+<!-- We focus here on the most common class of LGMs, in which the response is linked to the latent parameters only through a generalized linear model (see Bayesian LGMs with a univariate link function in \cite{BHM_ref}). We formally denote this class of models as Model \ref{def:model}, under some useful additional assumptions that are adopted in the vast majority of LGM applications. --></p>
+<!-- \begin{model}[Latent Gaussian Model]\label{def:model}  -->
+<!-- Let $\boldsymbol{X}=[X_1,...,X_J]$ be a set of covariates with $\boldsymbol{X}\sim \pi(\boldsymbol{x})$, and possible realizations $x\in \mathcal{X}_j,\;\forall j=1,...,J$. Let a response $Y\sim \text{Dist}(\eta,\boldsymbol{\psi})$, where $\eta$ corresponds to a  transformation of the expected value of Y given $\boldsymbol{\psi}$ and is defined as: -->
+<!-- \begin{align*} -->
+<!--        \eta &=\mu+\sum_{j=1}^Jf_j(X_j) -->
+<!-- \end{align*} -->
+<!-- Each $f_j(X_j)$ for $j=1,...,J$ is defined as:  -->
+<!-- \begin{gather*} -->
+<!--        f_j(X_j)=\boldsymbol{D}^T_j(X_j)\boldsymbol{u}_j\text{    where    } -->
+<!--      \boldsymbol{u}_j|\sigma^2_j   \sim N_{K_j}(\boldsymbol{0},\sigma^2_j\boldsymbol{Q}_j^*) -->
+<!-- \end{gather*} -->
+<!-- where the basis $\boldsymbol{D}_j(X_j)$ is a column vector containing $K_j$ known functions, the precision matrix $\boldsymbol{Q}_j$ is known, and the scalar $\sigma^2_j$ is the variance parameter. -->
+<!-- The parameters of the model that require prior specification are $\boldsymbol{\sigma}=[\sigma^2,...,\sigma^2_J]$, along with $\mu$ and $\boldsymbol{\psi}$. -->
+<!-- \end{model} -->
+<!-- Note that $\boldsymbol{Q}_j^*$ represents the generalized inverse of $\boldsymbol{Q}_j^*$, so that Model 1 also consider improper Gaussian effects, as long as the appropriate constraints are imposed (see Section \ref{sec:IGMRFs}). Moreover, if any of $\boldsymbol{Q}_j$ is not actually fixed but controlled by additional parameters (e.g. the range in Matern processes), such cases can still be part of the model class as long as the model is conditioned upon a reasonable value of such parameters and it is assumed reasonable to carry out the prior specification of $\boldsymbol{\sigma}$ independently of these additional parameters \parencite{F20}. -->
+<!-- \begin{definition}[Fixed and random effects]\label{def:fixed_random} -->
+<!-- Consider each effect $f_j(X_j)$ from Model 1: if the user is interested in inference about $\boldsymbol{u}_j$ (or transformations), we shall refer to the $j$ effect as "fixed"; if the user is instead interested in inference about the parameter $\sigma^2_j$ (or transformations), we shall refer to it as "random". The effects of Model 1 shall be ordered such that $\boldsymbol{\theta}=[\boldsymbol{u}_1,...,\boldsymbol{u}_L,\sigma^2_{L+1},...,\sigma^2_J]$ contains all the parameters of interest for the user, i.e. the first $L$ effects are fixed, and the last $J-L$ are random. -->
+<!-- \end{definition} -->
+<!-- \begin{definition}[Intuitive interpretation of $\sigma^2_j$ parameters]\label{def:int_int}\ \\ -->
+<!-- Consider Model 1 with $\boldsymbol{\theta}=[\boldsymbol{u}_1,...,\boldsymbol{u}_L,\sigma^2_{L+1},...,\sigma^2_J]$. We say that $\sigma^2_1,...,\sigma^2_J$ match their intuitive interpretation if -->
+<!-- \begin{itemize} -->
+<!--     \item for fixed effects $(j=1....,L)$: -->
+<!--     \begin{gather}\label{eq:fe_int_req}  -->
+<!--          \sigma^2_j=E_{\boldsymbol{u}_j}\{Var_{X_j}[f_j(X_j)|\boldsymbol{u}_j]|\sigma^2_j\} -->
+<!--     \end{gather} -->
+<!--      \item for random effects $(j=L+1....,J)$: -->
+<!--     \begin{gather}\label{eq:re_int_req}       -->
+<!--     \sigma^2_j= Var_{X_j,\boldsymbol{u}_j}[f_j(X_j)|\sigma^2_j] -->
+<!--     \end{gather}  -->
+<!-- \end{itemize} -->
+<!-- \end{definition} -->
+<!-- Definition \ref{def:int_int} answers the concern raised in \cite{F20} about the introduction of fixed effects and is consistent with the authors' suggestion of considering the concept of \textit{explained variance}.  On the other hand, the definition for random effects is coherent with the R2D2 approach.  -->
+<!-- Inspired by the work of \cite{SR14}, we propose a standardization procedure that ensures that the conditions of Definition \ref{def:int_int} are satisfied for all effects of Model 1. -->
+<!-- \begin{proposition}[Standardization procedure]\label{prop:standardization} -->
+<!-- Consider Model 1. Definition \ref{def:int_int} is satisfied after the application of the following two steps. -->
+<!-- \begin{enumerate} -->
+<!-- \item \textbf{0-mean constraint}. Each fixed effect $(j=1,...,L)$ is constrained such that: -->
+<!-- \begin{equation} -->
+<!-- \label{eq:0mean_constraint} -->
+<!-- \begin{aligned} -->
+<!--  E_{X_j}[f_j(X_j)]=0 -->
+<!-- \end{aligned} -->
+<!-- \end{equation} -->
+<!-- \item \textbf{Scaling}. Each effect $j=1,...,J$ is replaced by $\widetilde{f}_j(X_j)=\dfrac{f_j(X_j)}{\sqrt{C}_j}$ where:  -->
+<!-- \begin{equation} -->
+<!-- \label{eq:scaling_constant} -->
+<!-- \begin{aligned} -->
+<!--   C_j&= Var_{X_j,\boldsymbol{u}_j}[f_j(X_j)|\sigma^2_j=1]\\ -->
+<!--   &=E_{X_j}\left[\boldsymbol{D}^T_j(X_j)\boldsymbol{Q}_j^*\boldsymbol{D}_j(X_j)\right]\\ -->
+<!-- \end{aligned} -->
+<!-- \end{equation} -->
+<!-- \end{enumerate}  -->
+<!-- \end{proposition} -->
+<!-- Once it has been proven that the $\sigma^2_j$ parameters match their intuitive interpretation, this result can be used to derive expressions for the VP  parameters that are interpretable for the user. -->
+<!-- The procedure is called \textit{standardization} as it can be proven that classical standardization is a special case that arises in the case of linear effects. -->
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
