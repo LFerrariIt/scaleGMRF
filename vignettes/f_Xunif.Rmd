@@ -11,6 +11,7 @@ vignette: >
 
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
+  message=FALSE,
   collapse = TRUE,
   comment = "#>"
 )
@@ -48,44 +49,51 @@ A plot showing `n_sim` realizations of the standardized process is reported alon
 
 ## Discrete covariate: $X\sim \text{Unif}[1,...,K]$
 
-Models `"iid","rw1","rw2","besag"` are effects for a discrete covariate $X\sim \text{Unif}[1,...,K]$. The `x` argument needs to be an ordered factor in which each level corresponds to a value in the support of $X$, so that $K$ is estimated as the number of levels in the factor. For all effects, the basis functions are equal to:
-$$D_k(X)=\mathbb{I}(X=k)\quad k=1,...,K$$
+Models `"iid","rw1","rw2","besag"` are effects for a discrete covariate $X\sim \text{Unif}[1,...,K]$. The `x` argument needs to be an ordered factor in which each level corresponds to a value in the support of $X$, so that $K$ is estimated as the number of levels in the factor. For all effects, the basis functions are equal to: $$D_k(X)=\mathbb{I}(X=k)\quad k=1,...,K$$
 
 ### `"iid"` effect
 
-The effect assumes that the precision is an identity matrix, i.e. $\mathbf{Q}=\mathbf{I}$. `"iid"` is the only effect that is affected by the fixed/random categorization.
+The effect assumes that the precision is an identity matrix, i.e. $\mathbf{Q}=\mathbf{I}$. This is the only effect that is affected by the fixed/random categorization.
 
 -   Fixed
-```{r }
+
+```{r}
 K <- 20
 x <- factor(1:K, ordered = TRUE, levels = c(1:K))
-f_Xunif(x, model = "iid",fixed=T, plot_check = TRUE) 
+result <- f_Xunif(x, model = "iid",fixed=T, plot_check = TRUE) 
 ```
+
 -   Random
+
 ```{r }
-f_Xunif(x, model = "iid",fixed=F, plot_check = TRUE) 
+result <- f_Xunif(x, model = "iid",fixed=F, plot_check = TRUE) 
 ```
 
 ### `"rw1"` effect
 
-`"rw1"` implements a random walk process of order 1 which is often used to model temporal effects. The model is an IGMRF of order 1 where the precision matrix is defined as: $$  $$ see Equation ??? of Rue & Held, 2005. 
+`"rw1"` implements a random walk process of order 1 which is often used to model temporal effects. The model is an IGMRF of order 1 where the precision matrix is defined as: $$                                $$ see Equation 3.22 of Rue & Held, 2005.
+
 ```{r }
-f_Xunif(x, model = "rw1", plot_check = TRUE) 
-```
-### `"rw2"` effect `"rw2"` implements a random walk process of order 2 which is often used to model temporal effects. The model is an IGMRF of order 2 where the precision matrix is defined as: $$  $$ see Equation ??? of Rue & Held, 2005. 
-```{r }
-f_Xunif(x, model = "rw2", plot_check = TRUE) 
+result <- f_Xunif(x, model = "rw1", plot_check = TRUE) 
 ```
 
-### `"besag"` effect 
-`"besag"` implements a Besag or ICAR often used to model areal data. This effect requires the specification of the `adj_mat` argument, which must be the binary adjacency matrix between the areas of the lattice. Calling $\mathbf{W}$ the adjacency matrix, the precision matrix of the effect is defined as: $$ \mathbf{Q}=\text{diag}({\mathbf{W1}})-\mathbf{W}$$ 
-Hence, the Besag model is an IGMRF of order 1.
+### `"rw2"` effect
+
+`"rw2"` implements a random walk process of order 2 which is often used to model temporal effects. The model is an IGMRF of order 2 where the precision matrix is defined as: $$                                $$ see Equation 3.40 of Rue & Held, 2005.
+
+```{r }
+result <- f_Xunif(x, model = "rw2", plot_check = TRUE) 
+```
+
+### `"besag"` effect
+
+`"besag"` implements a Besag or ICAR often used to model areal data. This effect requires the specification of the `adj_mat` argument, which must be the binary adjacency matrix between the areas of the lattice. Calling $\mathbf{W}$ the adjacency matrix, the precision matrix of the effect is defined as: $$ \mathbf{Q}=\text{diag}({\mathbf{W1}})-\mathbf{W}$$ Hence, the Besag model is an IGMRF of order 1.
 
 ```{r }
 data("nwEngland_adj_mat")
 K <- nrow(nwEngland_adj_mat)
 x <- factor(1:K, ordered = TRUE, levels = c(1:K))
-f_Xunif(x, model = "besag", adj_mat=nwEngland_adj_mat, plot_check = TRUE) 
+result <- f_Xunif(x, model = "besag", adj_mat=nwEngland_adj_mat, plot_check = TRUE) 
 ```
 
 ## Continuous covariate: $X\sim \text{Unif}(m,M)$
@@ -93,27 +101,34 @@ f_Xunif(x, model = "besag", adj_mat=nwEngland_adj_mat, plot_check = TRUE)
 Models `"linear","pspline1","pspline2","pspline_2D"` are effects for a continuous covariate $X\sim \text{Unif}(m,M)$. The `x` argument needs to be a numeric vector. $m,M$ can be specified through arguments `m,M`; otherwise, they are estimated using the minimum and maximum of `x`.
 
 ### `"linear"` effect
-A linear effect is implemented using a single basis function $D(X)=X$ and a precision matrix $\mathbf{Q}=1$. 
+
+A linear effect is implemented using a single basis function $D(X)=X$ and a precision matrix $\mathbf{Q}=1$.
+
 ```{r }
 x <- runif(1000, min = 2, max = 5)
-f_Xunif(x, model = "linear", plot_check = TRUE) 
+result <- f_Xunif(x, model = "linear", plot_check = TRUE) 
 ```
 
 ### `"pspline1"` effect
-A P-Spline effect of order is implemented using a basis of $K$ cubic B-Spline on equidistant nodes on $m,M$ and a precision matrix equak to the one of a random walk of order 1. The number of basis functions is specified using the mandatory argument `K`. 
+
+A P-Spline effect of order is implemented using a basis of $K$ cubic B-Spline on equidistant nodes on $m,M$ and a precision matrix equak to the one of a random walk of order 1. The number of basis functions is specified using the mandatory argument `K`.
+
 ```{r }
 K <- 20 
-f_Xunif(x, model = "pspline1", K = K, plot_check = TRUE) 
+result <- f_Xunif(x, model = "pspline1", K = K, plot_check = TRUE) 
 ```
 
 ### `"pspline2"` effect
-A P-Spline effect of order is implemented using a basis of $K$ cubic B-Spline on equidistant nodes on $m,M$ and a precision matrix equak to the one of a random walk of order 2. The number of basis functions is specified using the mandatory argument `K`. 
+
+A P-Spline effect of order is implemented using a basis of $K$ cubic B-Spline on equidistant nodes on $m,M$ and a precision matrix equak to the one of a random walk of order 2. The number of basis functions is specified using the mandatory argument `K`.
+
 ```{r }
 K <- 20 
-f_Xunif(x, model = "pspline2", K = K, plot_check = TRUE) 
+result <- f_Xunif(x, model = "pspline2", K = K, plot_check = TRUE) 
 ```
 
 ## Two-dimensional covariate: $X\sim \text{Unif}([m_1,M_1]x[m_2,M_2])$
+
 `"pspline_2D"` is the only effect for a two-dimensional covariate: $X\sim \text{Unif}([m_1,M_1]x[m_2,M_2])$. The basis contains 2D cubic B-Spline functions obtained as the Kronecker product between $K_1$ B-Spline function in one dimension and $K_2$ functions in the second dimension. The precision matrix is defined as Equation ??? where $\mathbf{W}$ is the adjacency matrix of a regular grid lattice of dimension $K_1\times K_2$.
 
 ```{r }
@@ -121,5 +136,9 @@ x <- as.matrix(expand.grid(
   seq(0, 1, length.out = 100),
   seq(0, 1, length.out = 100)
 ))
-f_Xunif(x,model="pspline_2D", K = c(5, 5),plot_check = TRUE)
+result <- f_Xunif(x,model="pspline_2D", K = c(5, 5),plot_check = TRUE)
 ```
+
+## References
+
+-   Rue, H., & Held, L. (2005). *Gaussian Markov random fields: theory and applications*. Chapman and Hall/CRC.

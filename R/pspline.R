@@ -134,7 +134,7 @@ pspline_standard <- function(x, K, order, m = NULL, M = NULL, sparse_sol = T) {
     return(kld)
   }
   # Optimization of the KLD function with symmetric entries for lambda
-  optimal_lambdas <- stats::nlm(kld_fun, rep(1, ceiling(K / 2)), print.level = 2)$estimate
+  optimal_lambdas <- stats::nlm(kld_fun, rep(1, ceiling(K / 2)))$estimate
   # Process for the optimal lambdas
   tilde_f <- tilde_f_fun(optimal_lambdas)
   R_tilde <- tilde_f$R_tilde
