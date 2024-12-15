@@ -8,7 +8,7 @@ standardize_GMRF(
   Q,
   D = NULL,
   rank_def = NULL,
-  fixed = TRUE,
+  fixed = FALSE,
   scale_Q = TRUE,
   plot_check = FALSE,
   n_sim = 100
@@ -21,7 +21,7 @@ standardize_GMRF(
 
 \item{rank_def}{A non-negative integer, indicating the rank deficiency of the matrix \code{Q}. If not provided, it is estimated.}
 
-\item{fixed}{Logical, indicating whether the effect must be treated as fixed or random. An effect is always considered fixed if it only has one basis function. By default, \code{TRUE}.}
+\item{fixed}{Logical, indicating whether the effect must be treated as fixed or random. An effect is always considered fixed if it only has one basis function. By default, \code{FALSE}.}
 
 \item{scale_Q}{Logical, indicating whether the precision matrix must be scaled or not. By default, \code{TRUE}.}
 

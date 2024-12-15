@@ -11,7 +11,7 @@ f_Xunif(
   adj_mat,
   m = NULL,
   M = NULL,
-  fixed = TRUE,
+  fixed = FALSE,
   scale_Q = T,
   plot_check = F,
   n_sim = 100
@@ -28,7 +28,7 @@ f_Xunif(
 
 \item{m, M}{A pair of numbers indicating respectively the lower and upper boundaries of the support of X. If not provided, they are set to the extreme values from \code{x}. Required for \verb{model="linear","pspline1","pspline2","pspline_2D"}.}
 
-\item{fixed}{Logical, indicating whether the effect must be treated as fixed or random. By default, \code{TRUE}.}
+\item{fixed}{Logical, indicating whether the effect must be treated as fixed or random. By default, \code{FALSE}.}
 
 \item{scale_Q}{Logical, indicating whether the precision matrix to be returned must already be scaled or not. By default, \code{TRUE}.}
 
