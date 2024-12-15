@@ -13,11 +13,13 @@ vignette: >
 knitr::opts_chunk$set(
   message=FALSE,
   collapse = TRUE,
+  fig.width =7,
+  fig.height=12,
   comment = "#>"
 )
 ```
 
-```{r setup}
+```{r echo=FALSE}
 library(scaleGMRF)
 ```
 
@@ -71,7 +73,17 @@ result <- f_Xunif(x, model = "iid",fixed=F, plot_check = TRUE)
 
 ### `"rw1"` effect
 
-`"rw1"` implements a random walk process of order 1 which is often used to model temporal effects. The model is an IGMRF of order 1 where the precision matrix is defined as: $$                                $$ see Equation 3.22 of Rue & Held, 2005.
+`"rw1"` implements a random walk process of order 1 which is often used to model temporal effects. The model is an IGMRF of order 1 where the precision matrix is defined as: 
+$$\mathbf{Q}=
+\begin{bmatrix}
+1 	& -1  &     &     &   \\
+-1 	&  2  & -1  &     &   \\
+    & ... & ... & ... &   \\
+    &     & -1  & 2   & -1\\
+    &     &     & -1  &  1\\
+\end{bmatrix}$$
+
+see Equation 3.22 of Rue & Held, 2005.
 
 ```{r }
 result <- f_Xunif(x, model = "rw1", plot_check = TRUE) 
@@ -79,7 +91,20 @@ result <- f_Xunif(x, model = "rw1", plot_check = TRUE)
 
 ### `"rw2"` effect
 
-`"rw2"` implements a random walk process of order 2 which is often used to model temporal effects. The model is an IGMRF of order 2 where the precision matrix is defined as: $$                                $$ see Equation 3.40 of Rue & Held, 2005.
+`"rw2"` implements a random walk process of order 2 which is often used to model temporal effects. The model is an IGMRF of order 2 where the precision matrix is defined as: 
+$$\mathbf{Q}=
+\begin{bmatrix}
+1 	& -2  &  1  &      &    &   &  & &  \\
+-2 	&  5  & -4  &  1   &    &   &   & & \\
+1 	&  -4 &  6  &  -4  & 1  &   &  & &  \\
+    &  1  &  -4 & 6    & -4 & 1 &  & &   \\
+    &     & ... & ...  & ...&...& ...&   &\\
+    &     &     & 1    & -4 &  6& -4 & 1 &  \\
+    &     &     &      & 1  & -4&  6 & -4& 1 \\
+    &     &     &      &    & 1 & -4 & 5 & -2\\
+ &     &     &      &    &  & 1 & -2 & 1\\
+ \end{bmatrix}$$ 
+see Equation 3.40 of Rue & Held, 2005.
 
 ```{r }
 result <- f_Xunif(x, model = "rw2", plot_check = TRUE) 
