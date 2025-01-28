@@ -6,9 +6,7 @@
 <!-- badges: start -->
 <!-- badges: end -->
 
-`scaleGMRF` is an R package that provides useful functions to
-standardize Gaussian Markov Random Fields (GMRF) effects in Latent
-Gaussian Models (LGM).
+`scaleGMRF` is an R package that provides useful functions to standardize Gaussian Markov Random Fields (GMRF) effects in Latent Gaussian Models (LGM) as proposed by  [Ferrari & Ventrucci (2025)](https://arxiv.org/abs/2501.16057).
 
 Standardizing GMRF effects guarantees that their variance parameters
 match their intuitive interpretation, defined as the variance
@@ -75,9 +73,6 @@ et al. 2009). If the argument `plot_check=TRUE`, the function also
 prints a graphical output that can be used to visually assess whether
 the standardization procedure has been successful.
 
-The design and usage of `standardize_GMRF()` are thoroughly discussed in
-`vignette("standardization", package = "scaleGMRF")`.
-
 ### User-friendly wrapper: `f_Xunif()`
 
 Another useful function of the package is `f_Xunif()`, which is a
@@ -85,10 +80,7 @@ user-friendly wrapper of `standardize_GMRF()` that returns standardized
 versions of popular GMRF effects, under the convenient assumption that
 the covariate follows a Uniform distribution. The function takes as
 arguments simply a sample of values of the covariate and a string
-indicating the type of effect, e.g. `"linear","iid","besag"`, etc. More
-details about the function and the list of effects implemented in
-`f_Xunif()` can be found in
-`vignette("f_Xunif", package = "scaleGMRF")`.
+indicating the type of effect, e.g. `"linear","iid","besag"`, etc. 
 
 <!--### Modified P-Splines
 &#10;An important class of effects implemented in the `f_Xunif()` function are the P-Spline effects, which are popularly used in LGMs (Fahrmeir et al. 2004). Applying the standardization procedure to these effects require a slight modification of the precision matrices traditionally used for their specification. The motivation and the design of this modified version of P-Splines is presented in `vignette("psplines", package = "scaleGMRF")`.---->
