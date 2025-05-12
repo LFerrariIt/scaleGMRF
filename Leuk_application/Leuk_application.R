@@ -43,27 +43,27 @@ transf_data$time <- factor(transf_data$time,ordered = T)
 #Step 2: define the effects of the model ----
 
 K_X <- 50
-f_t_AGE <- f_Xunif(transf_data$age,model="linear",scale_Q=F)
-f_t_WBC <- f_Xunif(transf_data$wbc,model="linear",scale_Q=F)
-f_t_TPI <- f_Xunif(transf_data$tpi,model="linear",scale_Q=F)
-f_n_AGE <- f_Xunif(transf_data$age,model="pspline2",K=K_X,scale_Q=F)
-f_n_WBC <- f_Xunif(transf_data$wbc,model="pspline2",K=K_X,scale_Q=F)
-f_n_TPI <- f_Xunif(transf_data$tpi,model="pspline2",K=K_X,scale_Q=F)
-f_SEX   <- f_Xunif(transf_data$sex,model="iid",scale_Q=F)
-f_DST   <- f_Xunif(transf_data$district,model="besag",scale_Q=F,
+f_t_AGE <- standardize_X_unif(transf_data$age,model="linear",scale_Q=F)
+f_t_WBC <- standardize_X_unif(transf_data$wbc,model="linear",scale_Q=F)
+f_t_TPI <- standardize_X_unif(transf_data$tpi,model="linear",scale_Q=F)
+f_n_AGE <- standardize_X_unif(transf_data$age,model="pspline2",K=K_X,scale_Q=F)
+f_n_WBC <- standardize_X_unif(transf_data$wbc,model="pspline2",K=K_X,scale_Q=F)
+f_n_TPI <- standardize_X_unif(transf_data$tpi,model="pspline2",K=K_X,scale_Q=F)
+f_SEX   <- standardize_X_unif(transf_data$sex,model="iid",scale_Q=F)
+f_DST   <- standardize_X_unif(transf_data$district,model="besag",scale_Q=F,
                    adj_mat = nwEngland_adj_mat)
-f_TEM   <- f_Xunif(transf_data$time,transf_data,model="rw1",scale_Q=F)
+f_TEM   <- standardize_X_unif(transf_data$time,transf_data,model="rw1",scale_Q=F)
 
-f_scld_t_AGE <- f_Xunif(transf_data$age,model="linear")
-f_scld_t_WBC <- f_Xunif(transf_data$wbc,model="linear")
-f_scld_t_TPI <- f_Xunif(transf_data$tpi,model="linear")
-f_scld_n_AGE <- f_Xunif(transf_data$age,model="pspline2",K=K_X)
-f_scld_n_WBC <- f_Xunif(transf_data$wbc,model="pspline2",K=K_X)
-f_scld_n_TPI <- f_Xunif(transf_data$tpi,model="pspline2",K=K_X)
-f_scld_SEX   <- f_Xunif(transf_data$sex,model="iid")
-f_scld_DST   <- f_Xunif(transf_data$district,model="besag",
+f_scld_t_AGE <- standardize_X_unif(transf_data$age,model="linear")
+f_scld_t_WBC <- standardize_X_unif(transf_data$wbc,model="linear")
+f_scld_t_TPI <- standardize_X_unif(transf_data$tpi,model="linear")
+f_scld_n_AGE <- standardize_X_unif(transf_data$age,model="pspline2",K=K_X)
+f_scld_n_WBC <- standardize_X_unif(transf_data$wbc,model="pspline2",K=K_X)
+f_scld_n_TPI <- standardize_X_unif(transf_data$tpi,model="pspline2",K=K_X)
+f_scld_SEX   <- standardize_X_unif(transf_data$sex,model="iid")
+f_scld_DST   <- standardize_X_unif(transf_data$district,model="besag",
                    adj_mat = nwEngland_adj_mat)
-f_scld_TEM   <- f_Xunif(transf_data$time,transf_data,model="rw1")
+f_scld_TEM   <- standardize_X_unif(transf_data$time,transf_data,model="rw1")
 
 # Step 3: creation of the data stack for INLA ---------------
 

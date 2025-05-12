@@ -8,7 +8,7 @@
 #'
 #' @return Plot.
 #'
-#' @details This function is used to visually check the standardization of the Gaussian effect. It is called in the functions `standardize_GMRF()` and `f_Xunif()` of the `scaleGMRF` package when `plot_check=T`. The plot provided in the output is different for fixed and random effects: in both cases, the "Mean" value in the plot should be close to 1 if standardization has been correctly applied. See `vignette("standardization",package="scaleGMRF")` for more details.
+#' @details This function is used to visually check the standardization of the Gaussian effect. It is called in the functions `standardize_GMRF()` and `standardize_X_unif()` of the `scaleGMRF` package when `plot_check=T`. The plot provided in the output is different for fixed and random effects: in both cases, the "Mean" value in the plot should be close to 1 if standardization has been correctly applied. See `vignette("standardization",package="scaleGMRF")` for more details.
 #'
 check_GMRF <- function(realizations, fixed = T, X_dist = NULL) {
   if (!is.matrix(realizations)) {

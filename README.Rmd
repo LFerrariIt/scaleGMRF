@@ -56,15 +56,15 @@ The main function of the package is `standardize_GMRF()`, which takes as argumen
 
 <!-- The design and usage of `standardize_GMRF()` are thoroughly discussed in `vignette("standardization", package = "scaleGMRF")`. -->
 
-### User-friendly wrapper: `f_Xunif()`
+### User-friendly wrapper: `standardize_X_unif()`
 
-Another useful function of the package is `f_Xunif()`, which is a user-friendly wrapper of `standardize_GMRF()` that returns standardized versions of popular GMRF effects, under the convenient assumption that the covariate follows a Uniform distribution. The function takes as arguments simply a sample of values of the covariate and a string indicating the type of effect, e.g. `"linear","iid","besag"`, etc. 
+Another useful function of the package is `standardize_X_unif()`, which is a user-friendly wrapper of `standardize_GMRF()` that returns standardized versions of popular GMRF effects, under the convenient assumption that the covariate follows a Uniform distribution. The function takes as arguments simply a sample of values of the covariate and a string indicating the type of effect, e.g. `"linear","iid","besag"`, etc. 
 
-<!-- More details about the function and the list of effects implemented in `f_Xunif()` can be found in `vignette("f_Xunif", package = "scaleGMRF")`.-->
+<!-- More details about the function and the list of effects implemented in `standardize_X_unif()` can be found in `vignette("standardize_X_unif", package = "scaleGMRF")`.-->
 
 <!--### Modified P-Splines
 
-An important class of effects implemented in the `f_Xunif()` function are the P-Spline effects, which are popularly used in LGMs (Fahrmeir et al. 2004). Applying the standardization procedure to these effects require a slight modification of the precision matrices traditionally used for their specification. The motivation and the design of this modified version of P-Splines is presented in `vignette("psplines", package = "scaleGMRF")`.---->
+An important class of effects implemented in the `standardize_X_unif()` function are the P-Spline effects, which are popularly used in LGMs (Fahrmeir et al. 2004). Applying the standardization procedure to these effects require a slight modification of the precision matrices traditionally used for their specification. The motivation and the design of this modified version of P-Splines is presented in `vignette("psplines", package = "scaleGMRF")`.---->
 
 ### Worked example
 
@@ -83,7 +83,7 @@ K <- 50
 # Values of the covariate as an ordered factor
 x <- factor(1:K, ordered = TRUE)
 # Standardized random walk effect of order 1
-standard_rw1 <- f_Xunif(x, model = "rw1", fixed = TRUE, plot_check = T)
+standard_rw1 <- standardize_X_unif(x, model = "rw1", fixed = TRUE, plot_check = T)
 summary(standard_rw1)
 # Realizations of a response Y
 Y <- cumsum(rnorm(K)) + rnorm(K,sd = 2)

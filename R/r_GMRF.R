@@ -8,7 +8,7 @@
 #'
 #' @return A numeric matrix, containing a realization of the process in each column.
 #'
-#' @details This function is used in the `standardize_GMRF()` and `f_Xunif()` functions of the `scaleGMRF` package to generate realizations of Gaussian effects.
+#' @details This function is used in the `standardize_GMRF()` and `standardize_X_unif()` functions of the `scaleGMRF` package to generate realizations of Gaussian effects.
 #'
 #' @examples
 #' # Example for an i.i.d. effect --------------------

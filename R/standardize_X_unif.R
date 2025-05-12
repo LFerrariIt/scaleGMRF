@@ -1,6 +1,6 @@
 #' Standardized effects for a Uniform covariate
 #'
-#' `f_Xunif()` provides a list of elements to build various standardized effects (chosen through the `model` argument) under the assumption that the corresponding covaiate follows a Uniform distribution.
+#' `standardize_X_unif()` provides a list of elements to build various standardized effects (chosen through the `model` argument) under the assumption that the corresponding covaiate follows a Uniform distribution.
 
 #' @param x A numeric vector (for `model="linear","pspline1","pspline2","pspline_2D"`) or an ordered factor with more than 1 level (for `model="iid","rw1","rw2","besag"``).
 #' @param model String to select the type of effect between `"iid","rw1","rw2","besag","linear","pspline1","pspline2","pspline_2D"`.
@@ -12,7 +12,7 @@
 #' @param plot_check Logical, indicating whether a plot to check the standardization must be printed or not. By default, `FALSE`.
 #' @param n_sim Positive integer, indicating the number of realizations to generate for the check plot. By default, `n_sim=100`.
 #'
-#' @details This function is designed so that the first three elements of the output list can directly be used to specify a model effect in INLA through the model `generic0` (see `inla.doc(generic0)`). More details about this function can be found in `vignette("f_Xunif",package="scaleGMRF")`.
+#' @details This function is designed so that the first three elements of the output list can directly be used to specify a model effect in INLA through the model `generic0` (see `inla.doc(generic0)`). More details about this function can be found in `vignette("standardize_X_unif",package="scaleGMRF")`.
 #'
 #' @inherit iid_standard return
 #'
@@ -20,15 +20,15 @@
 #' # Examples for discrete covariates --------------------------
 #' K <- 20 # number of levels
 #' x <- factor(sample(1:K, 100, replace = TRUE), ordered = TRUE, levels = c(1:K))
-#' f_Xunif(x, model = "iid", plot_check = TRUE) # fixed iid effect
-#' f_Xunif(x, model = "rw1", plot_check = TRUE) # random walk of order 1
+#' standardize_X_unif(x, model = "iid", plot_check = TRUE) # fixed iid effect
+#' standardize_X_unif(x, model = "rw1", plot_check = TRUE) # random walk of order 1
 #'
 #' # Examples for continuous covariates --------------------------
 #' x <- runif(1000, min = 2, max = 5)
-#' f_Xunif(x, model = "linear", plot_check = TRUE) # linear effect
+#' standardize_X_unif(x, model = "linear", plot_check = TRUE) # linear effect
 #' K <- 20 # number of b-spline basis functions
-#' f_Xunif(x, model = "pspline2", K = K, plot_check = TRUE) # p-spline of order 2
-f_Xunif <- function(
+#' standardize_X_unif(x, model = "pspline2", K = K, plot_check = TRUE) # p-spline of order 2
+standardize_X_unif <- function(
     x, model, K,
     adj_mat, m = NULL, M = NULL,
     fixed = FALSE, scale_Q = T,
