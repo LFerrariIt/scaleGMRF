@@ -19,9 +19,11 @@ Imports:
     spam,
     splines,
     stats,
-    tidyr
+    tidyr,
+    sp,
+    INLA
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.2.1
+RoxygenNote: 7.3.2
 Suggests: 
     knitr,
     rmarkdown
@@ -47,6 +49,6 @@ Collate:
  'pspline.R' 
  'pspline2D.R'
  'check.R'
- 'f_Xunif.R'
+ 'standardize_X_unif.R'
 Depends: 
     R (>= 2.10)

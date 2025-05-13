@@ -24,7 +24,7 @@ A numeric matrix, containing a realization of the process in each column.
 \code{r_GMRF()} returns a matrix where each column is a realization of the specified Gaussian effect.
 }
 \details{
-This function is used in the \code{standardize_GMRF()} and \code{f_Xunif()} functions of the \code{scaleGMRF} package to generate realizations of Gaussian effects.
+This function is used in the \code{standardize_GMRF()} and \code{standardize_X_unif()} functions of the \code{scaleGMRF} package to generate realizations of Gaussian effects.
 }
 \examples{
 # Example for an i.i.d. effect --------------------

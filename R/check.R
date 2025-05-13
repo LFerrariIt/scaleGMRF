@@ -87,7 +87,7 @@ check_GMRF <- function(realizations, fixed = T, X_dist = NULL) {
           ggplot2::theme(plot.title = ggplot2::element_text(hjust = 0.5)) +
           ggplot2::labs(y = "f(x)", x = "x"),
         plot_1 + ggplot2::theme(plot.title = ggplot2::element_text(hjust = 0.5)),
-        ncol = 1
+        ncol = 2
       )
     )
   }

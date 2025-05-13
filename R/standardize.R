@@ -9,10 +9,10 @@
 #' @param n_sim Positive integer, indicating the number of realizations to generate for the check plot. By default, `n_sim=100`.
 #'
 #' @return A list of 4 elements containing:
-#' * `Q`: a matrix, representing the precision matrix.
-#' * `D`: a matrix, representing the basis.
-#' * `C`: a positive number, representing the scaling constant.
-#' * `A`: a matrix with 1 column, representing the 0-mean constraint as the coefficients of a linear combination. `NULL` for `fixed=FALSE`.
+#' * `precision`: a matrix, representing the precision matrix.
+#' * `scaling`: a matrix, representing the basis.
+#' * `scaling_constant`: a positive number, representing the scaling constant.
+#' * `mean_constraint`: a matrix with 1 column, representing the 0-mean constraint as the coefficients of a linear combination. `NULL` for `fixed=FALSE`.
 #'
 #'
 #' @details This function is one of the two main functions of the `scaleGMRF` package. More details about this function can be found in `vignette("standardization",package="scaleGMRF")`.

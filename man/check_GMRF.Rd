@@ -20,5 +20,5 @@ Plot.
 \code{check_GMRF()} returns a plot made up by 1 or more panels to check the standardization of a Gaussian effect. If a sample of the distribution of the covariate is specified, a plot of the realizations is also returned.
 }
 \details{
-This function is used to visually check the standardization of the Gaussian effect. It is called in the functions \code{standardize_GMRF()} and \code{f_Xunif()} of the \code{scaleGMRF} package when \code{plot_check=T}. The plot provided in the output is different for fixed and random effects: in both cases, the "Mean" value in the plot should be close to 1 if standardization has been correctly applied. See \code{vignette("standardization",package="scaleGMRF")} for more details.
+This function is used to visually check the standardization of the Gaussian effect. It is called in the functions \code{standardize_GMRF()} and \code{standardize_X_unif()} of the \code{scaleGMRF} package when \code{plot_check=T}. The plot provided in the output is different for fixed and random effects: in both cases, the "Mean" value in the plot should be close to 1 if standardization has been correctly applied. See \code{vignette("standardization",package="scaleGMRF")} for more details.
 }
