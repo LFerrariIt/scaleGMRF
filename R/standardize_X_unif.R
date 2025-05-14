@@ -63,14 +63,14 @@ standardize_X_unif <- function(
 
   # Precision matrix unscaling -----
   if (!scale_Q) {
-    result$precision <- result$precision / result$scaling_constant
+    result$Q <- result$Q / result$C
   }
 
   # Check results via simulation-----------------------------
 
   if (plot_check) {
     realizations <- r_GMRF(
-      Q = result$precision,
+      Q = result$Q,
       D = result$basis_distribution,
       n_sim = n_sim
     )

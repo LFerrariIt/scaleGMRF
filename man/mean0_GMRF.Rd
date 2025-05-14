@@ -18,7 +18,7 @@ A list of 3 elements containing:
 \itemize{
 \item \code{Q}: a matrix, representing the precision matrix subject to the 0-mean constraint.
 \item \code{D}: a matrix, representing the basis subject to the 0-mean constraint.
-\item \code{A}: a matrix with 1 column, representing the 0-mean constraint as the coefficients of a linear combination.
+\item \code{A}: a matrix with 1 row, representing the 0-mean constraint as the coefficients of a linear combination.
 }
 }
 \description{
@@ -29,7 +29,7 @@ This function is used in the \code{standardize_GMRF()} function of the \code{sca
 }
 \section{Example for an i.i.d. effect -------------------------------}{
 result <- mean0_GMRF(diag(10))
-result$Q \%*\% result$A
+result$Q \%*\% t(result$A)
 }
 
 \section{Example for a linear effect -------------------------------}{
@@ -39,6 +39,6 @@ mean(result$D)
 
 \section{Example for a random walk effect of order 1------------------------}{
 result <- mean0_GMRF(as.matrix(spam::precmat.RW1(10)), rank_def = 1)
-result$Q \%*\% result$A
+result$Q \%*\% t(result$A)
 }
 

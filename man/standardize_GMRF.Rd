@@ -32,10 +32,10 @@ standardize_GMRF(
 \value{
 A list of 4 elements containing:
 \itemize{
-\item \code{precision}: a matrix, representing the precision matrix.
-\item \code{scaling}: a matrix, representing the basis.
-\item \code{scaling_constant}: a positive number, representing the scaling constant.
-\item \code{mean_constraint}: a matrix with 1 column, representing the 0-mean constraint as the coefficients of a linear combination. \code{NULL} for \code{fixed=FALSE}.
+\item \code{Q}: a matrix, representing the precision matrix.
+\item \code{D}: a matrix, representing the basis.#'
+\item \code{A}: a matrix with 1 row, representing the 0-mean constraint as the coefficients of a linear combination. \code{NULL} for \code{fixed=FALSE}.
+\item \code{C}: a positive number, representing the scaling constant.
 }
 }
 \description{

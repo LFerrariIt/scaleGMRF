@@ -14,11 +14,11 @@ besag_standard(x, adj_mat)
 \value{
 A list of 6 elements, containing:
 \itemize{
-\item \code{precision}: precision matrix
-\item \code{basis}:  basis matrix evaluated at \code{x}
-\item \code{scaling_constant}: a positive number, representing the appropriate scaling constant
+\item \code{Q}: precision matrix
+\item \code{D}: basis matrix evaluated at \code{x}
+\item \code{C}: a positive number, representing the appropriate scaling constant
 \item \code{null_space}: a matrix, representing the null space of the precision matrix
-\item \code{X_distribution}: a numeric vector (or matrix) of values sampled from the Uniform distribution of X
+\item \code{X_distribution}: a numeric vector (or matrix for \code{pspline2D}) of values sampled from the Uniform distribution of X
 \item \code{basis_distribution}: basis matrix evaluated at \code{X_distribution}
 }
 }

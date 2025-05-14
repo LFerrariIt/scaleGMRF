@@ -32,9 +32,9 @@ linear_standard <- function(x, m = NULL, M = NULL) {
   D_dist <- matrix((X_dist - x_mean), ncol = 1, nrow = length(X_dist))
 
   return(list(
-    "precision" = Q * C,
-    "basis" = D,
-    "scaling_constant" = C,
+    "Q" = Q * C,
+    "D" = D,
+    "C" = C,
     "null_space" = NULL,
     "X_distribution" = X_dist,
     "basis_distribution" = D_dist

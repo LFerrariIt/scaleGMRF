@@ -43,9 +43,9 @@ besag_standard <- function(x, adj_mat) {
   C <- scale_GMRF(Q = Q, D = NULL, rank_def = 1)
 
   return(list(
-    "precision" = Q * C,
-    "basis" = D,
-    "scaling_constant" = C,
+    "Q" = Q * C,
+    "D" = D,
+    "C" = C,
     "null_space" = S,
     "X_distribution" = X_dist,
     "basis_distribution" = D_dist

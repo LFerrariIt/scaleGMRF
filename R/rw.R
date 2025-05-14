@@ -35,7 +35,7 @@ rw_standard <- function(x, order) {
       stop("The number of levels 'K' should be larger than 3.")
     }
     Q <- as.matrix(spam::precmat.RW2(K))
-    S <- S <- cbind(rep(1, K), 1:K)
+    S <- cbind(rep(1, K), 1:K)
   } else {
     stop("'order' can only be equal to 1 or 2. Instead, order=", order, ".")
   }
@@ -43,9 +43,9 @@ rw_standard <- function(x, order) {
   C <- scale_GMRF(Q = Q, D = NULL, rank_def = order)
 
   return(list(
-    "precision" = Q * C,
-    "basis" = D,
-    "scaling_constant" = C,
+    "Q" = Q * C,
+    "D" = D,
+    "C" = C,
     "null_space" = S,
     "X_distribution" = X_dist,
     "basis_distribution" = D_dist

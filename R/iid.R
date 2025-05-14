@@ -6,12 +6,12 @@
 #' @param fixed Logical, indicating whether the effect must be treated as fixed (TRUE) or random (FALSE). If it is treated as fixed, a 0 mean constraint is imposed By default, TRUE.
 #'
 #' @return A list of 6 elements, containing:
-#' * `precision`: precision matrix
-#' * `basis`:  basis matrix evaluated at `x`
-#' * `scaling_constant`: a positive number, representing the appropriate scaling constant
-#'  * `null_space`: a matrix, representing the null space of the precision matrix
-#'  * `X_distribution`: a numeric vector (or matrix) of values sampled from the Uniform distribution of X
-#'  * `basis_distribution`: basis matrix evaluated at `X_distribution`
+#' * `Q`: precision matrix
+#' * `D`: basis matrix evaluated at `x`
+#' * `C`: a positive number, representing the appropriate scaling constant
+#' * `null_space`: a matrix, representing the null space of the precision matrix
+#' * `X_distribution`: a numeric vector (or matrix for `pspline2D`) of values sampled from the Uniform distribution of X
+#' * `basis_distribution`: basis matrix evaluated at `X_distribution`
 #'
 #'
 #' @examples
@@ -39,14 +39,18 @@ iid_standard <- function(x, fixed = TRUE) {
     rank_def = 0, fixed = fixed
   )
 
-  Q <- stand_iid$precision
-  S <- stand_iid$mean_constraint
-  C <- stand_iid$scaling_constant
+  Q <- stand_iid$Q
+  if (!is.null(stand_iid$A)) {
+    S <- t(stand_iid$A)
+  } else {
+    S <- stand_iid$A
+  }
+  C <- stand_iid$C
 
   return(list(
-    "precision" = Q,
-    "basis" = D,
-    "scaling_constant" = C,
+    "Q" = Q,
+    "D" = D,
+    "C" = C,
     "null_space" = S,
     "X_distribution" = X_dist,
     "basis_distribution" = D_dist

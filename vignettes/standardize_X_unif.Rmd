@@ -42,12 +42,16 @@ The following table reports the effects that can be specified `standardize_X_uni
 | `"pspline2"` | P-Spline effect of second order for continuous covariate | `K`: numeric (mandatory). Number of basis function |
 | `"pspline_2D"` | 2D P-Spline effect of first order for spatial data | `K`: numeric vector (mandatory). Number of basis functions in each dimension |
 
-The output is again a list of elements that contains the same one of `standardize_GMRF()`, along with two more:
+The output is a list of 6 elements:
 
+- `Q`: a matrix representing the standardized version of the precision matrix
+- `D`: a matrix representing the basis matrix evaluated at the input `x`
+- `C`: a positive number, representing the scaling constant $C$
+- `null space`: a matrix representing the null space of the precision matrix
 -   `X_distribution`: sample of values from the Uniform distribution assumed on the covariate;
--   `basis_distribution`: basis evaluated at `X_distribution` as a matrix object. These additional elements are reported to remind the user that the standardization procedure was performed assuming Uniformity rather than on the basis of the empirical distribution of `x`.
+-   `basis_distribution`: basis evaluated at `X_distribution` as a matrix object. These last two elements are reported to remind the user that the standardization procedure was performed assuming Uniformity rather than on the basis of the empirical distribution of `x`.
 
-A plot showing `n_sim` realizations of the standardized process is reported along with The graphical output of `standardize_GMRF()` if `plot_check=T`.
+A plot showing `n_sim` realizations of the standardized process is reported along with the graphical output of `standardize_GMRF()` if `plot_check=T`.
 
 ## Discrete covariate: $X\sim \text{Unif}[1,...,K]$
 

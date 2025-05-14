@@ -3,7 +3,7 @@
 title: "Standardization of a Gaussian Markov Random Field (GMRF)"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Standardization of a GMRF}
+  %\VignetteIndexEntry{standardize_GMRF}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -60,7 +60,7 @@ E_X[f(X)]=0\implies\\
 \end{gather*}
 In practice, the constraint is equal to:
 
-$$\boldsymbol{A}^T\mathbf{u}=0 \text{ where }\boldsymbol{A}^T=E_X[D(X)]$$
+$$\boldsymbol{A}\mathbf{u}=0 \text{ where }\boldsymbol{A}=E_X[D(X)]$$
 
 for $K>1$. If $K=1$, the single basis function must be changed to $d_1(X)-E_X[d_1(X)]$. Note that the constraint modifies the precision matrix $\boldsymbol{Q}$.
 
@@ -79,7 +79,7 @@ $$\widetilde{f}(X)=\widetilde{\mathbf{D}}(X)\widetilde{\mathbf{u}} \text{  where
 
 $$\widetilde{\mathbf{u}}\sim N(\mathbf{0},\sigma^2\widetilde{\mathbf{Q}^*})$$
 
-$\widetilde{\mathbf{u}}$ will be also subject to $\boldsymbol{A}^T\widetilde{\mathbf{u}}=0$ if the effect is fixed. $\widetilde{\mathbf{D}}$ and $\widetilde{\mathbf{Q}}$ may or may not be equal to the original matrices, according to whether or not the effect already satisfied the requirements in terms of $\sigma^2$.
+$\widetilde{\mathbf{u}}$ will be also subject to $\boldsymbol{A}\widetilde{\mathbf{u}}=0$ if the effect is fixed. $\widetilde{\mathbf{D}}$ and $\widetilde{\mathbf{Q}}$ may or may not be equal to the original matrices, according to whether or not the effect already satisfied the requirements in terms of $\sigma^2$.
 
 ## Function Overview
 
@@ -107,10 +107,10 @@ The argument `D` is optional as the default choice covers the simplest and commo
 
 The output of `standardize_GMRF()` is a list of 4 elements, namely:
 
-- `precision`: a matrix representing $\widetilde{\boldsymbol{Q}}$ (or $\widetilde{\boldsymbol{Q}}/C$ when `scale_Q=FALSE`)
-- `basis`: a matrix representing $\widetilde{\boldsymbol{D}}(\boldsymbol{x})$. Equal to the input `D` unless $K=1$.
-- `scaling_constant`: a positive number, representing the scaling constant $C$
-- `mean_constraint`: a matrix with 1 column, representing $\boldsymbol{A}$. `NULL` for `fixed=FALSE`.
+- `Q`: a matrix representing $\widetilde{\boldsymbol{Q}}$ (or $\widetilde{\boldsymbol{Q}}/C$ when `scale_Q=FALSE`)
+- `D`: a matrix representing $\widetilde{\boldsymbol{D}}(\boldsymbol{x})$. Equal to the input `D` unless $K=1$.
+- `A`: a matrix with 1 row, representing $\boldsymbol{A}$. `NULL` for `fixed=FALSE`.
+- `C`: a positive number, representing the scaling constant $C$
 
 The logical argument `scale_Q` is a logical value that determines whether the scaling step should be applied. By default, it is obviously set to `TRUE`, but the option is useful to compare effects before and after the scaling to assess the practical impact of the procedure. 
 
@@ -143,7 +143,7 @@ As an example, we consider a latent Gaussian model for a Normally-distributed re
 # Create the data stack for INLA
 data_stack <- inla.stack(
   data = list(Y = Y),       #response
-  A = list(1, standardized_effect$basis),  # Use the standardized basis
+  A = list(1, standardized_effect$D),  # Use the standardized basis
   effects = list(
     data.frame(intercept = rep(1, length(Y))),
     list(u_rw1 = 1:10)  # Random walk coefficients
@@ -158,11 +158,10 @@ Secondly, we need to include the effect in the formula of the INLA call. To spec
 model <- inla(
   Y ~ -1 + intercept +  # No default intercept
     f(u_rw1, model = "generic0", constr = FALSE,
-      Cmatrix = standardized_effect$precision,  # Standardized precision matrix
+      Cmatrix = standardized_effect$Q,  # Standardized precision matrix
       extraconstr = list(
-        A = t(standardized_effect$mean_constraint),  # Mean constraint (if fixed effect)
-        e = matrix(rep(0, ncol(standardized_effect$mean_constraint)))  # Constraint RHS
-      )
+        A = standardized_effect$A,  # Mean constraint (if fixed effect)
+        e = matrix(rep(0, 1)) # Constraint RHS
     ),
   family = "gaussian", data = inla.stack.data(data_stack),
   control.predictor = list(A = inla.stack.A(data_stack))

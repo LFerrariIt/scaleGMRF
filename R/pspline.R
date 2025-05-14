@@ -166,9 +166,9 @@ pspline_standard <- function(x, K, order, m = NULL, M = NULL, sparse_sol = T) {
   }
 
   return(list(
-    "basis" = basis,
-    "precision" = precision,
-    "scaling_constant" = scaling_constant,
+    "Q" = precision,
+    "D" = basis,
+    "C" = scaling_constant,
     "null_space" = null_space,
     "X_distribution" = x_unif,
     "basis_distribution" = basis_dist

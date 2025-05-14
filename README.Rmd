@@ -53,8 +53,7 @@ In this context, we define "standardization" a procedure that ensures that the v
 ### Main function: `standardize_GMRF()`
 
 The main function of the package is `standardize_GMRF()`, which takes as arguments a GMRF effect (via its 3 components) and its categorization as either fixed or random. `standardize_GMRF()` implements standardization and returns a standardized version of the GMRF as a list of elements. The function is built such that the elements of its output can be directly used to specify an effect of an `INLA` model using the `inla.stack()` function and the model `"generic0"` (www.r-inla.org, Rue et al. 2009). If the argument `plot_check=TRUE`, the function also prints a graphical output that can be used to visually assess whether the standardization procedure has been successful.
-
-<!-- The design and usage of `standardize_GMRF()` are thoroughly discussed in `vignette("standardization", package = "scaleGMRF")`. -->
+The design and usage of `standardize_GMRF()` are thoroughly discussed in `vignette("standardization", package = "scaleGMRF")`. -->
 
 ### User-friendly wrapper: `standardize_X_unif()`
 
@@ -112,7 +111,7 @@ Y <- cumsum(rnorm(K)) + rnorm(K, sd = 2)
 # - Effects: fixed intercept and indexed random effect coefficients
 data_stack <- inla.stack(
   data = list(Y = Y), # response
-  A = list(1, standard_rw1$basis), # basis matrices
+  A = list(1, standard_rw1$D), # basis matrices
   effects = list(
     data.frame(intercept = rep(1, length(Y))),
     list(u_rw1 = 1:K) # coefficients
@@ -124,7 +123,7 @@ model <- inla(
   Y ~ -1 + intercept +  # Remove default intercept, include custom one
     f(u_rw1,
       model = "generic0", constr = FALSE,
-      Cmatrix = standard_rw1$precision,  # Precision matrix from standardization
+      Cmatrix = standard_rw1$Q,  # Precision matrix from standardization
       extraconstr = list(                 # Additional constraints to ensure identifiability
         A = t(standard_rw1$null_space),   # Null space of the precision matrix
         e = matrix(0, ncol(standard_rw1$null_space))  # RHS of the constraint

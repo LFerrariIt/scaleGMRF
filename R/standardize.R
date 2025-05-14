@@ -9,10 +9,10 @@
 #' @param n_sim Positive integer, indicating the number of realizations to generate for the check plot. By default, `n_sim=100`.
 #'
 #' @return A list of 4 elements containing:
-#' * `precision`: a matrix, representing the precision matrix.
-#' * `scaling`: a matrix, representing the basis.
-#' * `scaling_constant`: a positive number, representing the scaling constant.
-#' * `mean_constraint`: a matrix with 1 column, representing the 0-mean constraint as the coefficients of a linear combination. `NULL` for `fixed=FALSE`.
+#' * `Q`: a matrix, representing the precision matrix.
+#' * `D`: a matrix, representing the basis.#'
+#' * `A`: a matrix with 1 row, representing the 0-mean constraint as the coefficients of a linear combination. `NULL` for `fixed=FALSE`.
+#' * `C`: a positive number, representing the scaling constant.
 #'
 #'
 #' @details This function is one of the two main functions of the `scaleGMRF` package. More details about this function can be found in `vignette("standardization",package="scaleGMRF")`.
@@ -72,31 +72,32 @@ standardize_GMRF <- function(
     C <- unname(scale_GMRF(constr_results$Q, constr_results$D))
 
     result <- list(
-      "precision" = constr_results$Q * C,
-      "basis" = constr_results$D,
-      "scaling_constant" = C,
-      "mean_constraint" = constr_results$A
+      "Q" = constr_results$Q * C,
+      "D" = constr_results$D,
+      "A" = constr_results$A,
+      "C" = C
     )
   } else {
     C <- unname(scale_GMRF(Q, D, rank_def = rank_def))
 
     result <- list(
-      "precision" = Q * C,
-      "basis" = D,
-      "scaling_constant" = C,
-      "mean_constraint" = NULL
+      "Q" = Q * C,
+      "D" = D,
+      "A" = NULL,
+      "C" = C
     )
   }
 
   if (!scale_Q) {
-    result$precision <- result$precision / result$scaling_constant
+    result$Q <- result$Q / result$C
   }
 
 
   if (plot_check) {
     realizations <- r_GMRF(
-      Q = result$precision,
-      D = result$basis, n_sim = n_sim
+      Q = result$Q,
+      D = result$D,
+      n_sim = n_sim
     )
 
     print(check_GMRF(realizations, fixed = fixed, X_dist = NULL))
