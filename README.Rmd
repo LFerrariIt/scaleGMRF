@@ -16,7 +16,7 @@ knitr::opts_chunk$set(
 # `scaleGMRF`
 
 <!-- badges: start -->
-<img src="logo/logo.png" align="sticker.png" height="150"/>
+<img src="logo/hex_logo.png" align="left" height="150"/>
 <!-- badges: end -->
 
 `scaleGMRF` is an R package that provides useful functions to standardize Gaussian Markov Random Fields (GMRF) effects in Latent Gaussian Models (LGM) as proposed by  [Ferrari & Ventrucci (2025)](https://arxiv.org/abs/2501.16057).
@@ -32,6 +32,8 @@ The `scaleGMRF` package can be installed from [GitHub](https://github.com/):
 ``` r
 # install.packages("devtools")
 devtools::install_github("LFerrariIt/scaleGMRF")
+# to access vignettes, run instead:
+devtools::install_github("LFerrariIt/scaleGMRF", build_vignettes = TRUE)
 ```
 
 ## Context
@@ -53,7 +55,7 @@ In this context, we define "standardization" a procedure that ensures that the v
 ### Main function: `standardize_GMRF()`
 
 The main function of the package is `standardize_GMRF()`, which takes as arguments a GMRF effect (via its 3 components) and its categorization as either fixed or random. `standardize_GMRF()` implements standardization and returns a standardized version of the GMRF as a list of elements. The function is built such that the elements of its output can be directly used to specify an effect of an `INLA` model using the `inla.stack()` function and the model `"generic0"` (www.r-inla.org, Rue et al. 2009). If the argument `plot_check=TRUE`, the function also prints a graphical output that can be used to visually assess whether the standardization procedure has been successful.
-The design and usage of `standardize_GMRF()` are thoroughly discussed in `vignette("standardization", package = "scaleGMRF")`. -->
+The design and usage of `standardize_GMRF()` are thoroughly discussed in `vignette("standardization", package = "scaleGMRF")`. 
 
 ### User-friendly wrapper: `standardize_X_unif()`
 

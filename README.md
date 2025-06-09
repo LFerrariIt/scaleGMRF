@@ -5,7 +5,7 @@
 
 <!-- badges: start -->
 
-<img src="logo/logo.png" align="sticker.png" height="150"/>
+<img src="logo/hex_logo.png" align="left" height="150"/>
 <!-- badges: end -->
 
 `scaleGMRF` is an R package that provides useful functions to
@@ -30,6 +30,8 @@ The `scaleGMRF` package can be installed from
 ``` r
 # install.packages("devtools")
 devtools::install_github("LFerrariIt/scaleGMRF")
+# to access vignettes, run instead:
+devtools::install_github("LFerrariIt/scaleGMRF", build_vignettes = TRUE)
 ```
 
 ## Context
@@ -78,7 +80,7 @@ et al. 2009). If the argument `plot_check=TRUE`, the function also
 prints a graphical output that can be used to visually assess whether
 the standardization procedure has been successful. The design and usage
 of `standardize_GMRF()` are thoroughly discussed in
-`vignette("standardization", package = "scaleGMRF")`. –\>
+`vignette("standardization", package = "scaleGMRF")`.
 
 ### User-friendly wrapper: `standardize_X_unif()`
 
