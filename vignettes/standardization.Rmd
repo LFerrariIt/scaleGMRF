@@ -124,36 +124,64 @@ for each realization of $f(\boldsymbol{x})$. The plot also reports the mean of t
 
 ```{r}
 #Quadratic effect
-basis <- matrix(runif(100))^2
-standardize_GMRF(Q = matrix(1), D = basis)
+x <- sort(runif(100))
+basis <- matrix(x^2)
+standardize_GMRF(Q = matrix(1), D = basis, fixed = TRUE, plot_check = TRUE, n_sim=10000)
 ```
 
 - *Random effects*. Since the requirement for random effects is that $\sigma^2=Var_{X,\mathbf{u}}[f(X)|\sigma^2]\}$, which is also equal to $\sigma^2=E_{X}\{Var_{\mathbf{u}}[f(X)|\sigma^2]\}$ we want to check that when $\sigma^2=1$, then the distribution of $Var_{\mathbf{u}}[f(X)|\sigma^2]$ for multiple realizations of $X$ is concentrated around 1. To do so, we compute the *between-realization variance* for each value $x_i$ in $\boldsymbol{x}$. For B realizations, we compute:
 $Var_{b=1}^B[f^{(b)}(x_i)]$
 Since the function does not directly take as argument $\boldsymbol{x}$ but only $D(\boldsymbol{x})$, we simply plot the *between-realization variance* in the order in which the user provided. The plot also reports the mean of the between-realization variance as a dashed black line, as well as its numerical value at the bottom: if the standardization is succesful, the mean should be close to 1.
 
+```{r}
+#Random walk effect
+x <- 1:20
+Q_matrix <- as.matrix(spam::precmat.RW1(length(x)))
+standardize_GMRF(Q = Q_matrix, plot_check = TRUE,n_sim = 10000)
+```
 
 ## Using the Output in INLA
 
-Once the GMRF is standardized using `standardize_GMRF()`, you can use the output directly in an **INLA** model to specify an effect. The key components of the output—`precision`, `basis`, and `mean_constraint`—are used to define a GMRF effect in INLA.
+Once the GMRF is standardized using `standardize_GMRF()`, you can use the output directly in an **INLA** model to specify an effect. The key components of the output—`Q`, `D`, and `A`—are used to define a GMRF effect in INLA.
 
-As an example, we consider a latent Gaussian model for a Normally-distributed response $Y$ where we only want to include an effect. Assuming the output of the `standardize_GMRF()` call for the effect is stored as `standardized_effect`, we first need to specify the basis matrix of the effect accessing the `basis` element of the list:
 
-```{r, eval =FALSE}
+As an example, we consider a latent Gaussian model for a Normally-distributed response $Y$, where the linear predictor is a first-order random walk on $K=20$ locations:
+
+```{r}
+# Creation of the data
+x <- 1:20
+y <- cumsum(rnorm(20))+rnorm(20)
+plot(x,y)
+```
+
+Then, we find the standardized version of a first-order random walk using `standardize_GMRF()`:
+
+```{r}
+# Standardization of the effect
+Q_matrix <- as.matrix(spam::precmat.RW1(length(x)))
+standardized_effect <- standardize_GMRF(Q = Q_matrix,plot_check = T,fixed=T,n_sim = 10000)
+# Compare to the unstandardized version
+standardize_GMRF(Q = Q_matrix,scale_Q = F, fixed=T,plot_check = T,n_sim = 10000)
+```
+
+Now, we can start specifying our INLA model. First, we create the data stack and use the basis of the standardized effect, stored in the `D` element of `standardized_effect`:
+```{r}
+library(INLA)
+
 # Create the data stack for INLA
 data_stack <- inla.stack(
-  data = list(Y = Y),       #response
+  data = list(Y = y),       #response
   A = list(1, standardized_effect$D),  # Use the standardized basis
   effects = list(
-    data.frame(intercept = rep(1, length(Y))),
-    list(u_rw1 = 1:10)  # Random walk coefficients
+    data.frame(intercept = rep(1, length(y))),
+    list(u_rw1 = 1:ncol(standardized_effect$D))  # Random walk coefficients
   )
 )
 ```
 
-Secondly, we need to include the effect in the formula of the INLA call. To specify a generic GMRF effect with null mean, we need to set `model = "generic0"`; then, the standardized version of the precision matrix can be specified using the argument `Cmatrix`; finally, remember to include the 0-mean constraint using the argument `mean_constraint` if the effect is considered fixed 
+Secondly, we need to include the effect in the formula of the INLA call. To specify a generic GMRF effect with null mean, we need to set `model = "generic0"`; then, the standardized version of the precision matrix can be specified using the argument `Cmatrix`; finally, remember to include the 0-mean constraint on the coefficients using the element `A` if the effect is considered fixed.
 
-```{r, eval =FALSE}
+```{r}
 # Fit the INLA model
 model <- inla(
   Y ~ -1 + intercept +  # No default intercept
@@ -161,11 +189,13 @@ model <- inla(
       Cmatrix = standardized_effect$Q,  # Standardized precision matrix
       extraconstr = list(
         A = standardized_effect$A,  # Mean constraint (if fixed effect)
-        e = matrix(rep(0, 1)) # Constraint RHS
+        e = matrix(rep(0, 1))) # Constraint RHS
     ),
   family = "gaussian", data = inla.stack.data(data_stack),
-  control.predictor = list(A = inla.stack.A(data_stack))
+  control.predictor = list(A = inla.stack.A(data_stack)),verbose=T
 )
+
+summary(model)
 ```
 
 

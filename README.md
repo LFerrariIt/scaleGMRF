@@ -187,7 +187,7 @@ If you need help or find any bug, feel free to send an email to
 
 This package has been developed by [Luisa
 Ferrari](https://www.unibo.it/sitoweb/luisa.ferrari5/en) and
-[Prof. Massimo
+[Massimo
 Ventrucci](https://www.unibo.it/sitoweb/massimo.ventrucci/en) from the
 University of Bologna (Italy).
 

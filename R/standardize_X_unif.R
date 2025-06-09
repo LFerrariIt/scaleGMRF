@@ -48,7 +48,6 @@ standardize_X_unif <- function(
   }
   # Continuous -----
   if (model == "linear") {
-    fixed <- TRUE
     result <- linear_standard(x = x, m = m, M = M)
   }
   if (model == "pspline1") {

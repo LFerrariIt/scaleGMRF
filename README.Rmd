@@ -16,7 +16,7 @@ knitr::opts_chunk$set(
 # `scaleGMRF`
 
 <!-- badges: start -->
-
+<img src="logo/logo.png" align="sticker.png" height="150"/>
 <!-- badges: end -->
 
 `scaleGMRF` is an R package that provides useful functions to standardize Gaussian Markov Random Fields (GMRF) effects in Latent Gaussian Models (LGM) as proposed by  [Ferrari & Ventrucci (2025)](https://arxiv.org/abs/2501.16057).
@@ -147,7 +147,7 @@ If you need help or find any bug, feel free to send an email to [luisa.ferrari5\
 
 ## Acknowledgments
 
-This package has been developed by [Luisa Ferrari](https://www.unibo.it/sitoweb/luisa.ferrari5/en) and [Prof. Massimo Ventrucci](https://www.unibo.it/sitoweb/massimo.ventrucci/en) from the University of Bologna (Italy).
+This package has been developed by [Luisa Ferrari](https://www.unibo.it/sitoweb/luisa.ferrari5/en) and [Massimo Ventrucci](https://www.unibo.it/sitoweb/massimo.ventrucci/en) from the University of Bologna (Italy).
 
 The project has been supported by the research grant "PRIN 2022 - COD. 2022PA3BS2 - META 2 - METAbarcoding for METAcommunities: towards a genetic approach to community ecology" (<https://www.metasquared.unito.it/>), in collaboration with the Department of Economics of the University of Modena & Reggio Emilia (Italy) and the Department of Life Sciences and Systems Biology of the University of Turin (Italy).
 
