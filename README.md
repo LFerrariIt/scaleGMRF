@@ -4,6 +4,8 @@
 # `scaleGMRF`
 
 <!-- badges: start -->
+
+<img src="logo/logo.png" align="sticker.png" height="150"/>
 <!-- badges: end -->
 
 `scaleGMRF` is an R package that provides useful functions to
@@ -74,9 +76,9 @@ directly used to specify an effect of an `INLA` model using the
 `inla.stack()` function and the model `"generic0"` (www.r-inla.org, Rue
 et al. 2009). If the argument `plot_check=TRUE`, the function also
 prints a graphical output that can be used to visually assess whether
-the standardization procedure has been successful.
-
-<!-- The design and usage of `standardize_GMRF()` are thoroughly discussed in `vignette("standardization", package = "scaleGMRF")`. -->
+the standardization procedure has been successful. The design and usage
+of `standardize_GMRF()` are thoroughly discussed in
+`vignette("standardization", package = "scaleGMRF")`. –\>
 
 ### User-friendly wrapper: `standardize_X_unif()`
 
@@ -148,7 +150,7 @@ Y <- cumsum(rnorm(K)) + rnorm(K, sd = 2)
 # - Effects: fixed intercept and indexed random effect coefficients
 data_stack <- inla.stack(
   data = list(Y = Y), # response
-  A = list(1, standard_rw1$basis), # basis matrices
+  A = list(1, standard_rw1$D), # basis matrices
   effects = list(
     data.frame(intercept = rep(1, length(Y))),
     list(u_rw1 = 1:K) # coefficients
@@ -160,7 +162,7 @@ model <- inla(
   Y ~ -1 + intercept +  # Remove default intercept, include custom one
     f(u_rw1,
       model = "generic0", constr = FALSE,
-      Cmatrix = standard_rw1$precision,  # Precision matrix from standardization
+      Cmatrix = standard_rw1$Q,  # Precision matrix from standardization
       extraconstr = list(                 # Additional constraints to ensure identifiability
         A = t(standard_rw1$null_space),   # Null space of the precision matrix
         e = matrix(0, ncol(standard_rw1$null_space))  # RHS of the constraint
@@ -186,8 +188,7 @@ If you need help or find any bug, feel free to send an email to
 ## Acknowledgments
 
 This package has been developed by [Luisa
-Ferrari](https://www.unibo.it/sitoweb/luisa.ferrari5/en) and
-[Massimo
+Ferrari](https://www.unibo.it/sitoweb/luisa.ferrari5/en) and [Massimo
 Ventrucci](https://www.unibo.it/sitoweb/massimo.ventrucci/en) from the
 University of Bologna (Italy).
 
