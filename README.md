@@ -170,7 +170,8 @@ model <- inla(
     ),
   family = "gaussian",  # Likelihood family
   data = inla.stack.data(data_stack),
-  control.predictor = list(A = inla.stack.A(data_stack))  # Link design matrix
+  control.predictor = list(A = inla.stack.A(data_stack)),  # Link design matrix
+  verbose=T
 )
 ```
 
