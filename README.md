@@ -5,8 +5,10 @@
 
 <!-- badges: start -->
 
-<img src="logo/hex_logo.png" align="left" height="150"/>
+<img src="logo/sticker.png" align="left" height="150"/>
 <!-- badges: end -->
+
+<br><br><br><br><br><br>
 
 `scaleGMRF` is an R package that provides useful functions to
 standardize Gaussian Markov Random Fields (GMRF) effects in Latent
