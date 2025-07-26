@@ -42,7 +42,7 @@ transf_data$time <- factor(transf_data$time,ordered = T)
 
 #Step 2: define the effects of the model ----
 
-K_X <- 50
+K_X <- 20
 f_t_AGE <- standardize_X_unif(transf_data$age,model="linear",scale_Q=F)
 f_t_WBC <- standardize_X_unif(transf_data$wbc,model="linear",scale_Q=F)
 f_t_TPI <- standardize_X_unif(transf_data$tpi,model="linear",scale_Q=F)
@@ -71,15 +71,15 @@ data_stack <- inla.stack(
   data = list(Y=as.matrix(transf_data$y,ncol=1)),
   # Basis matrices
   A = list(1,
-           f_t_AGE$basis,
-           f_t_WBC$basis,
-           f_t_TPI$basis,
-           f_n_AGE$basis,
-           f_n_WBC$basis,
-           f_n_TPI$basis,
-           f_SEX$basis,
-           f_DST$basis,
-           f_TEM$basis
+           f_t_AGE$D,
+           f_t_WBC$D,
+           f_t_TPI$D,
+           f_n_AGE$D,
+           f_n_WBC$D,
+           f_n_TPI$D,
+           f_SEX$D,
+           f_DST$D,
+           f_TEM$D
   ),
   effects=list(data.frame(
     intercept=rep(1,nrow(transf_data))
@@ -305,27 +305,28 @@ VP_log_joint_prior <- function(theta, theta.desc = NULL) {
 unscaled_model <- inla(
   Y ~ -1+intercept+
     # Linear effects
-    f(beta_AGE, model="generic0",Cmatrix = f_t_AGE$precision)+
-    f(beta_WBC, model="generic0",Cmatrix = f_t_WBC$precision)+
-    f(beta_TPI, model="generic0",Cmatrix = f_t_TPI$precision)+
+    f(beta_AGE, model="generic0",Cmatrix = f_t_AGE$Q)+
+    f(beta_WBC, model="generic0",Cmatrix = f_t_WBC$Q)+
+    f(beta_TPI, model="generic0",Cmatrix = f_t_TPI$Q)+
     # Non-linear effects
-    f(u_AGE,model="generic0",Cmatrix = f_n_AGE$precision, constr = F,
+    f(u_AGE,model="generic0",Cmatrix = f_n_AGE$Q, constr = F,
       extraconstr = list(A=t(f_n_AGE$null_space),e=matrix(c(0,0))))+
-    f(u_WBC,model="generic0",Cmatrix = f_n_WBC$precision,constr = F,
+    f(u_WBC,model="generic0",Cmatrix = f_n_WBC$Q,constr = F,
       extraconstr = list(A=t(f_n_WBC$null_space),e=matrix(c(0,0))))+
-    f(u_TPI,model="generic0",Cmatrix = f_n_TPI$precision,constr = F,
+    f(u_TPI,model="generic0",Cmatrix = f_n_TPI$Q,constr = F,
       extraconstr = list(A=t(f_n_TPI$null_space), e=matrix(c(0,0))))+
     # Cluster effect
-    f(u_SEX,model="generic0",Cmatrix =  f_SEX$precision,constr = T)+
+    f(u_SEX,model="generic0",Cmatrix =  f_SEX$Q,constr = T)+
     # Besag effect
-    f(u_DST,model="generic0",Cmatrix = f_DST$precision,constr = T)+
+    f(u_DST,model="generic0",Cmatrix = f_DST$Q,constr = T)+
     # RW1 effect
-    f(u_TEM,model="generic0",Cmatrix = f_TEM$precision,constr = T),
+    f(u_TEM,model="generic0",Cmatrix = f_TEM$Q,constr = T),
   family = 'poisson',
   data = inla.stack.data(data_stack),
   E =  transf_data$E, verbose=T,
   # VP prior
   control.expert = list(jp=inla.jp.define(VP_log_joint_prior)),
+  control.compute=list(return.marginals.predictor=TRUE,config=T,dic=T,cpo=T),
   control.predictor = list(A = inla.stack.A(data_stack)))
 
 # Step 5: fit the model with scaled effects ----------------
@@ -333,27 +334,28 @@ unscaled_model <- inla(
 scaled_model <- inla(
   Y ~ -1+intercept+
     # Linear effects
-    f(beta_AGE, model="generic0",Cmatrix = f_scld_t_AGE$precision)+
-    f(beta_WBC, model="generic0",Cmatrix = f_scld_t_WBC$precision)+
-    f(beta_TPI, model="generic0",Cmatrix = f_scld_t_TPI$precision)+
+    f(beta_AGE, model="generic0",Cmatrix = f_scld_t_AGE$Q)+
+    f(beta_WBC, model="generic0",Cmatrix = f_scld_t_WBC$Q)+
+    f(beta_TPI, model="generic0",Cmatrix = f_scld_t_TPI$Q)+
     # Non-linear effects
-    f(u_AGE,model="generic0",Cmatrix = f_scld_n_AGE$precision, constr = F,
+    f(u_AGE,model="generic0",Cmatrix = f_scld_n_AGE$Q, constr = F,
       extraconstr = list(A=t(f_scld_n_AGE$null_space),e=matrix(c(0,0))))+
-    f(u_WBC,model="generic0",Cmatrix = f_scld_n_WBC$precision,constr = F,
+    f(u_WBC,model="generic0",Cmatrix = f_scld_n_WBC$Q,constr = F,
       extraconstr = list(A=t(f_scld_n_WBC$null_space),e=matrix(c(0,0))))+
-    f(u_TPI,model="generic0",Cmatrix = f_scld_n_TPI$precision,constr = F,
+    f(u_TPI,model="generic0",Cmatrix = f_scld_n_TPI$Q,constr = F,
       extraconstr = list(A=t(f_scld_n_TPI$null_space), e=matrix(c(0,0))))+
     # Cluster effect
-    f(u_SEX,model="generic0",Cmatrix = f_scld_SEX$precision,constr = T)+
+    f(u_SEX,model="generic0",Cmatrix = f_scld_SEX$Q,constr = T)+
     # Besag effect
-    f(u_DST,model="generic0",Cmatrix = f_scld_DST$precision,constr = T)+
+    f(u_DST,model="generic0",Cmatrix = f_scld_DST$Q,constr = T)+
     # RW1 effect
-    f(u_TEM,model="generic0",Cmatrix = f_scld_TEM$precision,constr = T),
+    f(u_TEM,model="generic0",Cmatrix = f_scld_TEM$Q,constr = T),
   family = 'poisson',
   data = inla.stack.data(data_stack),
   E =  transf_data$E, verbose=T,
   # VP prior
   control.expert = list(jp=inla.jp.define(VP_log_joint_prior)),
+  control.compute=list(return.marginals.predictor=TRUE,config=T,dic=T,cpo=T),
   control.predictor = list(A = inla.stack.A(data_stack)))
 
 
